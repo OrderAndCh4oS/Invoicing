@@ -1,0 +1,6 @@
+Manage:
+-------
+${green}1${colour_end}: Companies
+${green}2${colour_end}: Clients
+${green}3${colour_end}: Quotes
+${green}4${colour_end}: Invoices
