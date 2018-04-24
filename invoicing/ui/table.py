@@ -14,6 +14,11 @@ class Table:
             print(Table.make_row(row, col_widths))
 
     @staticmethod
+    def get_headers(description):
+        headers = list(map(lambda x: x[0], description))
+        return headers
+
+    @staticmethod
     def make_row(row, col_widths, separator = "|"):
         string = ""
         for i, column in enumerate(row):

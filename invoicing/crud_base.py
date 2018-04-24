@@ -3,12 +3,12 @@ from abc import ABCMeta, abstractmethod
 from ui.menu import Menu
 
 
-class Crud(metaclass=ABCMeta):
+class CrudBase(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     def menu(self, table):
         crud = ['View ' + table, 'Add ' + table, 'Edit ' + table, 'Delete ' + table, 'Back']
-        user_selection = Menu.create('Manage Company', crud)
+        user_selection = Menu.create('Manage ' + table, crud)
         if user_selection == 1:
             self.show()
         elif user_selection == 2:
@@ -17,6 +17,10 @@ class Crud(metaclass=ABCMeta):
             self.edit()
         elif user_selection == 4:
             self.delete()
+
+    @abstractmethod
+    def map_data(self, data):
+        pass
 
     @abstractmethod
     def show(self):

@@ -1,11 +1,11 @@
 from repository.base_repository import BaseRepository
 
 class CompanyRepository(BaseRepository):
-    def find_companies(self):
+    def find_all(self):
         self.cursor.execute('select id, name, address from companies')
         return self.get_all()
 
-    def find_companies_by_id(self, id):
+    def find_by_id(self, id):
         self.cursor.execute('select id, name, address from companies where id = ?', (id,))
         return self.get_one()
 
