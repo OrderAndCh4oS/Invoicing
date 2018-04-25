@@ -38,3 +38,6 @@ class JobRepository(BaseRepository):
 
     def remove_job(self, id):
         self.cursor.execute('delete from jobs where id = ?', (id,))
+
+    def remove_jobs_by_quote_id(self, quote_id):
+        self.cursor.execute('delete from jobs where quote_id = ?', (quote_id,))

@@ -13,6 +13,16 @@ class JobCrud(BaseCrud, JobRepository):
     def __init__(self):
         super().__init__()
 
+    def menu(self, table):
+        crud = ['View ' + table, 'Edit ' + table, 'Delete ' + table, 'Back']
+        user_selection = Menu.create('Manage ' + table, crud)
+        if user_selection == 1:
+            self.show()
+        elif user_selection == 2:
+            self.edit()
+        elif user_selection == 3:
+            self.delete()
+
     def show(self):
         print(Style.create_title('Show Job'))
         job = Menu.select_row(self, 'Jobs')
@@ -76,3 +86,7 @@ class JobCrud(BaseCrud, JobRepository):
         reference_code = 'J-' + str(int(last_reference_code[2:]) + 1)
         print(reference_code)
         return reference_code
+
+    def delete_jobs_by_quote_id(self, quote_id):
+        self.remove_jobs_by_quote_id(quote_id)
+        self.save()

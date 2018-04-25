@@ -1,4 +1,5 @@
 from crud.base_crud import BaseCrud
+from crud.quote_crud import QuoteCrud
 from repository.client_repository import ClientRepository
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
@@ -8,7 +9,6 @@ from ui.style import Style
 class ClientCrud(BaseCrud, ClientRepository):
     def __init__(self):
         super().__init__()
-        self.menu('Client')
 
     def show(self):
         print(Style.create_title('Show Client'))
@@ -57,6 +57,17 @@ class ClientCrud(BaseCrud, ClientRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
+                self.remove_children(client['id'])
                 self.remove_client(client['id'])
                 self.save()
                 self.check_rows_updated('Client Deleted')
+
+    def remove_children(self, client_id):
+        QuoteCrud().delete_quotes_by_client_id(client_id)
+
+    def delete_clients_by_company_id(self, company_id):
+        clients = self.find_clients_by_company_id(company_id)
+        for client in clients:
+            self.remove_children(client['id'])
+        self.remove_clients_by_company_id(company_id)
+        self.save()

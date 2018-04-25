@@ -16,19 +16,19 @@ class Invoicing:
             manage = ['Companies', 'Clients', 'Quotes', 'Jobs', 'Invoices', 'Staff', 'Statuses']
             user_selection = Menu.create('Manage', manage)
             if user_selection == 1:
-                CompanyCrud()
+                CompanyCrud().menu('Company')
             elif user_selection == 2:
-                ClientCrud()
+                ClientCrud().menu('Client')
             elif user_selection == 3:
-                QuoteCrud()
+                QuoteCrud().menu('Quote')
             elif user_selection == 4:
-                JobCrud().menu('Jobs')
+                JobCrud().menu('Job')
             elif user_selection == 5:
                 pass
             elif user_selection == 6:
-                StaffCrud()
+                StaffCrud().menu('Staff')
             elif user_selection == 7:
-                StatusCrud()
+                StatusCrud().menu('Status')
 
 
 if __name__ == '__main__':

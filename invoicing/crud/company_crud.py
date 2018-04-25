@@ -1,4 +1,5 @@
 from crud.base_crud import BaseCrud
+from crud.client_crud import ClientCrud
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
 from ui.style import Style
@@ -7,7 +8,6 @@ from ui.style import Style
 class CompanyCrud(BaseCrud, CompanyRepository):
     def __init__(self):
         super().__init__()
-        self.menu('Company')
 
     def show(self):
         print(Style.create_title('Show Company'))
@@ -47,10 +47,12 @@ class CompanyCrud(BaseCrud, CompanyRepository):
         if company:
             user_action = False
             while not user_action == 'delete':
-                user_action = input('Type \'delete\' to remove this company or \'c\' to cancel: ')
+                user_action = input(
+                    'Type \'delete\' to remove this company and ALL associated data or \'c\' to cancel: ')
                 if user_action == 'c':
                     return
             if user_action == 'delete':
+                ClientCrud().delete_clients_by_company_id(company['id'])
                 self.remove_company(company['id'])
                 self.save()
                 self.check_rows_updated('Company Deleted')

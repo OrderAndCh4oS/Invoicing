@@ -9,7 +9,6 @@ from ui.style import Style
 class QuoteCrud(BaseCrud, QuoteRepository):
     def __init__(self):
         super().__init__()
-        self.menu('Quote')
 
     def show(self):
         print(Style.create_title('Show Quote'))
@@ -61,6 +60,17 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
+                self.remove_children(quote['id'])
                 self.remove_quote(quote['id'])
                 self.save()
                 self.check_rows_updated('Company Deleted')
+
+    def delete_quotes_by_client_id(self, client_id):
+        quotes = self.find_quotes_by_client_id(client_id)
+        for quote in quotes:
+            self.remove_children(quote['id'])
+        self.remove_quotes_by_client_id(client_id)
+        self.save()
+
+    def remove_children(self, quote_id):
+        JobCrud().delete_jobs_by_quote_id(quote_id)

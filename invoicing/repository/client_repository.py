@@ -17,12 +17,12 @@ class ClientRepository(BaseRepository):
         self.cursor.execute(query, (id,))
         return self.get_one()
 
-    def find_client_by_company_id(self, company_id):
+    def find_clients_by_company_id(self, company_id):
         self.cursor.execute(
             'select id, fullname, email, telephone, company_id from clients where company_id = ?',
             (company_id,)
         )
-        return self.get_one()
+        return self.get_all()
 
     def find_client_and_company_by_id(self, id):
         query = 'select id, fullname, email, telephone, name, address ' \
@@ -41,3 +41,6 @@ class ClientRepository(BaseRepository):
 
     def remove_client(self, id):
         self.cursor.execute('delete from clients where id = ?', (id,))
+
+    def remove_clients_by_company_id(self, company_id):
+        self.cursor.execute('delete from clients where company_id = ?', (company_id,))

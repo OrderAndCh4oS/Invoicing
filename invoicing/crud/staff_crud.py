@@ -7,7 +7,6 @@ from ui.style import Style
 class StaffCrud(BaseCrud, StaffRepository):
     def __init__(self):
         super().__init__()
-        self.menu('Staff')
 
     def show(self):
         print(Style.create_title('Show Staff'))

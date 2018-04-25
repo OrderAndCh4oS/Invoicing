@@ -24,6 +24,10 @@ class QuoteRepository(BaseRepository):
         self.cursor.execute(query, (id,))
         return self.get_one()
 
+    def find_quotes_by_client_id(self, client_id):
+        self.cursor.execute('select id, reference_code, date from quotes where client_id = ?', (client_id,))
+        return self.get_all()
+
     def find_last_reference_code(self):
         self.cursor.execute(
             'select id, reference_code as last_reference_code from quotes where id = (select max(id) from quotes)')
@@ -40,4 +44,6 @@ class QuoteRepository(BaseRepository):
 
     def remove_quote(self, id):
         self.cursor.execute('delete from quotes where id = ?', (id,))
-        # Todo: delete quote items
+
+    def remove_quotes_by_client_id(self, client_id):
+        self.cursor.execute('delete from quotes where client_id = ?', (client_id,))
