@@ -17,3 +17,4 @@ class CompanyRepository(BaseRepository):
 
     def remove_company(self, id):
         self.cursor.execute('delete from companies where id = ?', (id,))
+        self.cursor.execute('delete from clients where company_id = ?', (id,))

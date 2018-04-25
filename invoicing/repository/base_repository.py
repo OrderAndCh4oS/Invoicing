@@ -1,3 +1,4 @@
+import sqlite3
 from abc import ABCMeta, abstractmethod
 
 from database import Database
@@ -8,6 +9,7 @@ class BaseRepository(metaclass=ABCMeta):
 
     def __init__(self):
         self.connection = Database('../Invoicing.db').getDB()
+        self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
     def __exit__(self):

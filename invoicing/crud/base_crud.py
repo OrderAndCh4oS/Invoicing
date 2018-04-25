@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 from ui.menu import Menu
 
 
-class CrudBase(metaclass=ABCMeta):
+class BaseCrud(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     def menu(self, table):
@@ -18,9 +18,10 @@ class CrudBase(metaclass=ABCMeta):
         elif user_selection == 4:
             self.delete()
 
-    @abstractmethod
-    def map_data(self, data):
-        pass
+    def update_field(self, current_value, field_name):
+        value = input(field_name + "(" + current_value + "): ")
+        new_value = value if len(value) > 0 else current_value
+        return new_value
 
     @abstractmethod
     def show(self):

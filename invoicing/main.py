@@ -1,5 +1,6 @@
 from crud.client_crud import ClientCrud
 from crud.company_crud import CompanyCrud
+from crud.quote_crud import QuoteCrud
 from ui.menu import Menu
 
 
@@ -15,6 +16,8 @@ class Invoicing:
                 CompanyCrud()
             if user_selection == 2:
                 ClientCrud()
+            if user_selection == 3:
+                QuoteCrud()
 
 
 if __name__ == '__main__':

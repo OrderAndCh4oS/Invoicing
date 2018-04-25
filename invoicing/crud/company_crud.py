@@ -1,16 +1,13 @@
-from crud_base import CrudBase
+from crud.base_crud import BaseCrud
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
 from ui.style import Style
 
 
-class CompanyCrud(CrudBase, CompanyRepository):
+class CompanyCrud(BaseCrud, CompanyRepository):
     def __init__(self):
         super().__init__()
         self.menu('Company')
-
-    def map_data(self, data):
-        return {'id': data[0], 'name': data[1], 'address': data[2]}
 
     def show(self):
         print(Style.create_title('Show Company'))
@@ -30,17 +27,15 @@ class CompanyCrud(CrudBase, CompanyRepository):
             self.save()
             self.check_rows_updated('Company Added')
         else:
-            print('No company added')
+            print('Company not added')
 
     def edit(self):
         print(Style.create_title('Edit Company'))
         company = Menu.select_row(self, 'Companies')
         if company:
-            name = input("Name (" + company['name'] + "): ")
-            address = input("Name (" + company['address'] + "): ")
-            new_name = name if len(name) > 0 else company['name']
-            new_address = address if len(address) > 0 else company['address']
-            self.update_company(company['id'], new_name, new_address)
+            name = self.update_field(company['name'], 'Name')
+            address = self.update_field(company['address'], 'Address')
+            self.update_company(company['id'], name, address)
             self.save()
             self.check_rows_updated('Company Updated')
         else:

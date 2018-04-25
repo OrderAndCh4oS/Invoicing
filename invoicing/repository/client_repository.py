@@ -3,20 +3,32 @@ from repository.base_repository import BaseRepository
 
 class ClientRepository(BaseRepository):
     def find_all(self):
-        self.cursor.execute('select id, fullname, email, telephone, company_id from clients')
+        query = 'select clients.id, fullname, email, telephone, companies.name as company_name ' \
+                'from clients ' \
+                'join companies on company_id = companies.id'
+        self.cursor.execute(query)
         return self.get_all()
 
     def find_by_id(self, id):
-        self.cursor.execute('select id, fullname, email, telephone, company_id from clients where id = ?', (id,))
+        query = 'select clients.id, fullname, email, telephone, companies.name as company_name, companies.address as company_address ' \
+                'from clients ' \
+                'join companies on company_id = companies.id ' \
+                'where clients.id = ?'
+        self.cursor.execute(query, (id,))
         return self.get_one()
 
     def find_client_by_company_id(self, company_id):
-        self.cursor.execute('select id, fullname, email, telephone, company_id from clients where company_id = ?',
-                            (company_id,))
+        self.cursor.execute(
+            'select id, fullname, email, telephone, company_id from clients where company_id = ?',
+            (company_id,)
+        )
         return self.get_one()
 
     def find_client_and_company_by_id(self, id):
-        self.cursor.execute('select id, fullname, email, telephone, name, address from clients join company on client.company_id = company.id where client.id = ?', (id,))
+        query = 'select id, fullname, email, telephone, name, address ' \
+                'from clients ' \
+                'join company on client.company_id = company.id where client.id = ?'
+        self.cursor.execute(query, (id,))
         return self.get_one()
 
     def insert_client(self, fullname, email, telephone, company_id):
