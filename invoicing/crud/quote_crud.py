@@ -1,4 +1,5 @@
 from crud.base_crud import BaseCrud
+from crud.job_crud import JobCrud
 from repository.client_repository import ClientRepository
 from repository.quote_repository import QuoteRepository
 from ui.menu import Menu
@@ -24,13 +25,20 @@ class QuoteCrud(BaseCrud, QuoteRepository):
     def add(self):
         print(Style.create_title('Add Quote'))
         client = Menu.select_row(ClientRepository(), 'Select Client')
-        quote = self.find_last_reference_code()
-        last_reference_code = quote["last_reference_code"] if quote else 'None'
-        reference_code = input('Reference Code (Last used: ' + last_reference_code + '): ')
+        last_quote = self.find_last_reference_code()
+        last_reference_code = last_quote["last_reference_code"] if last_quote else 'Q-7000'
+        reference_code = 'Q-' + str(int(last_reference_code[2:]) + 1)
         if client and len(reference_code) > 0:
             self.insert_quote(client['id'], reference_code)
             self.save()
             self.check_rows_updated('Quote Added')
+            while True:
+                add_job = input('Add job (Y/n): ')
+                if add_job == 'n':
+                    break
+                elif add_job != 'y' and add_job != 'Y' and add_job != '':
+                    continue
+                JobCrud().add()
         else:
             print('Quote not added')
 

@@ -26,7 +26,7 @@ class QuoteRepository(BaseRepository):
 
     def find_last_reference_code(self):
         self.cursor.execute(
-            'select reference_code as last_reference_code from quotes where id = (select max(id) from quotes)')
+            'select id, reference_code as last_reference_code from quotes where id = (select max(id) from quotes)')
         return self.get_one()
 
     def insert_quote(self, client_id, reference_code):
