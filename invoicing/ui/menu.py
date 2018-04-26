@@ -7,15 +7,19 @@ from validation.validation import Validation
 
 class Menu:
     @staticmethod
-    def create(title, options):
+    def create(title, actions):
         user_selection = 0
         print(Style.create_title(title))
-        for i, option in enumerate(options):
-            print(Colour.green(str(i + 1)) + ": " + option)
-        while user_selection not in [i for i in range(1, len(options) + 1)]:
+        keys = []
+        for action in actions:
+            print(Colour.green(action.key) + ": " + str(action))
+            keys.append(action.key)
+        while user_selection not in keys:
             user_selection = input('\nSelect an option: ')
-            user_selection = Validation.isNumberAndInRange(user_selection, 1, len(options))
-        return user_selection
+        for action in actions:
+            if action.check_input(user_selection):
+                action.execute()
+                break
 
     @staticmethod
     def choose_item(repository):

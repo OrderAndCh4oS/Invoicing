@@ -1,3 +1,5 @@
+from actions.action import Action
+from controller.main_controller import MainController
 from crud.client_crud import ClientCrud
 from crud.company_crud import CompanyCrud
 from crud.job_crud import JobCrud
@@ -13,23 +15,17 @@ class Invoicing:
 
     def main(self):
         while True:
-            manage = ['Companies', 'Clients', 'Quotes', 'Jobs', 'Invoices', 'Staff', 'Statuses']
-            user_selection = Menu.create('Manage', manage)
-            if user_selection == 1:
-                CompanyCrud().menu('Company')
-            elif user_selection == 2:
-                ClientCrud().menu('Client')
-            elif user_selection == 3:
-                QuoteCrud().menu('Quote')
-            elif user_selection == 4:
-                JobCrud().menu('Job')
-            elif user_selection == 5:
-                pass
-            elif user_selection == 6:
-                StaffCrud().menu('Staff')
-            elif user_selection == 7:
-                StatusCrud().menu('Status')
-
+            controller = MainController()
+            actions = [
+                Action('1', 'Companies', controller.companyAction),
+                Action('2', 'Clients', controller.clientAction),
+                Action('3', 'Quotes', controller.quoteAction),
+                Action('4', 'Jobs', controller.jobAction),
+                Action('5', 'Invoices', controller.invoiceAction),
+                Action('6', 'Staff', controller.staffAction),
+                Action('7', 'Statuses', controller.statusAction)
+            ]
+            Menu.create('Manage', actions)
 
 if __name__ == '__main__':
     Invoicing()

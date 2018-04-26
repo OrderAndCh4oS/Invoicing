@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from actions.action import Action
 from crud.base_crud import BaseCrud
 from repository.job_repository import JobRepository
 from repository.quote_repository import QuoteRepository
@@ -13,15 +14,15 @@ class JobCrud(BaseCrud, JobRepository):
     def __init__(self):
         super().__init__()
 
-    def menu(self, table):
-        crud = ['View ' + table, 'Edit ' + table, 'Delete ' + table, 'Back']
-        user_selection = Menu.create('Manage ' + table, crud)
-        if user_selection == 1:
-            self.show()
-        elif user_selection == 2:
-            self.edit()
-        elif user_selection == 3:
-            self.delete()
+    def menu(self, table_name, actions=None):
+        if actions is None:
+            actions = [
+                Action('1', 'View', self.show),
+                Action('2', 'Edit', self.edit),
+                Action('3', 'Delete', self.delete),
+                Action('b', 'Back', False)
+            ]
+        Menu.create('Manage ' + table_name, actions)
 
     def show(self):
         print(Style.create_title('Show Job'))

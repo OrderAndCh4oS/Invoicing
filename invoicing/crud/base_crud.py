@@ -1,22 +1,22 @@
 from abc import ABCMeta, abstractmethod
 
+from actions.action import Action
 from ui.menu import Menu
 
 
 class BaseCrud(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
-    def menu(self, table):
-        crud = ['View ' + table, 'Add ' + table, 'Edit ' + table, 'Delete ' + table, 'Back']
-        user_selection = Menu.create('Manage ' + table, crud)
-        if user_selection == 1:
-            self.show()
-        elif user_selection == 2:
-            self.add()
-        elif user_selection == 3:
-            self.edit()
-        elif user_selection == 4:
-            self.delete()
+    def menu(self, table_name, actions=None):
+        if actions is None:
+            actions = [
+                Action('1', 'View', self.show),
+                Action('2', 'Add', self.add),
+                Action('3', 'Edit', self.edit),
+                Action('4', 'Delete', self.delete),
+                Action('b', 'Back', False)
+            ]
+        Menu.create('Manage ' + table_name, actions)
 
     def update_field(self, current_value, field_name):
         value = input(field_name + "(" + current_value + "): ")
