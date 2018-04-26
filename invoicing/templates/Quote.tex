@@ -1,0 +1,70 @@
+\documentclass[11pt,a4paper]{letter}
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\setmainfont{Aptifer Sans LT Pro}
+\newfontfamily\semibold{Aptifer Sans LT Pro Semibold}
+\newfontfamily\semiboldit{Aptifer Sans LT Pro Semibold Italic}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{anyfontsize}
+\usepackage{verbatimbox}
+\usepackage{booktabs}
+
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\usepackage[left=88pt,right=88pt,top=28pt,bottom=48pt]{geometry}
+\author{Sean Cooper}
+\title{Quote}
+
+
+\begin{document}
+    \begin{center}
+        \includegraphics[width=180pt]{oacc-logo-web-01.png}
+    \end{center}
+    \vspace{68pt}
+    \begin{minipage}[t]{0.3115\textwidth}
+    {\semibold Quote To:}
+        \\
+        \VAR{company_name}
+        \VAR{company_address}
+    \end{minipage}\hspace{12pt}
+    \begin{minipage}[t]{0.3115\textwidth}
+        \setlength{\parskip}{1em}
+        {\semibold Quote Number:}\\
+        \VAR{reference_code}\par
+        {\semibold Date Issued}\\
+        \VAR{date}
+    \end{minipage}\hspace{12pt}
+    \begin{minipage}[t]{0.3115\textwidth}
+    {\semibold Client Reference}
+        \\
+        N\textbackslash A
+    \end{minipage}
+    \addvbuffer[24pt 32pt]{
+    \def\arraystretch{1.5}%
+    \begin{tabular}{L{65.5mm}|R{12mm}|R{12mm}|R{12mm}|R{24mm}}
+        \hline
+        {\semibold Description} & {\semibold Type} & {\semibold Qty} & {\semibold Rate} & {\semibold Cost} \\
+        \hline
+        \BLOCK{ for job in jobs }
+        \VAR{job["title"]} & \VAR{job["type"]} & \VAR{job["estimated_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
+        \BLOCK{ endfor }
+
+        \specialrule{1.5pt}{0pt}{1pt}
+        \multicolumn{4}{c}{} {\semibold Total} & \VAR{total_cost} \\
+        \cline{4-5}
+    \end{tabular}}\\
+    \fontsize{9pt}{11pt}\selectfont
+    {\semibold Payment must be made within 28 days of invoice issue date.}\\
+    By making payment you confirm that you fully accept my terms and conditions.\par
+
+\end{document}

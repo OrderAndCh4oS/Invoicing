@@ -8,6 +8,7 @@ class BaseRepository(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     # Todo: Not great, initialises a connection for every instance of crud classes
+    # Todo: DB may not be found after pip install
     def __init__(self):
         self.connection = Database('../Invoicing.db').getDB()
         self.connection.row_factory = sqlite3.Row

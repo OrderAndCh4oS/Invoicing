@@ -7,7 +7,8 @@ from ui.style import Style
 
 class CompanyCrud(BaseCrud, CompanyRepository):
     def __init__(self):
-        super().__init__()
+        super().__init__('Companies')
+        super(CompanyRepository, self).__init__()
 
     def show(self):
         print(Style.create_title('Show Company'))

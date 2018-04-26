@@ -2,21 +2,25 @@ from abc import ABCMeta, abstractmethod
 
 from actions.action import Action
 from ui.menu import Menu
+from ui.style import Style
 
 
 class BaseCrud(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
-    def menu(self, table_name, actions=None):
-        if actions is None:
-            actions = [
-                Action('1', 'View', self.show),
-                Action('2', 'Add', self.add),
-                Action('3', 'Edit', self.edit),
-                Action('4', 'Delete', self.delete),
-                Action('b', 'Back', False)
-            ]
-        Menu.create('Manage ' + table_name, actions)
+    def __init__(self, table_name):
+        self.table_name = table_name
+
+    def menu(self):
+        Style.create_title('Manage ' + self.table_name)
+        actions = [
+            Action('1', 'View', self.show),
+            Action('2', 'Add', self.add),
+            Action('3', 'Edit', self.edit),
+            Action('4', 'Delete', self.delete),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
 
     def update_field(self, current_value, field_name):
         value = input(field_name + "(" + current_value + "): ")

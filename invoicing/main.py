@@ -1,12 +1,7 @@
 from actions.action import Action
 from controller.main_controller import MainController
-from crud.client_crud import ClientCrud
-from crud.company_crud import CompanyCrud
-from crud.job_crud import JobCrud
-from crud.quote_crud import QuoteCrud
-from crud.staff_crud import StaffCrud
-from crud.status_crud import StatusCrud
 from ui.menu import Menu
+from ui.style import Style
 
 
 class Invoicing:
@@ -14,6 +9,7 @@ class Invoicing:
         self.main()
 
     def main(self):
+        print(Style.create_title('Manage'))
         while True:
             controller = MainController()
             actions = [
@@ -25,7 +21,7 @@ class Invoicing:
                 Action('6', 'Staff', controller.staffAction),
                 Action('7', 'Statuses', controller.statusAction)
             ]
-            Menu.create('Manage', actions)
+            Menu.create(actions)
 
 if __name__ == '__main__':
     Invoicing()

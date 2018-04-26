@@ -6,7 +6,8 @@ from ui.style import Style
 
 class StatusCrud(BaseCrud, StatusRepository):
     def __init__(self):
-        super().__init__()
+        super().__init__('Statuses')
+        super(StatusRepository, self).__init__()
 
     def show(self):
         print(Style.create_title('Show Status'))

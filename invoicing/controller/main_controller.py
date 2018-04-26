@@ -9,22 +9,22 @@ from crud.status_crud import StatusCrud
 class MainController:
 
     def companyAction(self):
-        CompanyCrud().menu('Company')
+        CompanyCrud().menu()
 
     def clientAction(self):
-        ClientCrud().menu('Client')
+        ClientCrud().menu()
 
     def quoteAction(self):
-        QuoteCrud().menu('Quote')
+        QuoteCrud().menu()
 
     def invoiceAction(self):
         pass
 
     def jobAction(self):
-        JobCrud().menu('Job')
+        JobCrud().menu()
 
     def staffAction(self):
-        StaffCrud().menu('Staff')
+        StaffCrud().menu()
 
     def statusAction(self):
-        StatusCrud().menu('Status')
+        StatusCrud().menu()

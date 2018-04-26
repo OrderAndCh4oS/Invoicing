@@ -8,7 +8,8 @@ from ui.style import Style
 
 class ClientCrud(BaseCrud, ClientRepository):
     def __init__(self):
-        super().__init__()
+        super().__init__('Clients')
+        super(ClientRepository, self).__init__()
 
     def show(self):
         print(Style.create_title('Show Client'))

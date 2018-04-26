@@ -12,17 +12,18 @@ from ui.style import Style
 
 class JobCrud(BaseCrud, JobRepository):
     def __init__(self):
-        super().__init__()
+        super().__init__('Jobs')
+        super(JobRepository, self).__init__()
 
-    def menu(self, table_name, actions=None):
-        if actions is None:
-            actions = [
-                Action('1', 'View', self.show),
-                Action('2', 'Edit', self.edit),
-                Action('3', 'Delete', self.delete),
-                Action('b', 'Back', False)
-            ]
-        Menu.create('Manage ' + table_name, actions)
+    def menu(self):
+        print(Style.create_title('Manage ' + self.table_name))
+        actions = [
+            Action('1', 'View', self.show),
+            Action('2', 'Edit', self.edit),
+            Action('3', 'Delete', self.delete),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
 
     def show(self):
         print(Style.create_title('Show Job'))

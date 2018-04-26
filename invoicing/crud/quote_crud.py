@@ -1,3 +1,4 @@
+from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from repository.client_repository import ClientRepository
@@ -8,7 +9,20 @@ from ui.style import Style
 
 class QuoteCrud(BaseCrud, QuoteRepository):
     def __init__(self):
-        super().__init__()
+        super().__init__('Quotes')
+        super(QuoteRepository, self).__init__()
+
+    def menu(self):
+        Style.create_title('Manage ' + self.table_name)
+        actions = [
+            Action('1', 'View', self.show),
+            Action('2', 'Add', self.add),
+            Action('3', 'Edit', self.edit),
+            Action('4', 'Delete', self.delete),
+            Action('5', 'Generate', self.generate),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
 
     def show(self):
         print(Style.create_title('Show Quote'))
@@ -49,6 +63,12 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             self.update_quote(quote['id'], reference_code)
             self.save()
             self.check_rows_updated('Quote Updated')
+
+    def generate(self):
+        print(Style.create_title('Generate Quote'))
+        quote = Menu.select_row(self, 'Quotes')
+        if quote:
+            pass
 
     def delete(self):
         print(Style.create_title('Delete Quote'))

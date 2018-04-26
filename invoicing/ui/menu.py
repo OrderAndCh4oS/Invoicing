@@ -7,9 +7,8 @@ from validation.validation import Validation
 
 class Menu:
     @staticmethod
-    def create(title, actions):
+    def create(actions):
         user_selection = 0
-        print(Style.create_title(title))
         keys = []
         for action in actions:
             print(Colour.green(action.key) + ": " + str(action))
