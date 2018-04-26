@@ -1,4 +1,5 @@
 import os
+import re
 
 import jinja2
 
@@ -33,7 +34,7 @@ class LatexTemplating:
             company_name=company_name,
             company_address=company_address,
             date=date,
-            total_cost=total_cost,
+            total_cost=re.escape(total_cost),
             jobs=jobs
         ))
 
@@ -42,15 +43,15 @@ if __name__ == '__main__':
     LatexTemplating().generate_quote(
         'Q-7001',
         'Widget Corp',
-        '100 Some street, A city, A town, BO41 0PN',
+        '100 Some street,\\\\\nA city,\\\\\nA town,\\\\\nBO41 0PN',
         '14/10/2018',
         '$160',
         [{
-            'title': 'Job 1',
-            'description': 'Do something',
-            'type': 'development',
-            'estimated_time': '4h',
-            'staff_rate': '$40',
-            'cost': '$160'
+            'title': re.escape('Job 1'),
+            'description': re.escape('Do something'),
+            'type': re.escape('time'),
+            'estimated_time': re.escape('4h'),
+            'staff_rate': re.escape('$40'),
+            'cost': re.escape('$160')
         }]
     )
