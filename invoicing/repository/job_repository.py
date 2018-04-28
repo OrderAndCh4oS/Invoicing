@@ -23,6 +23,16 @@ class JobRepository(BaseRepository):
         )
         return self.get_one()
 
+    def find_jobs_by_quote_id(self, quote_id):
+        query = 'select jobs.id, reference_code, jobs.title as title, description, estimated_time, status.title as status, deadline, ' \
+                '(staff.first_name || \' \' || staff.last_name) as staff_name, staff.rate as rate ' \
+                'from jobs ' \
+                'join staff on assigned_to = staff.id ' \
+                'join status on status_id = status.id ' \
+                'where jobs.quote_id = ?'
+        self.cursor.execute(query, (quote_id,))
+        return self.get_all()
+
     def insert_job(self, reference_code, title, description, estimated_time, deadline, status_id, assigned_to,
                    quote_id):
         query = 'insert into jobs ' \

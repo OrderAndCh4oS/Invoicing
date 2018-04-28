@@ -43,3 +43,27 @@ class Menu:
         print(Style.create_title(title))
         Menu.show_all(repository)
         return Menu.choose_item(repository)
+
+    @staticmethod
+    def select_row_2(title, find, cursor, select):
+        print(Style.create_title(title))
+        Menu.show_all_2(find, cursor)
+        return Menu.choose_item_2(select)
+
+    @staticmethod
+    def choose_item_2(select):
+        item = False
+        while not item:
+            id = input('\nEnter an id to view or \'b\' to go back: ')
+            if (id == 'b'):
+                return False
+            if Validation.isNumber(id) == -1:
+                continue
+            item = select(id)
+        return item
+
+    @staticmethod
+    def show_all_2(find, cursor):
+        rows = find()
+        headers = list(map(lambda x: x[0], cursor.description))
+        Table.create_table(headers, rows)

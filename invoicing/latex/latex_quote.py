@@ -1,7 +1,7 @@
 from latex.latex_templating import LatexTemplating
 
 
-class Quote(LatexTemplating):
+class LatexQuote(LatexTemplating):
     def generate(self, reference_code, company_name, company_address, date, total_cost, jobs):
         template = self.latex_jinja_env.get_template('templates/Quote.tex')
         tex = template.render(
@@ -18,7 +18,7 @@ class Quote(LatexTemplating):
 
 
 if __name__ == '__main__':
-    Quote().generate(
+    LatexQuote().generate(
         'Q-7001',
         'Widget Corp',
         '100 Some street, A city, A town, BO41 0PN',

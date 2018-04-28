@@ -1,7 +1,9 @@
 from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
+from latex.latex_quote import LatexQuote
 from repository.client_repository import ClientRepository
+from repository.job_repository import JobRepository
 from repository.quote_repository import QuoteRepository
 from ui.menu import Menu
 from ui.style import Style
@@ -68,7 +70,23 @@ class QuoteCrud(BaseCrud, QuoteRepository):
         print(Style.create_title('Generate Quote'))
         quote = Menu.select_row(self, 'Quotes')
         if quote:
-            pass
+            jobs = JobRepository().find_jobs_by_quote_id(quote['id'])
+            quote_data = {
+                'reference_code': quote['reference_code'],
+                'company_name': quote['company_name'],
+                'company_address': quote['company_address'],
+                'date': quote['date'],
+                'total_cost': str(sum([float(job['rate']) * float(job['estimated_time']) for job in jobs])),
+                'jobs': [{
+                    'title': job['title'],
+                    'description': job['description'],
+                    'type': 'hours',
+                    'estimated_time': job['estimated_time'],
+                    'staff_rate': str(job['rate']),
+                    'cost': str(float(job['rate']) * float(job['estimated_time']))
+                } for job in jobs]
+            }
+            LatexQuote().generate(**quote_data)
 
     def delete(self):
         print(Style.create_title('Delete Quote'))

@@ -24,6 +24,21 @@ class QuoteRepository(BaseRepository):
         self.cursor.execute(query, (id,))
         return self.get_one()
 
+    def find_by_id_with_jobs(self, id):
+        query = 'select quotes.id, quotes.reference_code, date,  ' \
+                'clients.fullname as client_fullname, ' \
+                'companies.name as company_name, companies.address as company_address, ' \
+                'jobs.title as job_title, jobs.description as job_description, ' \
+                'staff.rate as rate ' \
+                'from quotes ' \
+                'join clients on client_id = clients.id ' \
+                'join companies on clients.company_id = companies.id ' \
+                'join jobs on quotes.id = jobs.quote_id ' \
+                'join staff on jobs.assigned_to = staff.id ' \
+                'where quotes.id = ?'
+        self.cursor.execute(query, (id,))
+        return self.get_all()
+
     def find_quotes_by_client_id(self, client_id):
         self.cursor.execute('select id, reference_code, date from quotes where client_id = ?', (client_id,))
         return self.get_all()
