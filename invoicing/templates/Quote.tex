@@ -31,11 +31,12 @@
         \includegraphics[width=180pt]{oacc-logo-web-01.png}
     \end{center}
     \vspace{68pt}
-    \begin{minipage}[t]{0.4465\textwidth}
+    \begin{minipage}[t]{0.4450\textwidth}
     {\semibold Quote To:}
-        \\
+        \begin{flushleft}
         \VAR{company_name}
         \VAR{company_address}
+        \end{flushleft}
     \end{minipage}\hspace{12pt}
     \begin{minipage}[t]{0.1950\textwidth}
         \setlength{\parskip}{1em}
@@ -58,7 +59,6 @@
         \BLOCK{ for job in jobs }
         \VAR{job["title"]} & \VAR{job["type"]} & \VAR{job["estimated_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
         \BLOCK{ endfor }
-
         \specialrule{1.5pt}{0pt}{1pt}
         \multicolumn{4}{c}{} {\semibold Total} & \VAR{total_cost} \\
         \cline{4-5}
