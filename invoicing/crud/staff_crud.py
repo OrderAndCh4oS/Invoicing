@@ -4,6 +4,8 @@ from ui.menu import Menu
 from ui.style import Style
 
 
+# Todo: show jobs assigned to staff member
+# Todo: Log time against staff members jobs
 class StaffCrud(BaseCrud, StaffRepository):
     def __init__(self):
         super().__init__('Staff')

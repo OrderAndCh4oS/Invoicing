@@ -111,4 +111,3 @@ class JobCrud(BaseCrud, JobRepository):
     def delete_jobs_by_quote_id(self, quote_id):
         self.remove_jobs_by_quote_id(quote_id)
         self.save()
-

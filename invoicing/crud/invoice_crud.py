@@ -62,6 +62,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                     jobRepository.find_by_id
                 )
                 if job:
+                    # Todo: Enter billable time for job
                     jobRepository = JobRepository()
                     jobRepository.add_to_invoice(job['id'], last_invoice['id'])
                     jobRepository.save()
