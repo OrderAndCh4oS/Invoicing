@@ -4,6 +4,15 @@ from latex.latex_templating import LatexTemplating
 class LatexQuote(LatexTemplating):
     def generate(self, reference_code, company_name, company_address, date, total_cost, jobs):
         template = self.latex_jinja_env.get_template('templates/Quote.tex')
+        if len(jobs) == 0:
+            jobs.append({
+                'title': '-',
+                'description': '-',
+                'type': '-',
+                'estimated_time': '-',
+                'staff_rate': '-',
+                'cost': '-'
+            })
         tex = template.render(
             reference_code=self.tex_escape(reference_code),
             company_name=self.tex_escape(company_name),
@@ -14,7 +23,11 @@ class LatexQuote(LatexTemplating):
         )
         file_name = 'quote'
         self.create_tex_file(tex, file_name)
-        self.create_pdf(file_name)
+        try:
+            self.create_pdf(file_name)
+        except ValueError as e:
+            print("Error creating pdf: " + str(e))
+            print("This is probably an issue with the LaTeX file. Try to compile the template manually.\n")
 
 
 if __name__ == '__main__':

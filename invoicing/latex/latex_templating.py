@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+from pathlib import Path
 
 import jinja2
 
@@ -29,14 +30,21 @@ class LatexTemplating:
         )
 
     def create_pdf(self, file_name):
-        cmd = 'xelatex ' + file_name + '.tex'
-        return_code = subprocess.call(cmd, shell=True)
+        cmd = 'xelatex -interaction=nonstopmode -halt-on-error ' + file_name + '.tex'
+        return_code = subprocess.call(cmd, shell=True, stdout=open('var/logs/stdout.txt', 'wb'),
+                                      stderr=open('var/logs/stderr.txt', 'wb'))
         if not return_code == 0:
+            self.remove_generated_pdf_if_exists(file_name)
+            raise ValueError('\nError {} executing command: {}'.format(return_code, cmd))
+        else:
+            os.unlink(file_name + '.tex')
+            os.unlink(file_name + '.aux')
+            os.unlink(file_name + '.log')
+
+    def remove_generated_pdf_if_exists(self, file_name):
+        output = Path(file_name + '.pdf')
+        if output.is_file():
             os.unlink(file_name + '.pdf')
-            raise ValueError('Error {} executing command: {}'.format(return_code, cmd))
-        os.unlink(file_name + '.tex')
-        os.unlink(file_name + '.aux')
-        os.unlink(file_name + '.log')
 
     def create_tex_file(self, tex, file_name):
         file = open(file_name + ".tex", "w")
