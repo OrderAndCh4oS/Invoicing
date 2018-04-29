@@ -25,6 +25,7 @@ class JobCrud(BaseCrud, JobRepository):
         ]
         Menu.create(actions)
 
+
     def show(self):
         print(Style.create_title('Show Job'))
         job = Menu.select_row(self, 'Jobs')
@@ -111,3 +112,19 @@ class JobCrud(BaseCrud, JobRepository):
     def delete_jobs_by_quote_id(self, quote_id):
         self.remove_jobs_by_quote_id(quote_id)
         self.save()
+
+    def delete_jobs_by_invoice_id(self, invoice_id):
+        self.remove_jobs_by_invoice_id(invoice_id)
+        self.save()
+
+    def show_assigned_jobs(self, staff_id):
+        print(Style.create_title('Select job to log time'))
+        job = Menu().select_row_by(
+            lambda: self.find_by_assigned_to(staff_id),
+            self.cursor,
+            self.find_by_id
+        )
+        if job:
+            logged_time = input('Log Time: ')
+            self.update_actual_time(job['id'], logged_time)
+            self.save()

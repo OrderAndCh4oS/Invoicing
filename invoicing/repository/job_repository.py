@@ -17,6 +17,11 @@ class JobRepository(BaseRepository):
         self.cursor.execute(query, (id,))
         return self.get_one()
 
+    def find_by_assigned_to(self, staff_id):
+        query = 'select id, reference_code, title, description, estimated_time, actual_time, deadline from jobs where assigned_to = ?'
+        self.cursor.execute(query, (staff_id,))
+        return self.get_all()
+
     def find_last_reference_code(self):
         self.cursor.execute(
             'select reference_code as last_reference_code from jobs where id = (select max(id) from jobs)'
@@ -41,6 +46,17 @@ class JobRepository(BaseRepository):
                 'join status on status_id = status.id ' \
                 'where jobs.invoice_id = ?'
         self.cursor.execute(query, (invoice_id,))
+        return self.get_all()
+
+    def find_jobs_by_client_id_where_complete(self, client_id):
+        query = 'select jobs.id, jobs.reference_code, jobs.title, status.title as status, deadline, ' \
+                '(staff.first_name || \' \' || staff.last_name) as staff_name ' \
+                'from jobs ' \
+                'join staff on assigned_to = staff.id ' \
+                'join status on status_id = status.id ' \
+                'join quotes on quote_id = quotes.id ' \
+                'where quotes.client_id = ? and completed = 1'
+        self.cursor.execute(query, (client_id,))
         return self.get_all()
 
     def insert_job(self, reference_code, title, description, estimated_time, deadline, status_id, assigned_to,
@@ -75,13 +91,5 @@ class JobRepository(BaseRepository):
     def remove_jobs_by_quote_id(self, quote_id):
         self.cursor.execute('delete from jobs where quote_id = ?', (quote_id,))
 
-    def find_jobs_by_client_id_where_complete(self, client_id):
-        query = 'select jobs.id, jobs.reference_code, jobs.title, status.title as status, deadline, ' \
-                '(staff.first_name || \' \' || staff.last_name) as staff_name ' \
-                'from jobs ' \
-                'join staff on assigned_to = staff.id ' \
-                'join status on status_id = status.id ' \
-                'join quotes on quote_id = quotes.id ' \
-                'where quotes.client_id = ? and completed = 1'
-        self.cursor.execute(query, (client_id,))
-        return self.get_all()
+    def remove_jobs_by_invoice_id(self, invoice_id):
+        self.cursor.execute('delete from jobs where invoice_id = ?', (invoice_id,))

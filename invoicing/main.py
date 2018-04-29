@@ -9,10 +9,11 @@ class Invoicing:
         self.main()
 
     def main(self):
-        print(Style.create_title('Manage'))
         while True:
+            print(Style.create_title('Manage'))
             controller = MainController()
             actions = [
+                # Action('s', 'Show Assigned Jobs', controller.show_assigned_jobs),
                 Action('1', 'Companies', controller.companyAction),
                 Action('2', 'Clients', controller.clientAction),
                 Action('3', 'Quotes', controller.quoteAction),

@@ -1,4 +1,6 @@
+from actions.action import Action
 from crud.base_crud import BaseCrud
+from crud.job_crud import JobCrud
 from repository.staff_repository import StaffRepository
 from ui.menu import Menu
 from ui.style import Style
@@ -11,6 +13,27 @@ class StaffCrud(BaseCrud, StaffRepository):
         super().__init__('Staff')
         super(StaffRepository, self).__init__()
 
+    def menu(self):
+        Style.create_title('Manage ' + self.table_name)
+        actions = [
+            Action('1', 'View', self.show),
+            Action('2', 'Add', self.add),
+            Action('3', 'Edit', self.edit),
+            Action('4', 'Delete', self.delete),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
+
+    def view_staff_menu(self, staff_id):
+        print(Style.create_title(self.table_name + 'Menu'))
+        actions = [
+            Action('1', 'Show Assigned Jobs', lambda: JobCrud().show_assigned_jobs(staff_id)),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
+
+
+
     def show(self):
         print(Style.create_title('Show Staff'))
         staff = Menu.select_row(self, 'Staff')
@@ -19,8 +42,8 @@ class StaffCrud(BaseCrud, StaffRepository):
             print('First Name: ' + staff['first_name'])
             print('Last Name: ' + staff['last_name'])
             print('Job Title: ' + staff['job_title'])
-            print('Rate: ' + staff['rate'])
-            input('\nContinue?')
+            print('Rate: ' + str(staff['rate']))
+            self.view_staff_menu(staff['id'])
 
     def add(self):
         print(Style.create_title('Add Staff'))
