@@ -23,7 +23,7 @@ class BaseCrud(metaclass=ABCMeta):
         Menu.create(actions)
 
     def update_field(self, current_value, field_name):
-        value = input(field_name + "(" + current_value + "): ")
+        value = input(field_name + "(" + str(current_value) + "): ")
         new_value = value if len(value) > 0 else current_value
         return new_value
 

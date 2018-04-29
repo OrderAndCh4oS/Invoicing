@@ -81,7 +81,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                     'title': job['title'],
                     'description': job['description'],
                     'type': 'hours',
-                    'estimated_time': job['estimated_time'],
+                    'estimated_time': str(job['estimated_time']),
                     'staff_rate': str(job['rate']),
                     'cost': str(float(job['rate']) * float(job['estimated_time']))
                 } for job in jobs]
@@ -101,7 +101,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 self.remove_children(quote['id'])
                 self.remove_quote(quote['id'])
                 self.save()
-                self.check_rows_updated('Company Deleted')
+                self.check_rows_updated('Quote Deleted')
 
     def delete_quotes_by_client_id(self, client_id):
         quotes = self.find_quotes_by_client_id(client_id)

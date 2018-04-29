@@ -1,5 +1,6 @@
 from crud.client_crud import ClientCrud
 from crud.company_crud import CompanyCrud
+from crud.invoice_crud import InvoiceCrud
 from crud.job_crud import JobCrud
 from crud.quote_crud import QuoteCrud
 from crud.staff_crud import StaffCrud
@@ -18,7 +19,7 @@ class MainController:
         QuoteCrud().menu()
 
     def invoiceAction(self):
-        pass
+        InvoiceCrud().menu()
 
     def jobAction(self):
         JobCrud().menu()

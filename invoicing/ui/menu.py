@@ -44,14 +44,14 @@ class Menu:
         Menu.show_all(repository)
         return Menu.choose_item(repository)
 
+    # Todo: update all select_row usages to use this instead
     @staticmethod
-    def select_row_2(title, find, cursor, select):
-        print(Style.create_title(title))
-        Menu.show_all_2(find, cursor)
-        return Menu.choose_item_2(select)
+    def select_row_by(find, cursor, select):
+        Menu.show_all_by(find, cursor)
+        return Menu.choose_item_by(select)
 
     @staticmethod
-    def choose_item_2(select):
+    def choose_item_by(select):
         item = False
         while not item:
             id = input('\nEnter an id to view or \'b\' to go back: ')
@@ -63,7 +63,7 @@ class Menu:
         return item
 
     @staticmethod
-    def show_all_2(find, cursor):
+    def show_all_by(find, cursor):
         rows = find()
         headers = list(map(lambda x: x[0], cursor.description))
         Table.create_table(headers, rows)

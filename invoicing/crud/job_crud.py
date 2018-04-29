@@ -61,12 +61,31 @@ class JobCrud(BaseCrud, JobRepository):
         print(Style.create_title('Edit Job'))
         job = Menu.select_row(self, 'Jobs')
         if job:
-            name = self.update_field(job['name'], 'Name')
-            self.update_job(job['id'], name)
+            reference_code = self.update_field(job['reference_code'], 'Reference Code')
+            title = self.update_field(job['title'], 'Title')
+            description = self.update_field(job['description'], 'Description')
+            estimated_time = self.update_field(job['estimated_time'], 'Est. Time')
+            current_deadline = job['deadline'] if job['deadline'] != '' else 'DD-MM-YYYY'
+            deadline = self.update_field(current_deadline, 'Deadline')
+            self.update_job(job['id'], reference_code, title, description, estimated_time, deadline)
             self.save()
             self.check_rows_updated('Job Updated')
         else:
             print('No changes made')
+
+    def edit_billable_time(self, job):
+        print("Estimated Time: " + job['estimated_time'])
+        print("Actual Time: " + job['actual_time'])
+        billable_time = input("Billable Time: ")
+        self.update_billable_time(job['id'], billable_time)
+        self.save()
+        self.check_rows_updated('Job Updated')
+
+    def edit_actual_time(self, job):
+        logged_time = input("Log Time: ")
+        self.update_actual_time(job['id'], logged_time)
+        self.save()
+        self.check_rows_updated('Job Updated')
 
     def delete(self):
         print(Style.create_title('Delete Job'))
@@ -92,3 +111,4 @@ class JobCrud(BaseCrud, JobRepository):
     def delete_jobs_by_quote_id(self, quote_id):
         self.remove_jobs_by_quote_id(quote_id)
         self.save()
+

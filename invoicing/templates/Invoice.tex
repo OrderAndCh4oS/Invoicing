@@ -23,7 +23,7 @@
 
 \usepackage[left=88pt,right=88pt,top=28pt,bottom=48pt]{geometry}
 \author{Sean Cooper}
-\title{Quote}
+\title{Invoice}
 
 
 \begin{document}
@@ -32,15 +32,15 @@
     \end{center}
     \vspace{68pt}
     \begin{minipage}[t]{0.4450\textwidth}
-    {\semibold Quote To:}
+    {\semibold Invoice To:}
         \begin{flushleft}
-        \VAR{company_name}
-        \VAR{company_address}
+            \VAR{company_name}
+            \VAR{company_address}
         \end{flushleft}
     \end{minipage}\hspace{12pt}
     \begin{minipage}[t]{0.1950\textwidth}
         \setlength{\parskip}{1em}
-        {\semibold Quote Number:}\\
+        {\semibold Invoice Number:}\\
         \VAR{reference_code}\par
         {\semibold Date Issued:}\\
         \VAR{date}
@@ -57,11 +57,14 @@
         {\semibold Description} & {\semibold Type} & {\semibold Qty} & {\semibold Rate} & {\semibold Cost} \\
         \hline
         \BLOCK{ for job in jobs }
-        \VAR{job["title"]} & \VAR{job["type"]} & \VAR{job["estimated_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
+        \VAR{job["title"]} & \VAR{job["type"]} & \VAR{job["billable_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
         \BLOCK{ endfor }
         \specialrule{1.5pt}{0pt}{1pt}
         \multicolumn{4}{c}{} {\semibold Total} & \VAR{total_cost} \\
         \cline{4-5}
     \end{tabular}}\\
+    \fontsize{9pt}{11pt}\selectfont
+    {\semibold Payment must be made within 28 days of invoice issue date.}\\
+    By making payment you confirm that you fully accept the attached terms and conditions.\par
 
 \end{document}

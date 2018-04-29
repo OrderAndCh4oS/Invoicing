@@ -31,15 +31,27 @@ class LatexTemplating:
 
     def create_pdf(self, file_name):
         cmd = 'xelatex -interaction=nonstopmode -halt-on-error ' + file_name + '.tex'
-        return_code = subprocess.call(cmd, shell=True, stdout=open('var/logs/stdout.txt', 'wb'),
-                                      stderr=open('var/logs/stderr.txt', 'wb'))
-        if not return_code == 0:
-            self.remove_generated_pdf_if_exists(file_name)
-            raise ValueError('\nError {} executing command: {}'.format(return_code, cmd))
-        else:
-            os.unlink(file_name + '.tex')
-            os.unlink(file_name + '.aux')
-            os.unlink(file_name + '.log')
+        return_code = subprocess.call(
+            cmd,
+            shell=True,
+            stdout=open('var/logs/stdout.txt', 'wb'),
+            stderr=open('var/logs/stderr.txt', 'wb')
+        )
+        try:
+            if not return_code == 0:
+                self.remove_generated_pdf_if_exists(file_name)
+                raise ValueError('\nError {} executing command: {}'.format(return_code, cmd))
+            else:
+                self.remove_generation_files(file_name)
+                print("\n" + file_name + ".pdf has been generated\n")
+        except ValueError as e:
+            print("\nError creating pdf: " + str(e))
+            print("This is probably an issue with the LaTeX file. Try to compile the template manually.\n")
+
+    def remove_generation_files(self, file_name):
+        os.unlink(file_name + '.tex')
+        os.unlink(file_name + '.aux')
+        os.unlink(file_name + '.log')
 
     def remove_generated_pdf_if_exists(self, file_name):
         output = Path(file_name + '.pdf')
