@@ -172,13 +172,9 @@ class JobCrud(BaseCrud, JobRepository):
             self.log_time(job['id'])
 
     def log_time(self, job_id):
-        while True:
+        logged_time = False
+        while not Validation.isFloat(logged_time):
             logged_time = input('Log Time: ')
-            if Validation.isFloat(logged_time) == -1:
-                continue
-            else:
-                break
-        # Todo: all times should be parsed to accept format like 5h30m
         self.update_actual_time(job_id, logged_time)
         self.save()
         self.check_rows_updated('Job Updated')

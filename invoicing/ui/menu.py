@@ -27,7 +27,8 @@ class Menu:
             id = input('\nEnter an id to view or \'b\' to go back: ')
             if (id == 'b'):
                 return False
-            if Validation.isNumber(id) == -1:
+            if not Validation.isNumber(id):
+                print('Not a valid number')
                 continue
             item = repository.find_by_id(id)
         return item
@@ -65,7 +66,8 @@ class Menu:
             id = input('\nEnter an id to view or \'b\' to go back: ')
             if (id == 'b'):
                 return False
-            if Validation.isNumber(id) == -1:
+            if not Validation.isNumber(id):
+                print('Not a valid number')
                 continue
             item = select(id)
         return item

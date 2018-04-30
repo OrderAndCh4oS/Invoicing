@@ -1,31 +1,23 @@
-# Todo: This is garbage write validation that returns bools
-# Todo: Remove print statements too
+
 class Validation:
     @staticmethod
     def isNumber(number):
         try:
-            number = int(number)
+            int(number)
         except ValueError:
-            number = -1
-            print("Not a valid number")
-        return number
+            return False
+        return True
 
     @staticmethod
     def isFloat(number):
         try:
-            number = float(number)
+            float(number)
         except ValueError:
-            number = -1
-            print("Not a valid number")
-        return number
+            return False
+        return True
 
     @staticmethod
     def isNumberAndInRange(number, start, stop):
-        number = Validation.isNumber(number)
-        try:
-            if number < start or number > stop:
-                raise ValueError
-        except ValueError:
-            number = -1
-            print('Number is not in range')
-        return number
+        if Validation.isNumber(number) and number >= start and number <= stop:
+            return True
+        return False
