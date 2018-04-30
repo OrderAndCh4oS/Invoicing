@@ -11,18 +11,7 @@ from ui.style import Style
 class StaffCrud(BaseCrud, StaffRepository):
     def __init__(self):
         super().__init__('Staff')
-        super(StaffRepository, self).__init__()
-
-    def menu(self):
-        Style.create_title('Manage ' + self.table_name)
-        actions = [
-            Action('1', 'View', self.show),
-            Action('2', 'Add', self.add),
-            Action('3', 'Edit', self.edit),
-            Action('4', 'Delete', self.delete),
-            Action('b', 'Back', False)
-        ]
-        Menu.create(actions)
+        super(StaffRepository, self).__init__('staff')
 
     def view_staff_menu(self, staff_id):
         print(Style.create_title(self.table_name + 'Menu'))
@@ -50,7 +39,7 @@ class StaffCrud(BaseCrud, StaffRepository):
         job_title = input("Job Title: ")
         rate = input("Rate: ")
         if len(first_name) > 0 and len(last_name) and len(job_title) > 0:
-            self.insert_staff(first_name, last_name, job_title, rate)
+            self.insert({'first_name': first_name, 'last_name': last_name, 'job_title': job_title, 'rate': rate})
             self.save()
             self.check_rows_updated('Staff Added')
         else:
@@ -64,7 +53,10 @@ class StaffCrud(BaseCrud, StaffRepository):
             last_name = self.update_field(staff['last_name'], 'Last Name')
             job_title = self.update_field(staff['job_title'], 'Job Title')
             rate = self.update_field(staff['rate'], 'Rate')
-            self.update_staff(staff['id'], first_name, last_name, job_title, rate)
+            self.update(
+                staff['id'],
+                {'first_name': first_name, 'last_name': last_name, 'job_title': job_title, 'rate': rate}
+            )
             self.save()
             self.check_rows_updated('Staff Updated')
         else:
@@ -80,6 +72,6 @@ class StaffCrud(BaseCrud, StaffRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
-                self.remove_staff(staff['id'])
+                self.remove(staff['id'])
                 self.save()
                 self.check_rows_updated('Staff Member Deleted')

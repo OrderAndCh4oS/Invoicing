@@ -7,7 +7,7 @@ from ui.style import Style
 class StatusCrud(BaseCrud, StatusRepository):
     def __init__(self):
         super().__init__('Statuses')
-        super(StatusRepository, self).__init__()
+        super(StatusRepository, self).__init__('status')
 
     def show(self):
         print(Style.create_title('Show Status'))
@@ -23,7 +23,7 @@ class StatusCrud(BaseCrud, StatusRepository):
         title = input("Title: ")
         colour = input("Colour: ")
         if len(title) > 0:
-            self.insert_status(title, colour)
+            self.insert({'title': title, 'colour': colour})
             self.save()
             self.check_rows_updated('Status Added')
         else:
@@ -35,7 +35,7 @@ class StatusCrud(BaseCrud, StatusRepository):
         if status:
             title = self.update_field(status['title'], 'Title')
             colour = self.update_field(status['colour'], 'Colour')
-            self.update_status(status['id'], title, colour)
+            self.update(status['id'], {'title': title, 'colour': colour})
             self.save()
             self.check_rows_updated('Status Updated')
         else:

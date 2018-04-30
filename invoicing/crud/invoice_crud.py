@@ -1,3 +1,5 @@
+import datetime
+
 from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
@@ -12,7 +14,7 @@ from ui.style import Style
 class InvoiceCrud(BaseCrud, InvoiceRepository):
     def __init__(self):
         super().__init__('Invoices')
-        super(InvoiceRepository, self).__init__()
+        super(InvoiceRepository, self).__init__('invoices')
 
     def menu(self):
         Style.create_title('Manage ' + self.table_name)
@@ -28,14 +30,21 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def show(self):
         print(Style.create_title('Show Invoice'))
-        invoice = Menu.select_row(self, 'Invoices')
+        invoice = Menu.select_row_by(
+            self.find_all_join_clients_and_companies,
+            self.cursor,
+            self.find_by_id_join_clients_and_companies
+        )
         if invoice:
-            print('Company: ' + invoice['company_name'])
-            print('Client: ' + invoice['client_fullname'])
-            print('Date: ' + invoice['date'])
-            print('Reference Code: ' + invoice['reference_code'])
-            # Todo: print invoice items
+            self.display_invoice(invoice)
+            # Todo: print invoice items or add menu
             input('\nContinue?')
+
+    def display_invoice(self, invoice):
+        print('Company: ' + invoice['company_name'])
+        print('Client: ' + invoice['client_fullname'])
+        print('Date: ' + invoice['date'])
+        print('Reference Code: ' + invoice['reference_code'])
 
     def add(self):
         print(Style.create_title('Add Invoice'))
@@ -44,7 +53,11 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
         last_reference_code = last_invoice["last_reference_code"] if last_invoice else 'Q-7000'
         reference_code = 'I-' + str(int(last_reference_code[2:]) + 1)
         if client and len(reference_code) > 0:
-            self.insert_invoice(client['id'], reference_code)
+            self.insert({
+                'client_id': client['id'],
+                'reference_code': reference_code,
+                'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            })
             self.save()
             self.check_rows_updated('Invoice Added')
             last_invoice = self.find_last_reference_code()
@@ -72,16 +85,24 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))
-        invoice = Menu.select_row(self, 'Invoices')
+        invoice = Menu.select_row_by(
+            self.find_all_join_clients_and_companies,
+            self.cursor,
+            self.find_by_id_join_clients_and_companies
+        )
         if invoice:
             reference_code = self.update_field(invoice['reference_code'], 'Reference Code')
-            self.update_invoice(invoice['id'], reference_code)
+            self.update(invoice['id'], {'reference_code': reference_code})
             self.save()
             self.check_rows_updated('Invoice Updated')
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
-        invoice = Menu.select_row(self, 'Invoices')
+        invoice = Menu.select_row_by(
+            self.find_all_join_clients_and_companies,
+            self.cursor,
+            self.find_by_id_join_clients_and_companies
+        )
         if invoice:
             jobs = JobRepository().find_jobs_by_invoice_id(invoice['id'])
             invoice_data = {
@@ -103,7 +124,11 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))
-        invoice = Menu.select_row(self, 'Invoices')
+        invoice = Menu.select_row_by(
+            self.find_all_join_clients_and_companies,
+            self.cursor,
+            self.find_by_id_join_clients_and_companies
+        )
         if invoice:
             user_action = False
             while not user_action == 'delete':
@@ -112,7 +137,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                     return
             if user_action == 'delete':
                 self.remove_children(invoice['id'])
-                self.remove_invoice(invoice['id'])
+                self.remove(invoice['id'])
                 self.save()
                 self.check_rows_updated('Invoice Deleted')
 

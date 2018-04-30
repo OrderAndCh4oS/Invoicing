@@ -9,11 +9,11 @@ from ui.style import Style
 class ClientCrud(BaseCrud, ClientRepository):
     def __init__(self):
         super().__init__('Clients')
-        super(ClientRepository, self).__init__()
+        super(ClientRepository, self).__init__('clients')
 
     def show(self):
         print(Style.create_title('Show Client'))
-        client = Menu.select_row(self, 'Clients')
+        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
         if client:
             print(Style.create_title('Client Data'))
             print('Fullname: ' + client['fullname'])
@@ -30,7 +30,12 @@ class ClientCrud(BaseCrud, ClientRepository):
         telephone = input("Telephone: ")
         company = Menu.select_row(CompanyRepository(), 'Select Company')
         if len(fullname) > 0 and company:
-            self.insert_client(fullname, email, telephone, company[0])
+            self.insert({
+                'fullname': fullname,
+                'email': email,
+                'telephone': telephone,
+                'company_id': company[0]
+            })
             self.save()
             self.check_rows_updated('Client Added')
         else:
@@ -38,19 +43,23 @@ class ClientCrud(BaseCrud, ClientRepository):
 
     def edit(self):
         print(Style.create_title('Edit Client'))
-        client = Menu.select_row(self, 'Clients')
+        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
         if client:
             fullname = self.update_field(client['fullname'], 'Fullname')
             email = self.update_field(client['email'], 'Email')
             telephone = self.update_field(client['telephone'], 'Telephone')
             if len(fullname) > 0:
-                self.update_client(client['id'], fullname, email, telephone)
+                self.update(client['id'], {
+                    'fullname': fullname,
+                    'email': email,
+                    'telephone': telephone
+                })
                 self.save()
                 self.check_rows_updated('Client Updated')
 
     def delete(self):
         print(Style.create_title('Delete Client'))
-        client = Menu.select_row(self, 'Clients')
+        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
         if client:
             user_action = False
             while not user_action == 'delete':
@@ -59,7 +68,7 @@ class ClientCrud(BaseCrud, ClientRepository):
                     return
             if user_action == 'delete':
                 self.remove_children(client['id'])
-                self.remove_client(client['id'])
+                self.remove(client['id'])
                 self.save()
                 self.check_rows_updated('Client Deleted')
 

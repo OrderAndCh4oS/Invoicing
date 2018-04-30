@@ -45,6 +45,7 @@ class Menu:
         return Menu.choose_item(repository)
 
     # Todo: update all select_row usages to use this instead
+    # Todo: find a way to remove cursor from params
     @staticmethod
     def select_row_by(find, cursor, select):
         Menu.show_all_by(find, cursor)

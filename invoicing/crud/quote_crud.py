@@ -1,3 +1,5 @@
+import datetime
+
 from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
@@ -12,7 +14,7 @@ from ui.style import Style
 class QuoteCrud(BaseCrud, QuoteRepository):
     def __init__(self):
         super().__init__('Quotes')
-        super(QuoteRepository, self).__init__()
+        super(QuoteRepository, self).__init__('quotes')
 
     def menu(self):
         Style.create_title('Manage ' + self.table_name)
@@ -28,7 +30,11 @@ class QuoteCrud(BaseCrud, QuoteRepository):
 
     def show(self):
         print(Style.create_title('Show Quote'))
-        quote = Menu.select_row(self, 'Quotes')
+        quote = Menu.select_row_by(
+            self.find_all_join_clients_and_company,
+            self.cursor,
+            self.find_by_id_join_clients_and_company
+        )
         if quote:
             print('Company: ' + quote['company_name'])
             print('Client: ' + quote['client_fullname'])
@@ -44,7 +50,11 @@ class QuoteCrud(BaseCrud, QuoteRepository):
         last_reference_code = last_quote["last_reference_code"] if last_quote else 'Q-7000'
         reference_code = 'Q-' + str(int(last_reference_code[2:]) + 1)
         if client and len(reference_code) > 0:
-            self.insert_quote(client['id'], reference_code)
+            self.insert({
+                'client_id': client['id'],
+                'reference_code': reference_code,
+                'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            })
             self.save()
             self.check_rows_updated('Quote Added')
             while True:
@@ -59,16 +69,24 @@ class QuoteCrud(BaseCrud, QuoteRepository):
 
     def edit(self):
         print(Style.create_title('Edit Quote'))
-        quote = Menu.select_row(self, 'Quotes')
+        quote = Menu.select_row_by(
+            self.find_all_join_clients_and_company,
+            self.cursor,
+            self.find_by_id_join_clients_and_company
+        )
         if quote:
             reference_code = self.update_field(quote['reference_code'], 'Reference Code')
-            self.update_quote(quote['id'], reference_code)
+            self.update(quote['id'], {'reference_code': reference_code})
             self.save()
             self.check_rows_updated('Quote Updated')
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
-        quote = Menu.select_row(self, 'Quotes')
+        quote = Menu.select_row_by(
+            self.find_all_join_clients_and_company,
+            self.cursor,
+            self.find_by_id_join_clients_and_company
+        )
         if quote:
             jobs = JobRepository().find_jobs_by_quote_id(quote['id'])
             quote_data = {
@@ -90,7 +108,11 @@ class QuoteCrud(BaseCrud, QuoteRepository):
 
     def delete(self):
         print(Style.create_title('Delete Quote'))
-        quote = Menu.select_row(self, 'Quotes')
+        quote = Menu.select_row_by(
+            self.find_all_join_clients_and_company,
+            self.cursor,
+            self.find_by_id_join_clients_and_company
+        )
         if quote:
             user_action = False
             while not user_action == 'delete':
@@ -99,7 +121,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                     return
             if user_action == 'delete':
                 self.remove_children(quote['id'])
-                self.remove_quote(quote['id'])
+                self.remove(quote['id'])
                 self.save()
                 self.check_rows_updated('Quote Deleted')
 
