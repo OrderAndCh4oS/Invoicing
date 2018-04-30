@@ -27,12 +27,10 @@ class StaffCrud(BaseCrud, StaffRepository):
     def view_staff_menu(self, staff_id):
         print(Style.create_title(self.table_name + 'Menu'))
         actions = [
-            Action('1', 'Show Assigned Jobs', lambda: JobCrud().show_assigned_jobs(staff_id)),
+            Action('1', 'Show Assigned Jobs', lambda: JobCrud().show_jobs_by_assigned_to(staff_id)),
             Action('b', 'Back', False)
         ]
         Menu.create(actions)
-
-
 
     def show(self):
         print(Style.create_title('Show Staff'))

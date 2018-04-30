@@ -5,7 +5,7 @@ class JobRepository(BaseRepository):
 
     def find_all(self):
         query = 'select jobs.id, reference_code, jobs.title, status.title as status, deadline, ' \
-                '(staff.first_name || \' \' || staff.last_name) as staff_name ' \
+                '(staff.first_name || \' \' || staff.last_name) as assigned_to ' \
                 'from jobs ' \
                 'join staff on assigned_to = staff.id ' \
                 'join status on status_id = status.id'
@@ -13,7 +13,7 @@ class JobRepository(BaseRepository):
         return self.get_all()
 
     def find_by_id(self, id):
-        query = 'select id, reference_code, title, description, estimated_time, deadline from jobs where id = ?'
+        query = 'select id, reference_code, title, description, estimated_time, actual_time, deadline from jobs where id = ?'
         self.cursor.execute(query, (id,))
         return self.get_one()
 
@@ -81,6 +81,10 @@ class JobRepository(BaseRepository):
     def update_billable_time(self, id, time_spent):
         query = 'update jobs set billable_time = ? where id = ?'
         self.cursor.execute(query, (time_spent, id))
+
+    def update_mark_as_complete(self, id):
+        query = 'update jobs set completed = 1 where id = ?'
+        self.cursor.execute(query, (id,))
 
     def add_to_invoice(self, id, invoice_id):
         self.cursor.execute('update jobs set invoice_id = ? where id = ?', (invoice_id, id))

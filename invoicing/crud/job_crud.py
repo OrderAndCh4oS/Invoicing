@@ -25,6 +25,14 @@ class JobCrud(BaseCrud, JobRepository):
         ]
         Menu.create(actions)
 
+    def view_job_menu(self, job_id):
+        print(Style.create_title('Job Menu'))
+        actions = [
+            Action('1', 'Log Time', lambda: self.log_time(job_id)),
+            Action('2', 'Mark as Complete', lambda: self.mark_as_complete(job_id)),
+            Action('b', 'Back', False)
+        ]
+        Menu.create(actions)
 
     def show(self):
         print(Style.create_title('Show Job'))
@@ -34,8 +42,9 @@ class JobCrud(BaseCrud, JobRepository):
             print('Reference Code: ' + job['reference_code'])
             print('Title: ' + job['title'])
             print('Description: ' + job['description'])
-            print('Est. Time: ' + job['estimated_time'])
-            input('\nContinue?')
+            print('Est. Time: ' + str(job['estimated_time']))
+            print('Actual Time: ' + str(job['actual_time']))
+            self.view_job_menu(job['id'])
 
     def add(self):
         print(Style.create_title('Add Job'))
@@ -117,7 +126,7 @@ class JobCrud(BaseCrud, JobRepository):
         self.remove_jobs_by_invoice_id(invoice_id)
         self.save()
 
-    def show_assigned_jobs(self, staff_id):
+    def show_jobs_by_assigned_to(self, staff_id):
         print(Style.create_title('Select job to log time'))
         job = Menu().select_row_by(
             lambda: self.find_by_assigned_to(staff_id),
@@ -125,6 +134,16 @@ class JobCrud(BaseCrud, JobRepository):
             self.find_by_id
         )
         if job:
-            logged_time = input('Log Time: ')
-            self.update_actual_time(job['id'], logged_time)
-            self.save()
+            self.log_time(job['id'])
+
+    def log_time(self, job_id):
+        logged_time = input('Log Time: ')
+        # Todo: check logged_time is valid
+        # Todo: all times should be parsed to accept format like 5h30m
+        self.update_actual_time(job_id, logged_time)
+        self.save()
+
+    def mark_as_complete(self, job_id):
+        # Todo: add Y/n input question make a method for this for general use
+        self.update_mark_as_complete(job_id)
+        self.save()
