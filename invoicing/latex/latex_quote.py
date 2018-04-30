@@ -21,7 +21,7 @@ class LatexQuote(LatexTemplating):
             total_cost=self.tex_escape(total_cost),
             jobs=[(lambda job: {k: self.tex_escape(v) for k, v in job.items()})(job) for job in jobs]
         )
-        file_name = 'quote'
+        file_name = reference_code + " " + company_name
         self.create_tex_file(tex, file_name)
         self.create_pdf(file_name)
 

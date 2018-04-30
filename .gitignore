@@ -16,3 +16,10 @@ venv/
 .idea/
 __pycache__
 /invoicing/quote.pdf
+/invoicing/invoice.pdf
+/Invoicing-DB.db
+*.pdf
+*.aux
+*.log
+/Invoice.tex
+/Quote.tex

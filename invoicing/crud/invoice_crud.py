@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from actions.action import Action
 from crud.base_crud import BaseCrud
@@ -7,6 +7,7 @@ from latex.latex_invoice import LatexInvoice
 from repository.client_repository import ClientRepository
 from repository.invoice_repository import InvoiceRepository
 from repository.job_repository import JobRepository
+from ui.date import Date
 from ui.menu import Menu
 from ui.style import Style
 
@@ -56,7 +57,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
             self.insert({
                 'client_id': client['id'],
                 'reference_code': reference_code,
-                'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                'date': datetime.now().strftime("%Y-%m-%d %H:%M")
             })
             self.save()
             self.check_rows_updated('Invoice Added')
@@ -109,7 +110,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                 'reference_code': invoice['reference_code'],
                 'company_name': invoice['company_name'],
                 'company_address': invoice['company_address'],
-                'date': invoice['date'],
+                'date': Date().convert_date_time_for_printing(invoice['date']),
                 'total_cost': str(sum([float(job['rate']) * float(job['billable_time']) for job in jobs])),
                 'jobs': [{
                     'title': job['title'],

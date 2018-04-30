@@ -7,12 +7,6 @@ import jinja2
 
 
 class LatexTemplating:
-    """
-    Max char width for:
-        address col = 28
-        ref code and date col = 12
-        client ref col = 18
-    """
 
     def __init__(self):
         self.latex_jinja_env = jinja2.Environment(
@@ -30,7 +24,7 @@ class LatexTemplating:
         )
 
     def create_pdf(self, file_name):
-        cmd = 'xelatex -interaction=nonstopmode -halt-on-error ' + file_name + '.tex'
+        cmd = 'xelatex -interaction=nonstopmode -halt-on-error "' + file_name + '.tex"'
         return_code = subprocess.call(
             cmd,
             shell=True,

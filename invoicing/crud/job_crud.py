@@ -1,11 +1,15 @@
+from _datetime import datetime
+
 from actions.action import Action
 from crud.base_crud import BaseCrud
 from repository.job_repository import JobRepository
 from repository.quote_repository import QuoteRepository
 from repository.staff_repository import StaffRepository
 from repository.status_repository import StatusRepository
+from ui.date import Date
 from ui.menu import Menu
 from ui.style import Style
+from validation.validation import Validation
 
 
 class JobCrud(BaseCrud, JobRepository):
@@ -61,17 +65,18 @@ class JobCrud(BaseCrud, JobRepository):
         description = input("Description: ")
         estimated_time = input("Est. Time: ")
         deadline = input("Deadline (DD-MM-YYYY): ")
+        deadline = Date().convert_date_for_saving(deadline)
         staff_member_assigned = Menu.select_row(StaffRepository(), 'Assign To')
         status = Menu.select_row(StatusRepository(), 'Set Status')
         last_quote = QuoteRepository().find_last_reference_code()
         if len(title) > 0 and len(estimated_time) > 0 and status:
-            # Todo: insert created_at time
             self.insert({
                 'reference_code': reference_code,
                 'title': title,
                 'description': description,
                 'estimated_time': estimated_time,
                 'deadline': deadline,
+                'created_at': datetime.now().strftime("%Y-%m-%d %H:%M"),
                 'status_id': status['id'],
                 'assigned_to': staff_member_assigned['id'],
                 'quote_id': last_quote['id']
@@ -83,15 +88,23 @@ class JobCrud(BaseCrud, JobRepository):
 
     def edit(self):
         print(Style.create_title('Edit Job'))
-        job = Menu.select_row(self, 'Jobs')
+        job = Menu.select_row_by(
+            self.find_all_join_staff_and_status,
+            self.cursor,
+            lambda id: self.find_by_id(
+                id,
+                ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
+            )
+        )
         if job:
             reference_code = self.update_field(job['reference_code'], 'Reference Code')
             title = self.update_field(job['title'], 'Title')
             description = self.update_field(job['description'], 'Description')
             estimated_time = self.update_field(job['estimated_time'], 'Est. Time')
-            current_deadline = job['deadline'] if job['deadline'] != '' else 'DD-MM-YYYY'
-            # Todo: display date in correct format DD-MM-YYYY not in YYYY-MM-DD
+            current_deadline = Date.convert_date_for_printing(job['deadline']) if job[
+                                                                                      'deadline'] != '' else 'DD-MM-YYYY'
             deadline = self.update_field(current_deadline, 'Deadline')
+            deadline = Date.convert_date_for_saving(deadline)
             self.update(job['id'], {
                 'reference_code': reference_code,
                 'title': title,
@@ -114,7 +127,14 @@ class JobCrud(BaseCrud, JobRepository):
 
     def delete(self):
         print(Style.create_title('Delete Job'))
-        job = Menu.select_row(self, 'Jobs')
+        job = Menu.select_row_by(
+            self.find_all_join_staff_and_status,
+            self.cursor,
+            lambda id: self.find_by_id(
+                id,
+                ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
+            )
+        )
         if job:
             user_action = False
             while not user_action == 'delete':
@@ -152,15 +172,19 @@ class JobCrud(BaseCrud, JobRepository):
             self.log_time(job['id'])
 
     def log_time(self, job_id):
-        logged_time = input('Log Time: ')
-        # Todo: check logged_time is valid
+        while True:
+            logged_time = input('Log Time: ')
+            if Validation.isFloat(logged_time) == -1:
+                continue
+            else:
+                break
         # Todo: all times should be parsed to accept format like 5h30m
         self.update_actual_time(job_id, logged_time)
         self.save()
         self.check_rows_updated('Job Updated')
 
     def mark_as_complete(self, job_id):
-        # Todo: add Y/n input question make a method for this for general use
-        self.update_mark_as_complete(job_id)
-        self.save()
-        self.check_rows_updated('Job Updated')
+        if Menu.yes_no_question("Would you like to mark this job as complete?"):
+            self.update_mark_as_complete(job_id)
+            self.save()
+            self.check_rows_updated('Job Updated')

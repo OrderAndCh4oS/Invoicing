@@ -52,6 +52,13 @@ class Menu:
         return Menu.choose_item_by(select)
 
     @staticmethod
+    def yes_no_question(question):
+        response = False
+        while response not in ['y', 'Y', '', 'n', 'N']:
+            response = input(question + ' (Y/n): ')
+        return response in ['Y', 'y', '']
+
+    @staticmethod
     def choose_item_by(select):
         item = False
         while not item:

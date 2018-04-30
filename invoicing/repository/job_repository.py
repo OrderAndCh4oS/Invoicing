@@ -10,7 +10,8 @@ class JobRepository(BaseRepository):
     def find_all_join_staff_and_status(self):
         query = QueryBuilder(self.table) \
             .select(['jobs.id', 'reference_code', 'jobs.title', 'status.title as status', 'deadline',
-                     '(staff.first_name || \' \' || staff.last_name) as assigned_to']) \
+                     '(staff.first_name || \' \' || staff.last_name) as assigned_to',
+                     'created_at', 'completed']) \
             .from_() \
             .join('staff', 'assigned_to = staff.id') \
             .join('status', 'status_id = status.id')

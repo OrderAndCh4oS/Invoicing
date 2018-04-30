@@ -49,7 +49,7 @@ class QueryBuilder:
         return self
 
     def addParam(self, param):
-        if param:
+        if param != None:
             self.params.append(param)
 
     def raw(self, query, params=None):

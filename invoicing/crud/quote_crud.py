@@ -7,6 +7,7 @@ from latex.latex_quote import LatexQuote
 from repository.client_repository import ClientRepository
 from repository.job_repository import JobRepository
 from repository.quote_repository import QuoteRepository
+from ui.date import Date
 from ui.menu import Menu
 from ui.style import Style
 
@@ -93,15 +94,15 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 'reference_code': quote['reference_code'],
                 'company_name': quote['company_name'],
                 'company_address': quote['company_address'],
-                'date': quote['date'],
-                'total_cost': str(sum([float(job['rate']) * float(job['estimated_time']) for job in jobs])),
+                'date': Date().convert_date_time_for_printing(quote['date']),
+                'total_cost': '£' + str(sum([float(job['rate']) * float(job['estimated_time']) for job in jobs])),
                 'jobs': [{
                     'title': job['title'],
                     'description': job['description'],
                     'type': 'hours',
                     'estimated_time': str(job['estimated_time']),
-                    'staff_rate': str(job['rate']),
-                    'cost': str(float(job['rate']) * float(job['estimated_time']))
+                    'staff_rate': '£' + str(job['rate']),
+                    'cost': '£' + str(float(job['rate']) * float(job['estimated_time']))
                 } for job in jobs]
             }
             LatexQuote().generate(**quote_data)
