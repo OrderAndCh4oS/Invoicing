@@ -50,9 +50,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
     def add(self):
         print(Style.create_title('Add Invoice'))
         client = Menu.select_row(ClientRepository(), 'Select Client')
-        last_invoice = self.find_last_reference_code()
-        last_reference_code = last_invoice["last_reference_code"] if last_invoice else 'Q-7000'
-        reference_code = 'I-' + str(int(last_reference_code[2:]) + 1)
+        reference_code = self.generate_reference_code()
         if client and len(reference_code) > 0:
             self.insert({
                 'client_id': client['id'],
@@ -61,28 +59,38 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
             })
             self.save()
             self.check_rows_updated('Invoice Added')
-            last_invoice = self.find_last_reference_code()
-            while True:
-                add_job = input('Add job (Y/n): ')
-                if add_job == 'n':
-                    break
-                elif add_job != 'y' and add_job != 'Y' and add_job != '':
-                    continue
-                print(Style.create_title('Select Job'))
-                jobRepository = JobRepository()
-                job = Menu.select_row_by(
-                    lambda: jobRepository.find_jobs_by_client_id_where_complete(client['id']),
-                    jobRepository.cursor,
-                    jobRepository.find_by_id
-                )
-                if job:
-                    # Todo: Enter billable time for job
-                    jobRepository = JobRepository()
-                    jobRepository.add_to_invoice(job['id'], last_invoice['id'])
-                    jobRepository.save()
+            self.add_client_jobs_to_invoice(client['id'])
             print('\nInvoice added\n')
         else:
-            print('Invoice not added')
+            print('\nInvoice not added\n')
+
+    def generate_reference_code(self):
+        last_invoice = self.find_last_reference_code()
+        last_reference_code = last_invoice["last_reference_code"] if last_invoice else 'Q-7000'
+        reference_code = 'I-' + str(int(last_reference_code[2:]) + 1)
+        return reference_code
+
+    def add_client_jobs_to_invoice(self, client_id):
+        last_invoice = self.find_last_reference_code()
+        while True:
+            add_job = Menu.yes_no_question('Add job to invoice')
+            if not add_job:
+                break
+            self.select_job(last_invoice, client_id)
+
+    def select_job(self, last_invoice, client_id):
+        print(Style.create_title('Select Job'))
+        jobRepository = JobRepository()
+        job = Menu.select_row_by(
+            lambda: jobRepository.find_jobs_by_client_id_where_complete(client_id),
+            jobRepository.cursor,
+            jobRepository.find_by_id
+        )
+        if job:
+            # Todo: Enter billable time for job
+            jobRepository.add_to_invoice(job['id'], last_invoice['id'])
+            jobRepository.save()
+            self.check_rows_updated('Job Added')
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))

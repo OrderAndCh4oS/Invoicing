@@ -66,6 +66,7 @@ class JobCrud(BaseCrud, JobRepository):
         estimated_time = input("Est. Time: ")
         deadline = input("Deadline (DD-MM-YYYY): ")
         deadline = Date().convert_date_for_saving(deadline)
+        created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
         staff_member_assigned = Menu.select_row(StaffRepository(), 'Assign To')
         status = Menu.select_row(StatusRepository(), 'Set Status')
         last_quote = QuoteRepository().find_last_reference_code()
@@ -76,7 +77,7 @@ class JobCrud(BaseCrud, JobRepository):
                 'description': description,
                 'estimated_time': estimated_time,
                 'deadline': deadline,
-                'created_at': datetime.now().strftime("%Y-%m-%d %H:%M"),
+                'created_at': created_at,
                 'status_id': status['id'],
                 'assigned_to': staff_member_assigned['id'],
                 'quote_id': last_quote['id']
@@ -101,9 +102,7 @@ class JobCrud(BaseCrud, JobRepository):
             title = self.update_field(job['title'], 'Title')
             description = self.update_field(job['description'], 'Description')
             estimated_time = self.update_field(job['estimated_time'], 'Est. Time')
-            current_deadline = Date.convert_date_for_printing(job['deadline']) if job[
-                                                                                      'deadline'] != '' else 'DD-MM-YYYY'
-            deadline = self.update_field(current_deadline, 'Deadline')
+            deadline = self.update_date_field(job['deadline'], 'deadline')
             deadline = Date.convert_date_for_saving(deadline)
             self.update(job['id'], {
                 'reference_code': reference_code,
@@ -116,6 +115,13 @@ class JobCrud(BaseCrud, JobRepository):
             self.check_rows_updated('Job Updated')
         else:
             print('No changes made')
+
+    def update_date_field(self, date, title):
+        if date != '':
+            current_deadline = Date.convert_date_for_printing(date)
+        else:
+            current_deadline = 'DD-MM-YYYY'
+        return self.update_field(current_deadline, title)
 
     def edit_billable_time(self, job):
         print("Estimated Time: " + job['estimated_time'])

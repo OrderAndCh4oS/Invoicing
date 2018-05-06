@@ -14,8 +14,8 @@ class Date:
         if not len(date) > 0:
             return ''
         date = datetime.strptime(date, '%Y-%m-%d')
-        return date.strftime('%d-%m-%Y') \
- \
+        return date.strftime('%d-%m-%Y')
+
     @staticmethod
     def convert_date_time_for_printing(date):
         if not len(date) > 0:
