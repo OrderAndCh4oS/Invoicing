@@ -20,7 +20,7 @@ class Menu:
             for action in actions:
                 if action.check_input(user_selection):
                     action.execute()
-            if user_selection == 'b':
+            if user_selection == 'b' or user_selection == 'q':
                 break
             else:
                 user_selection = 0

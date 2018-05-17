@@ -9,20 +9,20 @@ class Invoicing:
         self.main()
 
     def main(self):
-        while True:
-            title = Style.create_title('Manage')
-            controller = MainController()
-            actions = [
-                # Action('s', 'Show Assigned Jobs', controller.show_assigned_jobs),
-                Action('1', 'Companies', controller.companyAction),
-                Action('2', 'Clients', controller.clientAction),
-                Action('3', 'Quotes', controller.quoteAction),
-                Action('4', 'Jobs', controller.jobAction),
-                Action('5', 'Invoices', controller.invoiceAction),
-                Action('6', 'Staff', controller.staffAction),
-                Action('7', 'Statuses', controller.statusAction)
-            ]
-            Menu.create(title, actions)
+        title = Style.create_title('Manage')
+        controller = MainController()
+        actions = [
+            # Action('s', 'Show Assigned Jobs', controller.show_assigned_jobs),
+            Action('1', 'Companies', controller.companyAction),
+            Action('2', 'Clients', controller.clientAction),
+            Action('3', 'Quotes', controller.quoteAction),
+            Action('4', 'Jobs', controller.jobAction),
+            Action('5', 'Invoices', controller.invoiceAction),
+            Action('6', 'Staff', controller.staffAction),
+            Action('7', 'Statuses', controller.statusAction),
+            Action('q', 'Quit', False)
+        ]
+        Menu.create(title, actions)
 
 if __name__ == '__main__':
     Invoicing()
