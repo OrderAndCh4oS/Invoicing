@@ -28,14 +28,14 @@ class JobCrud(BaseCrud, JobRepository):
         Menu.create(title, actions)
 
     def view_job_menu(self, job_id):
-        print(Style.create_title('Job Menu'))
+        title = Style.create_title('Job Menu')
         actions = [
             Action('1', 'Update Status', lambda: self.update_status(job_id)),
             Action('2', 'Log Time', lambda: self.log_time(job_id)),
             Action('3', 'Mark as Complete', lambda: self.mark_as_complete(job_id)),
             Action('b', 'Back', False)
         ]
-        Menu.create(actions)
+        Menu.create(title, actions)
 
     def show(self):
         print(Style.create_title('Show Job'))
