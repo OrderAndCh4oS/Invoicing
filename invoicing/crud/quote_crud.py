@@ -18,7 +18,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
         super(QuoteRepository, self).__init__('quotes')
 
     def menu(self):
-        Style.create_title('Manage ' + self.table_name)
+        title = Style.create_title('Manage ' + self.table_name)
         actions = [
             Action('1', 'View', self.show),
             Action('2', 'Add', self.add),
@@ -27,7 +27,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             Action('5', 'Generate', self.generate),
             Action('b', 'Back', False)
         ]
-        Menu.create(actions)
+        Menu.create(title, actions)
 
     def show(self):
         print(Style.create_title('Show Quote'))

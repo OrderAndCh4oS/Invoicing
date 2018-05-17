@@ -56,7 +56,8 @@
         {\semibold Description} & {\semibold Type} & {\semibold Qty} & {\semibold Rate} & {\semibold Cost} \\
         \hline
         \BLOCK{ for job in jobs }
-        \VAR{job["title"]} & \VAR{job["type"]} & \VAR{job["estimated_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
+        {\semiboldit \VAR{job["title"]}} \newline
+        \VAR{job["description"]} & \VAR{job["type"]} & \VAR{job["estimated_time"]} & \VAR{job["staff_rate"]} & \VAR{job["cost"]} \\
         \hline
         \BLOCK{ endfor }
         \specialrule{1.5pt}{0pt}{1pt}
