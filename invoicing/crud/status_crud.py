@@ -51,6 +51,6 @@ class StatusCrud(BaseCrud, StatusRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
-                self.remove_status(status['id'])
+                self.remove(status['id'])
                 self.save()
                 self.check_rows_updated('Status Deleted')

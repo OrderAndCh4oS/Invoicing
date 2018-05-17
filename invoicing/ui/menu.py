@@ -7,18 +7,23 @@ from validation.validation import Validation
 
 class Menu:
     @staticmethod
-    def create(actions):
+    def create(title, actions):
         user_selection = 0
         keys = []
-        for action in actions:
-            print(Colour.green(action.key) + ": " + str(action))
-            keys.append(action.key)
-        while user_selection not in keys:
-            user_selection = input('\nSelect an option: ')
-        for action in actions:
-            if action.check_input(user_selection):
-                action.execute()
+        while True:
+            print(title)
+            for action in actions:
+                print(Colour.green(action.key) + ": " + str(action))
+                keys.append(action.key)
+            while user_selection not in keys:
+                user_selection = input('\nSelect an option: ')
+            for action in actions:
+                if action.check_input(user_selection):
+                    action.execute()
+            if user_selection == 'b':
                 break
+            else:
+                user_selection = 0
 
     @staticmethod
     def choose_item(repository):

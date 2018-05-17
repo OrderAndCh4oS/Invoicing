@@ -12,7 +12,7 @@ class BaseCrud(metaclass=ABCMeta):
         self.table_name = table_name
 
     def menu(self):
-        Style.create_title('Manage ' + self.table_name)
+        title = Style.create_title('Manage ' + self.table_name)
         actions = [
             Action('1', 'View', self.show),
             Action('2', 'Add', self.add),
@@ -20,7 +20,7 @@ class BaseCrud(metaclass=ABCMeta):
             Action('4', 'Delete', self.delete),
             Action('b', 'Back', False)
         ]
-        Menu.create(actions)
+        Menu.create(title, actions)
 
     def update_field(self, current_value, field_name):
         value = input(field_name + "(" + str(current_value) + "): ")

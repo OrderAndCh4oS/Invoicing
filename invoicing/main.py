@@ -10,7 +10,7 @@ class Invoicing:
 
     def main(self):
         while True:
-            print(Style.create_title('Manage'))
+            title = Style.create_title('Manage')
             controller = MainController()
             actions = [
                 # Action('s', 'Show Assigned Jobs', controller.show_assigned_jobs),
@@ -22,7 +22,7 @@ class Invoicing:
                 Action('6', 'Staff', controller.staffAction),
                 Action('7', 'Statuses', controller.statusAction)
             ]
-            Menu.create(actions)
+            Menu.create(title, actions)
 
 if __name__ == '__main__':
     Invoicing()

@@ -18,20 +18,21 @@ class JobCrud(BaseCrud, JobRepository):
         super(JobRepository, self).__init__('jobs')
 
     def menu(self):
-        print(Style.create_title('Manage ' + self.table_name))
+        title = Style.create_title('Manage ' + self.table_name)
         actions = [
             Action('1', 'View', self.show),
             Action('2', 'Edit', self.edit),
             Action('3', 'Delete', self.delete),
             Action('b', 'Back', False)
         ]
-        Menu.create(actions)
+        Menu.create(title, actions)
 
     def view_job_menu(self, job_id):
         print(Style.create_title('Job Menu'))
         actions = [
-            Action('1', 'Log Time', lambda: self.log_time(job_id)),
-            Action('2', 'Mark as Complete', lambda: self.mark_as_complete(job_id)),
+            Action('1', 'Update Status', lambda: self.update_status(job_id)),
+            Action('2', 'Log Time', lambda: self.log_time(job_id)),
+            Action('3', 'Mark as Complete', lambda: self.mark_as_complete(job_id)),
             Action('b', 'Back', False)
         ]
         Menu.create(actions)
@@ -175,7 +176,8 @@ class JobCrud(BaseCrud, JobRepository):
             self.find_by_id
         )
         if job:
-            self.log_time(job['id'])
+            self.display_job(job)
+            self.view_job_menu(job['id'])
 
     def log_time(self, job_id):
         logged_time = False
@@ -190,3 +192,11 @@ class JobCrud(BaseCrud, JobRepository):
             self.update_mark_as_complete(job_id)
             self.save()
             self.check_rows_updated('Job Updated')
+
+    def update_status(self, job_id):
+        status = Menu.select_row(StatusRepository(), 'Set Status')
+        self.update(job_id, {
+            'status_id': status['id'],
+        })
+        self.save()
+        self.check_rows_updated('Status Updated')
