@@ -16,7 +16,7 @@ class StatusCrud(BaseCrud, StatusRepository):
             print(Style.create_title('Status Data'))
             print('Title: ' + status['title'])
             print('Colour: ' + status['colour'])
-            input('\nContinue?')
+            Menu.waitForInput()
 
     def add(self):
         print(Style.create_title('Add Status'))
@@ -28,6 +28,7 @@ class StatusCrud(BaseCrud, StatusRepository):
             self.check_rows_updated('Status Added')
         else:
             print('Status not added')
+        Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Status'))
@@ -40,6 +41,7 @@ class StatusCrud(BaseCrud, StatusRepository):
             self.check_rows_updated('Status Updated')
         else:
             print('No changes made')
+        Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Status'))
@@ -54,3 +56,4 @@ class StatusCrud(BaseCrud, StatusRepository):
                 self.remove(status['id'])
                 self.save()
                 self.check_rows_updated('Status Deleted')
+                Menu.waitForInput()

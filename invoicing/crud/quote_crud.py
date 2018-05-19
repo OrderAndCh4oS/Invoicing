@@ -37,12 +37,13 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             self.find_by_id_join_clients_and_company
         )
         if quote:
+            print(Style.create_title('Quote Data'))
             print('Company: ' + quote['company_name'])
             print('Client: ' + quote['client_fullname'])
             print('Date: ' + quote['date'])
             print('Reference Code: ' + quote['reference_code'])
             # Todo: print quote items
-            input('\nContinue?')
+            Menu.waitForInput()
 
     def add(self):
         print(Style.create_title('Add Quote'))
@@ -65,8 +66,10 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 elif add_job != 'y' and add_job != 'Y' and add_job != '':
                     continue
                 JobCrud().add()
+            print('Quote added')
         else:
             print('Quote not added')
+        Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Quote'))
@@ -80,6 +83,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             self.update(quote['id'], {'reference_code': reference_code})
             self.save()
             self.check_rows_updated('Quote Updated')
+            Menu.waitForInput()
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
@@ -106,6 +110,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 } for job in jobs]
             }
             LatexQuote().generate(**quote_data)
+            Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Quote'))
@@ -125,6 +130,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
                 self.remove(quote['id'])
                 self.save()
                 self.check_rows_updated('Quote Deleted')
+                Menu.waitForInput()
 
     def delete_quotes_by_client_id(self, client_id):
         quotes = self.find_quotes_by_client_id(client_id)

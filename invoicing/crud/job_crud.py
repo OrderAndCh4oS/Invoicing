@@ -116,6 +116,7 @@ class JobCrud(BaseCrud, JobRepository):
             self.check_rows_updated('Job Updated')
         else:
             print('No changes made')
+        Menu.waitForInput()
 
     def update_date_field(self, date, title):
         if date != '':
@@ -131,6 +132,7 @@ class JobCrud(BaseCrud, JobRepository):
         self.update_billable_time(job['id'], billable_time)
         self.save()
         self.check_rows_updated('Job Updated')
+        Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Job'))
@@ -152,6 +154,7 @@ class JobCrud(BaseCrud, JobRepository):
                 self.remove(job['id'])
                 self.save()
                 self.check_rows_updated('Job Deleted')
+                Menu.waitForInput()
 
     def get_reference_code(self):
         last_job = self.find_last_reference_code()
@@ -180,18 +183,20 @@ class JobCrud(BaseCrud, JobRepository):
             self.view_job_menu(job['id'])
 
     def log_time(self, job_id):
-        logged_time = False
+        logged_time = ''
         while not Validation.isFloat(logged_time):
             logged_time = input('Log Time: ')
         self.update_actual_time(job_id, logged_time)
         self.save()
         self.check_rows_updated('Job Updated')
+        Menu.waitForInput()
 
     def mark_as_complete(self, job_id):
         if Menu.yes_no_question("Would you like to mark this job as complete?"):
             self.update_mark_as_complete(job_id)
             self.save()
             self.check_rows_updated('Job Updated')
+            Menu.waitForInput()
 
     def update_status(self, job_id):
         status = Menu.select_row(StatusRepository(), 'Set Status')
@@ -200,3 +205,4 @@ class JobCrud(BaseCrud, JobRepository):
         })
         self.save()
         self.check_rows_updated('Status Updated')
+        Menu.waitForInput()

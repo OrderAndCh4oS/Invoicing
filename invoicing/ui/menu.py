@@ -82,3 +82,7 @@ class Menu:
         rows = find()
         headers = list(map(lambda x: x[0], cursor.description))
         Table.create_table(headers, rows)
+
+    @staticmethod
+    def waitForInput():
+        input('\nContinue?')

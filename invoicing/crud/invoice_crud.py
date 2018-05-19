@@ -39,9 +39,10 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
         if invoice:
             self.display_invoice(invoice)
             # Todo: print invoice items or add menu
-            input('\nContinue?')
+            Menu.waitForInput()
 
     def display_invoice(self, invoice):
+        print(Style.create_title('Invoice Data'))
         print('Company: ' + invoice['company_name'])
         print('Client: ' + invoice['client_fullname'])
         print('Date: ' + invoice['date'])
@@ -63,6 +64,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
             print('\nInvoice added\n')
         else:
             print('\nInvoice not added\n')
+        Menu.waitForInput()
 
     def generate_reference_code(self):
         last_invoice = self.find_last_reference_code()
@@ -130,6 +132,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                 } for job in jobs]
             }
             LatexInvoice().generate(**invoice_data)
+            Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))
@@ -149,6 +152,7 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                 self.remove(invoice['id'])
                 self.save()
                 self.check_rows_updated('Invoice Deleted')
+                Menu.waitForInput()
 
     def delete_invoices_by_client_id(self, client_id):
         invoices = self.find_invoices_by_client_id(client_id)

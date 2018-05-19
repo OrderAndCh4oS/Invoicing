@@ -21,7 +21,7 @@ class ClientCrud(BaseCrud, ClientRepository):
             print('Telephone: ' + client['telephone'])
             print('Company: ' + client['company_name'])
             print('Address: ' + client['company_address'])
-            input('\nContinue?')
+            Menu.waitForInput()
 
     def add(self):
         print(Style.create_title('Add Client'))
@@ -40,6 +40,7 @@ class ClientCrud(BaseCrud, ClientRepository):
             self.check_rows_updated('Client Added')
         else:
             print('Client not added')
+        Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Client'))
@@ -56,6 +57,7 @@ class ClientCrud(BaseCrud, ClientRepository):
                 })
                 self.save()
                 self.check_rows_updated('Client Updated')
+                Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Client'))
@@ -71,6 +73,7 @@ class ClientCrud(BaseCrud, ClientRepository):
                 self.remove(client['id'])
                 self.save()
                 self.check_rows_updated('Client Deleted')
+                Menu.waitForInput()
 
     def remove_children(self, client_id):
         QuoteCrud().delete_quotes_by_client_id(client_id)

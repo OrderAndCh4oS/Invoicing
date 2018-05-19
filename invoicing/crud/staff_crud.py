@@ -44,6 +44,7 @@ class StaffCrud(BaseCrud, StaffRepository):
             self.check_rows_updated('Staff Added')
         else:
             print('Staff not added')
+        Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Staff'))
@@ -61,6 +62,7 @@ class StaffCrud(BaseCrud, StaffRepository):
             self.check_rows_updated('Staff Updated')
         else:
             print('No changes made')
+        Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Staff'))
@@ -75,3 +77,4 @@ class StaffCrud(BaseCrud, StaffRepository):
                 self.remove(staff['id'])
                 self.save()
                 self.check_rows_updated('Staff Member Deleted')
+                Menu.waitForInput()

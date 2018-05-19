@@ -59,5 +59,4 @@ class QueryBuilder:
         return self
 
     def build(self):
-        print(self.query)
         return {'sql': self.query, 'parameters': tuple(self.params)}

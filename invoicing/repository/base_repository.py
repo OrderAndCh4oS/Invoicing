@@ -35,9 +35,9 @@ class BaseRepository(metaclass=ABCMeta):
 
     def check_rows_updated(self, message):
         if self.has_updated_rows() > 0:
-            print(message + '\n')
+            print('\n' + message)
         else:
-            print('Error performing update, please try again')
+            print('\nError performing update, please try again')
 
     def get_description(self):
         return self.cursor.description

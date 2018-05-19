@@ -11,13 +11,12 @@ class CompanyCrud(BaseCrud, CompanyRepository):
         super(CompanyRepository, self).__init__('companies')
 
     def show(self):
-        print(Style.create_title('Show Company'))
         company = Menu.select_row(self, 'Companies')
         if company:
             print(Style.create_title('Company Data'))
             print('Name: ' + company['name'])
             print('Address: ' + company['address'])
-            input('\nContinue?')
+            Menu.waitForInput()
 
     def add(self):
         print(Style.create_title('Add Company'))
@@ -29,6 +28,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
             self.check_rows_updated('Company Added')
         else:
             print('Company not added')
+        Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Company'))
@@ -41,6 +41,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
             self.check_rows_updated('Company Updated')
         else:
             print('No changes made')
+        Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Company'))
@@ -57,3 +58,4 @@ class CompanyCrud(BaseCrud, CompanyRepository):
                 self.remove(company['id'])
                 self.save()
                 self.check_rows_updated('Company Deleted')
+                Menu.waitForInput()
