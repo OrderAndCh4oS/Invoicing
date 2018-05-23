@@ -4,7 +4,7 @@ from datetime import datetime
 class Date:
     @staticmethod
     def convert_date_for_saving(date):
-        if not len(date) > 0:
+        if not len(date) > 0 or date == 'DD-MM-YYYY':
             return ''
         date = datetime.strptime(date, "%d-%m-%Y")
         return date.strftime('%Y-%m-%d')

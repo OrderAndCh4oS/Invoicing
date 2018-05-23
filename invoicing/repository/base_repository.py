@@ -12,7 +12,7 @@ class BaseRepository(metaclass=ABCMeta):
     # Todo: DB may not be found after pip install
     def __init__(self, table):
         self.table = table
-        self.connection = Database('../Invoicing.db').getDB()
+        self.connection = Database('../Invoicing-DB.db').getDB()
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 

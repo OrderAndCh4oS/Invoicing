@@ -59,17 +59,20 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             })
             self.save()
             self.check_rows_updated('Quote Added')
-            while True:
-                add_job = input('Add job (Y/n): ')
-                if add_job == 'n':
-                    break
-                elif add_job != 'y' and add_job != 'Y' and add_job != '':
-                    continue
-                JobCrud().add()
+            self.add_jobs()
             print('Quote added')
         else:
             print('Quote not added')
         Menu.waitForInput()
+
+    def add_jobs(self):
+        while True:
+            add_job = input('Add job (Y/n): ')
+            if add_job == 'n':
+                break
+            elif add_job != 'y' and add_job != 'Y' and add_job != '':
+                continue
+            JobCrud().add()
 
     def edit(self):
         print(Style.create_title('Edit Quote'))
@@ -83,6 +86,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
             self.update(quote['id'], {'reference_code': reference_code})
             self.save()
             self.check_rows_updated('Quote Updated')
+            self.add_jobs()
             Menu.waitForInput()
 
     def generate(self):
