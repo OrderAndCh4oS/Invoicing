@@ -43,7 +43,7 @@ class LatexTemplating:
             print("This is probably an issue with the LaTeX file. Try to compile the template manually.\n")
 
     def remove_generation_files(self, file_name):
-        os.unlink(file_name + '.tex')
+        # os.unlink(file_name + '.tex')
         os.unlink(file_name + '.aux')
         os.unlink(file_name + '.log')
 

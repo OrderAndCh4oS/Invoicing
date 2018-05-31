@@ -23,3 +23,5 @@ __pycache__
 *.log
 /Invoice.tex
 /Quote.tex
+/invoicing/templates/Invoice.tex
+/invoicing/templates/Quote.tex

@@ -67,7 +67,7 @@ class QuoteCrud(BaseCrud, QuoteRepository):
 
     def add_jobs(self):
         while True:
-            add_job = input('Add job (Y/n): ')
+            add_job = Menu.yes_no_question('Add job')
             if add_job == 'n':
                 break
             elif add_job != 'y' and add_job != 'Y' and add_job != '':
