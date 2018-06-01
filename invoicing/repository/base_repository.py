@@ -9,10 +9,11 @@ class BaseRepository(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     # Todo: Not great, initialises a connection for every instance of crud classes
-    # Todo: DB may not be found after pip install
+    # Todo: DB may not be found after a pip install
+    # Todo: Write a Dependency Injection/Services class
     def __init__(self, table):
         self.table = table
-        self.connection = Database('../Invoicing-DB.db').getDB()
+        self.connection = Database('../Invoicing.db').getDB()
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 

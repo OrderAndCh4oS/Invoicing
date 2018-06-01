@@ -1,5 +1,5 @@
 from crud.base_crud import BaseCrud
-from crud.quote_crud import QuoteCrud
+from crud.project_crud import ProjectCrud
 from repository.client_repository import ClientRepository
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
@@ -76,7 +76,7 @@ class ClientCrud(BaseCrud, ClientRepository):
                 Menu.waitForInput()
 
     def remove_children(self, client_id):
-        QuoteCrud().delete_quotes_by_client_id(client_id)
+        ProjectCrud().delete_projects_by_client_id(client_id)
 
     def delete_clients_by_company_id(self, company_id):
         clients = self.find_clients_by_company_id(company_id)

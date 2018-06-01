@@ -3,7 +3,7 @@ from _datetime import datetime
 from actions.action import Action
 from crud.base_crud import BaseCrud
 from repository.job_repository import JobRepository
-from repository.quote_repository import QuoteRepository
+from repository.project_repository import ProjectRepository
 from repository.staff_repository import StaffRepository
 from repository.status_repository import StatusRepository
 from ui.date import Date
@@ -70,7 +70,7 @@ class JobCrud(BaseCrud, JobRepository):
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
         staff_member_assigned = Menu.select_row(StaffRepository(), 'Assign To')
         status = Menu.select_row(StatusRepository(), 'Set Status')
-        last_quote = QuoteRepository().find_last_reference_code()
+        last_project = ProjectRepository().find_last_reference_code()
         if len(title) > 0 and len(estimated_time) > 0 and status:
             self.insert({
                 'reference_code': reference_code,
@@ -81,7 +81,7 @@ class JobCrud(BaseCrud, JobRepository):
                 'created_at': created_at,
                 'status_id': status['id'],
                 'assigned_to': staff_member_assigned['id'],
-                'quote_id': last_quote['id']
+                'project_id': last_project['id']
             })
             self.save()
             self.check_rows_updated('Job Added')
@@ -163,8 +163,8 @@ class JobCrud(BaseCrud, JobRepository):
         print(reference_code)
         return reference_code
 
-    def delete_jobs_by_quote_id(self, quote_id):
-        self.remove_jobs_by_quote_id(quote_id)
+    def delete_jobs_by_project_id(self, project_id):
+        self.remove_jobs_by_project_id(project_id)
         self.save()
 
     def delete_jobs_by_invoice_id(self, invoice_id):

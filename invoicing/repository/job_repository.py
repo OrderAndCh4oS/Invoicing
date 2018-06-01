@@ -36,7 +36,7 @@ class JobRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_one()
 
-    def find_jobs_by_quote_id(self, quote_id):
+    def find_jobs_by_project_id(self, project_id):
         query = QueryBuilder(self.table) \
             .select(['jobs.id', 'reference_code', 'jobs.title as title', 'description', 'estimated_time',
                      'status.title as status', 'deadline',
@@ -44,7 +44,7 @@ class JobRepository(BaseRepository):
             .from_() \
             .join('staff', 'assigned_to = staff.id') \
             .join('status', 'status_id = status.id') \
-            .where('jobs.quote_id = ?', quote_id)
+            .where('jobs.project_id = ?', project_id)
         self.execute(**query.build())
         return self.get_all()
 
@@ -68,8 +68,8 @@ class JobRepository(BaseRepository):
             .from_() \
             .join('staff', 'assigned_to = staff.id') \
             .join('status', 'status_id = status.id') \
-            .join('quotes', 'quote_id = quotes.id') \
-            .where('quotes.client_id = ?', client_id) \
+            .join('projects', 'project_id = projects.id') \
+            .where('projects.client_id = ?', client_id) \
             .andWhere('completed = ?', '1')
         self.execute(**query.build())
         return self.get_all()
@@ -97,10 +97,10 @@ class JobRepository(BaseRepository):
             .where('id = ?', id)
         self.execute(**query.build())
 
-    def remove_jobs_by_quote_id(self, quote_id):
+    def remove_jobs_by_project_id(self, project_id):
         query = QueryBuilder(self.table) \
             .delete() \
-            .where('quote_id = ?', quote_id)
+            .where('project_id = ?', project_id)
         self.execute(**query.build())
 
     def remove_jobs_by_invoice_id(self, invoice_id):

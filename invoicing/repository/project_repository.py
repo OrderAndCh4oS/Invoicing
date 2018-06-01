@@ -2,14 +2,14 @@ from query_builder.query_builder import QueryBuilder
 from repository.base_repository import BaseRepository
 
 
-class QuoteRepository(BaseRepository):
+class ProjectRepository(BaseRepository):
 
     def __init__(self):
-        super().__init__('quotes')
+        super().__init__('projects')
 
     def find_all_join_clients_and_company(self):
         query = QueryBuilder(self.table) \
-            .select(['quotes.id', 'reference_code', 'date',
+            .select(['projects.id', 'reference_code', 'date',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name']) \
             .from_() \
@@ -20,19 +20,19 @@ class QuoteRepository(BaseRepository):
 
     def find_by_id_join_clients_and_company(self, id):
         query = QueryBuilder(self.table) \
-            .select(['quotes.id', 'reference_code', 'date',
+            .select(['projects.id', 'reference_code', 'date',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name', 'companies.address as company_address']) \
             .from_() \
             .join('clients', 'client_id = clients.id') \
             .join('companies', 'clients.company_id = companies.id') \
-            .where('quotes.id = ?', id)
+            .where('projects.id = ?', id)
         self.execute(**query.build())
         return self.get_one()
 
     def find_by_id_with_jobs(self, id):
         query = QueryBuilder(self.table) \
-            .select(['quotes.id', 'quotes.reference_code', 'date',
+            .select(['projects.id', 'projects.reference_code', 'date',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name',
                      'companies.address as company_address',
@@ -42,13 +42,13 @@ class QuoteRepository(BaseRepository):
             .from_() \
             .join('clients', 'client_id = clients.id') \
             .join('companies', 'clients.company_id = companies.id') \
-            .join('jobs', 'quotes.id = jobs.quote_id') \
+            .join('jobs', 'projects.id = jobs.project_id') \
             .join('staff', 'jobs.assigned_to = staff.id') \
-            .where('quotes.id = ?', id)
+            .where('projects.id = ?', id)
         self.execute(**query.build())
         return self.get_all()
 
-    def find_quotes_by_client_id(self, client_id):
+    def find_projects_by_client_id(self, client_id):
         query = QueryBuilder(self.table) \
             .select(['id', 'reference_code', 'date']) \
             .from_() \
@@ -60,11 +60,11 @@ class QuoteRepository(BaseRepository):
         query = QueryBuilder(self.table) \
             .select(['id', 'reference_code as last_reference_code']) \
             .from_() \
-            .where('id = (select max(id) from quotes)')
+            .where('id = (select max(id) from projects)')
         self.execute(**query.build())
         return self.get_one()
 
-    def remove_quotes_by_client_id(self, client_id):
+    def remove_projects_by_client_id(self, client_id):
         query = QueryBuilder(self.table) \
             .delete() \
             .where('client_id = ?', client_id)

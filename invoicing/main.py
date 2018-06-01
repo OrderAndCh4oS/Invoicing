@@ -15,7 +15,7 @@ class Invoicing:
             # Action('s', 'Show Assigned Jobs', controller.show_assigned_jobs),
             Action('1', 'Companies', controller.companyAction),
             Action('2', 'Clients', controller.clientAction),
-            Action('3', 'Quotes', controller.quoteAction),
+            Action('3', 'Projects', controller.projectAction),
             Action('4', 'Jobs', controller.jobAction),
             Action('5', 'Invoices', controller.invoiceAction),
             Action('6', 'Staff', controller.staffAction),
