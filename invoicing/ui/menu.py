@@ -1,6 +1,5 @@
 from ansi_colours import AnsiColours as Colour
 
-from ui.style import Style
 from ui.table import Table
 from validation.validation import Validation
 
@@ -26,7 +25,7 @@ class Menu:
                 user_selection = 0
 
     @staticmethod
-    def choose_item(repository):
+    def choose_item_by_id(find_by_id):
         item = False
         while not item:
             id = input('\nEnter an id to view or \'b\' to go back: ')
@@ -35,27 +34,14 @@ class Menu:
             if not Validation.isNumber(id):
                 print('Not a valid number')
                 continue
-            item = repository.find_by_id(id)
+            item = find_by_id(id)
         return item
 
-    @staticmethod
-    def show_all(repository):
-        rows = repository.find_all()
-        headers = list(map(lambda x: x[0], repository.cursor.description))
-        Table.create_table(headers, rows)
 
     @staticmethod
-    def select_row(repository, title):
-        print(Style.create_title(title))
-        Menu.show_all(repository)
-        return Menu.choose_item(repository)
-
-    # Todo: update all select_row usages to use this instead
-    # Todo: find a way to remove cursor from params
-    @staticmethod
-    def select_row_by(find, cursor, select):
-        Menu.show_all_by(find, cursor)
-        return Menu.choose_item_by(select)
+    def select_row(rows, headers, find_by_id):
+        Table.create_table(rows, headers)
+        return Menu.choose_item_by_id(find_by_id)
 
     @staticmethod
     def yes_no_question(question):
@@ -63,25 +49,6 @@ class Menu:
         while response not in ['y', 'Y', '', 'n', 'N']:
             response = input(question + ' (Y/n): ')
         return response in ['Y', 'y', '']
-
-    @staticmethod
-    def choose_item_by(select):
-        item = False
-        while not item:
-            id = input('\nEnter an id to view or \'b\' to go back: ')
-            if (id == 'b'):
-                return False
-            if not Validation.isNumber(id):
-                print('Not a valid number')
-                continue
-            item = select(id)
-        return item
-
-    @staticmethod
-    def show_all_by(find, cursor):
-        rows = find()
-        headers = list(map(lambda x: x[0], cursor.description))
-        Table.create_table(headers, rows)
 
     @staticmethod
     def waitForInput():

@@ -5,13 +5,18 @@ from ui.style import Style
 
 
 class StatusCrud(BaseCrud, StatusRepository):
+    # Todo: see if you can use a sub class for this sort of meta data ie:
+    # class Meta():
+    #     name = 'Statuses'
+    #     table = 'status'
     def __init__(self):
         super().__init__('Statuses')
         super(StatusRepository, self).__init__('status')
 
+    #  Todo: these methods should work like controllers, the current contents should be moved to a view layer
     def show(self):
         print(Style.create_title('Show Status'))
-        status = Menu.select_row(self, 'Statuses')
+        status = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if status:
             print(Style.create_title('Status Data'))
             print('Title: ' + status['title'])
@@ -32,7 +37,7 @@ class StatusCrud(BaseCrud, StatusRepository):
 
     def edit(self):
         print(Style.create_title('Edit Status'))
-        status = Menu.select_row(self, 'Statuses')
+        status = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if status:
             title = self.update_field(status['title'], 'Title')
             colour = self.update_field(status['colour'], 'Colour')
@@ -45,7 +50,7 @@ class StatusCrud(BaseCrud, StatusRepository):
 
     def delete(self):
         print(Style.create_title('Delete Status'))
-        status = Menu.select_row(self, 'Statuses')
+        status = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if status:
             user_action = False
             while not user_action == 'delete':

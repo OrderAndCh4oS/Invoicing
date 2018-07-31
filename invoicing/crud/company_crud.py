@@ -11,7 +11,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
         super(CompanyRepository, self).__init__('companies')
 
     def show(self):
-        company = Menu.select_row(self, 'Companies')
+        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if company:
             print(Style.create_title('Company Data'))
             print('Name: ' + company['name'])
@@ -32,7 +32,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
 
     def edit(self):
         print(Style.create_title('Edit Company'))
-        company = Menu.select_row(self, 'Companies')
+        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if company:
             name = self.update_field(company['name'], 'Name')
             address = self.update_field(company['address'], 'Address')
@@ -45,7 +45,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
 
     def delete(self):
         print(Style.create_title('Delete Company'))
-        company = Menu.select_row(self, 'Companies')
+        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if company:
             user_action = False
             while not user_action == 'delete':

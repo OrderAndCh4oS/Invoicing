@@ -25,3 +25,5 @@ __pycache__
 /Quote.tex
 /invoicing/templates/Invoice.tex
 /invoicing/templates/Quote.tex
+/invoicing/Invoicing-DB.db
+Invoicing-old.db

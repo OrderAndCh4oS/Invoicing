@@ -1,7 +1,7 @@
 
 class Table:
     @staticmethod
-    def create_table(headers, rows):
+    def create_table(rows, headers):
         col_widths = [len(header) for header in headers]
         for row in rows:
             for i, column in enumerate(row):
@@ -12,11 +12,6 @@ class Table:
         print(Table.make_underline(col_widths))
         for row in rows:
             print(Table.make_row(row, col_widths))
-
-    @staticmethod
-    def get_headers(description):
-        headers = list(map(lambda x: x[0], description))
-        return headers
 
     @staticmethod
     def make_row(row, col_widths, separator = "|"):

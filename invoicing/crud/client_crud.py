@@ -13,7 +13,7 @@ class ClientCrud(BaseCrud, ClientRepository):
 
     def show(self):
         print(Style.create_title('Show Client'))
-        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
+        client = Menu.select_row(self.find_all_join_companies(), self.get_headers(), self.find_by_id_join_company)
         if client:
             print(Style.create_title('Client Data'))
             print('Fullname: ' + client['fullname'])
@@ -28,7 +28,12 @@ class ClientCrud(BaseCrud, ClientRepository):
         fullname = input("Full Name: ")
         email = input("Email: ")
         telephone = input("Telephone: ")
-        company = Menu.select_row(CompanyRepository(), 'Select Company')
+        companyRepository = CompanyRepository()
+        company = Menu.select_row(
+            companyRepository.find_all(),
+            companyRepository.get_headers(),
+            companyRepository.find_by_id
+        )
         if len(fullname) > 0 and company:
             self.insert({
                 'fullname': fullname,
@@ -44,7 +49,7 @@ class ClientCrud(BaseCrud, ClientRepository):
 
     def edit(self):
         print(Style.create_title('Edit Client'))
-        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
+        client = Menu.select_row(self.find_all_join_companies(), self.get_headers(), self.find_by_id_join_company)
         if client:
             fullname = self.update_field(client['fullname'], 'Fullname')
             email = self.update_field(client['email'], 'Email')
@@ -61,7 +66,7 @@ class ClientCrud(BaseCrud, ClientRepository):
 
     def delete(self):
         print(Style.create_title('Delete Client'))
-        client = Menu.select_row_by(self.find_all_join_companies, self.cursor, self.find_by_id_join_company)
+        client = Menu.select_row(self.find_all_join_companies(), self.get_headers(), self.find_by_id_join_company)
         if client:
             user_action = False
             while not user_action == 'delete':

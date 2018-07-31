@@ -31,9 +31,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def show(self):
         print(Style.create_title('Show Invoice'))
-        invoice = Menu.select_row_by(
-            self.find_all_join_clients_and_companies,
-            self.cursor,
+        invoice = Menu.select_row(
+            self.find_all_join_clients_and_companies(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_companies
         )
         if invoice:
@@ -50,7 +50,12 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def add(self):
         print(Style.create_title('Add Invoice'))
-        client = Menu.select_row(ClientRepository(), 'Select Client')
+        clientRepository = ClientRepository()
+        client = Menu.select_row(
+            clientRepository.find_all(),
+            clientRepository.get_headers(),
+            clientRepository.find_by_id
+        )
         reference_code = self.generate_reference_code()
         if client and len(reference_code) > 0:
             self.insert({
@@ -83,9 +88,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
     def select_job(self, last_invoice, client_id):
         print(Style.create_title('Select Job'))
         jobRepository = JobRepository()
-        job = Menu.select_row_by(
-            lambda: jobRepository.find_jobs_by_client_id_where_complete(client_id),
-            jobRepository.cursor,
+        job = Menu.select_row(
+            jobRepository.find_jobs_by_client_id_where_complete(client_id),
+            jobRepository.get_headers(),
             jobRepository.find_by_id
         )
         if job:
@@ -96,9 +101,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))
-        invoice = Menu.select_row_by(
-            self.find_all_join_clients_and_companies,
-            self.cursor,
+        invoice = Menu.select_row(
+            self.find_all_join_clients_and_companies(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_companies
         )
         if invoice:
@@ -109,9 +114,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
-        invoice = Menu.select_row_by(
-            self.find_all_join_clients_and_companies,
-            self.cursor,
+        invoice = Menu.select_row(
+            self.find_all_join_clients_and_companies(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_companies
         )
         if invoice:
@@ -136,9 +141,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))
-        invoice = Menu.select_row_by(
-            self.find_all_join_clients_and_companies,
-            self.cursor,
+        invoice = Menu.select_row(
+            self.find_all_join_clients_and_companies(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_companies
         )
         if invoice:

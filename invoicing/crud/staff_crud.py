@@ -23,7 +23,7 @@ class StaffCrud(BaseCrud, StaffRepository):
 
     def show(self):
         print(Style.create_title('Show Staff'))
-        staff = Menu.select_row(self, 'Staff')
+        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if staff:
             print(Style.create_title('Staff Data'))
             print('First Name: ' + staff['first_name'])
@@ -48,7 +48,7 @@ class StaffCrud(BaseCrud, StaffRepository):
 
     def edit(self):
         print(Style.create_title('Edit Staff'))
-        staff = Menu.select_row(self, 'Staff')
+        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if staff:
             first_name = self.update_field(staff['first_name'], 'First Name')
             last_name = self.update_field(staff['last_name'], 'Last Name')
@@ -66,7 +66,7 @@ class StaffCrud(BaseCrud, StaffRepository):
 
     def delete(self):
         print(Style.create_title('Delete Staff'))
-        staff = Menu.select_row(self, 'Staff')
+        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
         if staff:
             user_action = False
             while not user_action == 'delete':

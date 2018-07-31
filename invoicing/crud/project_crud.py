@@ -31,9 +31,9 @@ class ProjectCrud(BaseCrud, ProjectRepository):
 
     def show(self):
         print(Style.create_title('Show Project'))
-        project = Menu.select_row_by(
-            self.find_all_join_clients_and_company,
-            self.cursor,
+        project = Menu.select_row(
+            self.find_all_join_clients_and_company(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_company
         )
         if project:
@@ -46,11 +46,14 @@ class ProjectCrud(BaseCrud, ProjectRepository):
             Menu.waitForInput()
 
     def add(self):
-        print(Style.create_title('Add Project'))
-        client = Menu.select_row(ClientRepository(), 'Select Client')
-        last_project = self.find_last_reference_code()
-        last_reference_code = last_project["last_reference_code"] if last_project else 'Q-7000'
-        reference_code = 'Q-' + str(int(last_reference_code[2:]) + 1)
+        print(Style.create_title('Create Project'))
+        clientRepository = ClientRepository()
+        client = Menu.select_row(
+            clientRepository.find_all(),
+            clientRepository.get_headers(),
+            clientRepository.find_by_id
+        )
+        reference_code = self.make_project_reference_code()
         if client and len(reference_code) > 0:
             self.insert({
                 'client_id': client['id'],
@@ -60,25 +63,26 @@ class ProjectCrud(BaseCrud, ProjectRepository):
             self.save()
             self.check_rows_updated('Project Added')
             self.add_jobs()
-            print('Project added')
+            print('Project created')
         else:
-            print('Project not added')
+            print('Project not created')
         Menu.waitForInput()
 
+    def make_project_reference_code(self):
+        last_project = self.find_last_reference_code()
+        last_reference_code = last_project["last_reference_code"] if last_project else 'P-7000'
+        reference_code = 'P-' + str(int(last_reference_code[2:]) + 1)
+        return reference_code
+
     def add_jobs(self):
-        while True:
-            add_job = Menu.yes_no_question('Add job')
-            if add_job == 'n':
-                break
-            elif add_job != 'y' and add_job != 'Y' and add_job != '':
-                continue
+        while Menu.yes_no_question('Add job'):
             JobCrud().add()
 
     def edit(self):
         print(Style.create_title('Edit Project'))
-        project = Menu.select_row_by(
-            self.find_all_join_clients_and_company,
-            self.cursor,
+        project = Menu.select_row(
+            self.find_all_join_clients_and_company(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_company
         )
         if project:
@@ -91,9 +95,9 @@ class ProjectCrud(BaseCrud, ProjectRepository):
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
-        project = Menu.select_row_by(
-            self.find_all_join_clients_and_company,
-            self.cursor,
+        project = Menu.select_row(
+            self.find_all_join_clients_and_company(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_company
         )
         if project:
@@ -118,9 +122,9 @@ class ProjectCrud(BaseCrud, ProjectRepository):
 
     def delete(self):
         print(Style.create_title('Delete Project'))
-        project = Menu.select_row_by(
-            self.find_all_join_clients_and_company,
-            self.cursor,
+        project = Menu.select_row(
+            self.find_all_join_clients_and_company(),
+            self.get_headers(),
             self.find_by_id_join_clients_and_company
         )
         if project:

@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from abc import ABCMeta
 
@@ -9,11 +10,13 @@ class BaseRepository(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     # Todo: Not great, initialises a connection for every instance of crud classes
-    # Todo: DB may not be found after a pip install
+    # Todo: DB may not be found after a pip install (maybe will now using os.path)
     # Todo: Write a Dependency Injection/Services class
     def __init__(self, table):
         self.table = table
-        self.connection = Database('../Invoicing.db').getDB()
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(BASE_DIR, "../../Invoicing.db")
+        self.connection = Database(db_path).getDB()
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
@@ -33,6 +36,9 @@ class BaseRepository(metaclass=ABCMeta):
     def get_one(self):
         self.connection.commit()
         return self.cursor.fetchone()
+
+    def get_headers(self):
+        return list(map(lambda x: x[0], self.cursor.description))
 
     def check_rows_updated(self, message):
         if self.has_updated_rows() > 0:

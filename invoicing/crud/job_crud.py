@@ -39,9 +39,9 @@ class JobCrud(BaseCrud, JobRepository):
 
     def show(self):
         print(Style.create_title('Show Job'))
-        job = Menu.select_row_by(
-            self.find_all_join_staff_and_status,
-            self.cursor,
+        job = Menu.select_row(
+            self.find_all_join_staff_and_status(),
+            self.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -68,8 +68,18 @@ class JobCrud(BaseCrud, JobRepository):
         deadline = input("Deadline (DD-MM-YYYY): ")
         deadline = Date().convert_date_for_saving(deadline)
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
-        staff_member_assigned = Menu.select_row(StaffRepository(), 'Assign To')
-        status = Menu.select_row(StatusRepository(), 'Set Status')
+        staffRepository = StaffRepository()
+        staff_member_assigned = Menu.select_row(
+            staffRepository.find_all(),
+            staffRepository.get_headers(),
+            staffRepository.find_by_id
+        )
+        statusRepository = StatusRepository()
+        status = Menu.select_row(
+            statusRepository.find_all(),
+            statusRepository.get_headers(),
+            statusRepository.find_by_id
+        )
         last_project = ProjectRepository().find_last_reference_code()
         if len(title) > 0 and len(estimated_time) > 0 and status:
             self.insert({
@@ -90,9 +100,9 @@ class JobCrud(BaseCrud, JobRepository):
 
     def edit(self):
         print(Style.create_title('Edit Job'))
-        job = Menu.select_row_by(
-            self.find_all_join_staff_and_status,
-            self.cursor,
+        job = Menu.select_row(
+            self.find_all_join_staff_and_status(),
+            self.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -136,9 +146,9 @@ class JobCrud(BaseCrud, JobRepository):
 
     def delete(self):
         print(Style.create_title('Delete Job'))
-        job = Menu.select_row_by(
-            self.find_all_join_staff_and_status,
-            self.cursor,
+        job = Menu.select_row(
+            self.find_all_join_staff_and_status(),
+            self.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -173,9 +183,9 @@ class JobCrud(BaseCrud, JobRepository):
 
     def show_jobs_by_assigned_to(self, staff_id):
         print(Style.create_title('Select job to log time'))
-        job = Menu().select_row_by(
-            lambda: self.find_by_assigned_to(staff_id),
-            self.cursor,
+        job = Menu().select_row(
+            self.find_by_assigned_to(staff_id),
+            self.get_headers(),
             self.find_by_id
         )
         if job:
@@ -199,7 +209,12 @@ class JobCrud(BaseCrud, JobRepository):
             Menu.waitForInput()
 
     def update_status(self, job_id):
-        status = Menu.select_row(StatusRepository(), 'Set Status')
+        statusRepository = StatusRepository()
+        status = Menu.select_row(
+            statusRepository.find_all(),
+            statusRepository.get_headers(),
+            statusRepository.find_by_id
+        )
         self.update(job_id, {
             'status_id': status['id'],
         })
