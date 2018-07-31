@@ -1,56 +1,15 @@
-import os
-import sqlite3
 from abc import ABCMeta
 
-from database import Database
+from database.sqlite3 import Sqlite3Database
 from query_builder.query_builder import QueryBuilder
 
 
-class BaseRepository(metaclass=ABCMeta):
+class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
-    # Todo: Not great, initialises a connection for every instance of crud classes
-    # Todo: DB may not be found after a pip install (maybe will now using os.path)
-    # Todo: Write a Dependency Injection/Services class
     def __init__(self, table):
+        super().__init__()
         self.table = table
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        db_path = os.path.join(BASE_DIR, "../../Invoicing.db")
-        self.connection = Database(db_path).getDB()
-        self.connection.row_factory = sqlite3.Row
-        self.cursor = self.connection.cursor()
-
-    def __exit__(self):
-        self.connection.close()
-
-    def has_updated_rows(self):
-        return self.connection.total_changes > 0
-
-    def save(self):
-        self.connection.commit()
-
-    def get_all(self):
-        self.connection.commit()
-        return self.cursor.fetchall()
-
-    def get_one(self):
-        self.connection.commit()
-        return self.cursor.fetchone()
-
-    def get_headers(self):
-        return list(map(lambda x: x[0], self.cursor.description))
-
-    def check_rows_updated(self, message):
-        if self.has_updated_rows() > 0:
-            print('\n' + message)
-        else:
-            print('\nError performing update, please try again')
-
-    def get_description(self):
-        return self.cursor.description
-
-    def execute(self, sql='', parameters=()):
-        self.cursor.execute(sql, parameters)
 
     def find_all(self, select=('*')):
         query = QueryBuilder(self.table) \
