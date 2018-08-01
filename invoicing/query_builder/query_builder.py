@@ -18,6 +18,10 @@ class QueryBuilder:
         self.query += 'where {} '.format(condition)
         return self
 
+    def whereIDIsLastInserted(self):
+        self.query += 'where id = last_insert_rowid() '
+        return self
+
     def andWhere(self, condition, param=None):
         self.addParam(param)
         self.query += 'and {} '.format(condition)

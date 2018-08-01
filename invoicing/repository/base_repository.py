@@ -26,6 +26,14 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         self.execute(**query.build())
         return self.get_one()
 
+    def find_last_inserted(self, select=('*')):
+        query = QueryBuilder(self.table) \
+            .select(select) \
+            .from_() \
+            .whereIDIsLastInserted()
+        self.execute(**query.build())
+        return self.get_one()
+
     def insert(self, values):
         query = QueryBuilder(self.table) \
             .insert(values)

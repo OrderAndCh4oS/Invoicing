@@ -1,4 +1,4 @@
-
+# Todo: These methods can be used as a basis for creating a JSON response
 class Table:
     @staticmethod
     def create_table(rows, headers):
