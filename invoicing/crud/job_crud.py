@@ -9,7 +9,7 @@ from repository.status_repository import StatusRepository
 from ui.date import Date
 from ui.menu import Menu
 from ui.style import Style
-from validation.validation import Validation
+from value_validation.value_validation import Validation
 
 
 class JobCrud(BaseCrud, JobRepository):

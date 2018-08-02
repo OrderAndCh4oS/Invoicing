@@ -1,7 +1,7 @@
 from ansi_colours import AnsiColours as Colour
 
 from ui.table import Table
-from validation.validation import Validation
+from value_validation.value_validation import Validation
 
 
 class Menu:
