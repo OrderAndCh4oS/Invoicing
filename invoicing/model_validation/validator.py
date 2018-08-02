@@ -1,0 +1,28 @@
+from model_validation.validation_link import ValidationLink
+
+
+class Validator():
+    def __init__(self):
+        self.valid = False
+        self.validation_links = []
+        self.error_message = None
+
+    def is_valid(self):
+        return self.valid
+
+    def set_valid(self, is_valid):
+        self.valid = is_valid
+
+    def set_validation_links(self, validation_links):
+        for validation_link in validation_links:
+            ValidationLink(self.validation_links, validation_link)
+
+    def set_error_message(self, message):
+        self.error_message = message
+
+    def get_error_message(self):
+        return self.error_message
+
+    def validate(self):
+        self.error_message = None
+        return self.validation_links[0](self)
