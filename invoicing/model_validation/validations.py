@@ -38,6 +38,24 @@ class IsInteger(Validation):
         return field
 
 
+class IsBoolean(Validation):
+    def __init__(self, error_message='is not an integer'):
+        super().__init__(error_message)
+
+    def __call__(self, field):
+        self.validation_check(field, isinstance(field.value, bool))
+        return field
+
+
+class IsFloat(Validation):
+    def __init__(self, error_message='is not an integer'):
+        super().__init__(error_message)
+
+    def __call__(self, field):
+        self.validation_check(field, isinstance(field.value, float))
+        return field
+
+
 class MaxLength(Validation):
     def __init__(self, max, error_message='is too long'):
         super().__init__(error_message)
