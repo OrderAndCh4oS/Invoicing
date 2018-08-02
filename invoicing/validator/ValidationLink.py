@@ -29,15 +29,15 @@ class Validation:
     def __init__(self, error_message='is not valid'):
         self.error_message = error_message
 
-    def __call__(self, data) -> Validator:
+    def __call__(self, field) -> Validator:
         pass
 
-    def validation_check(self, data, check):
+    def validation_check(self, field, check):
         if not check:
-            data.set_valid(False)
-            data.set_error_message(self.error_message)
+            field.set_valid(False)
+            field.set_error_message(self.error_message)
         else:
-            data.set_valid(True)
+            field.set_valid(True)
 
 
 class ValidationLink():
@@ -54,13 +54,13 @@ class ValidationLink():
     def end(self):
         return (self.chain.index(self) + 1 >= len(self.chain))
 
-    def __call__(self, data: Validator):
-        validator = self.validation(data)
+    def __call__(self, field: Validator):
+        validator = self.validation(field)
         if not validator.is_valid() or self.end(): return validator
-        return self.next()(data)
+        return self.next()(field)
 
 
-class Data(Validator):
+class Field(Validator):
     def __init__(self, validation_links, default_value=None):
         super().__init__()
         self.value = default_value
@@ -77,27 +77,27 @@ class IsRequired(Validation):
     def __init__(self, error_message='is required'):
         super().__init__(error_message)
 
-    def __call__(self, data: Data):
-        self.validation_check(data, True if data.value else False)
-        return data
+    def __call__(self, field: Field):
+        self.validation_check(field, True if field.value else False)
+        return field
 
 
 class IsString(Validation):
     def __init__(self, error_message='is not a string'):
         super().__init__(error_message)
 
-    def __call__(self, data: Data):
-        self.validation_check(data, isinstance(data.value, str))
-        return data
+    def __call__(self, field: Field):
+        self.validation_check(field, isinstance(field.value, str))
+        return field
 
 
 class IsInteger(Validation):
     def __init__(self, error_message='is not an integer'):
         super().__init__(error_message)
 
-    def __call__(self, data: Data):
-        self.validation_check(data, isinstance(data.value, int))
-        return data
+    def __call__(self, field: Field):
+        self.validation_check(field, isinstance(field.value, int))
+        return field
 
 
 class MaxLength(Validation):
@@ -105,9 +105,9 @@ class MaxLength(Validation):
         super().__init__(error_message)
         self.max = max
 
-    def __call__(self, data: Data):
-        self.validation_check(data, len(data.value) <= self.max)
-        return data
+    def __call__(self, field: Field):
+        self.validation_check(field, len(field.value) <= self.max)
+        return field
 
 
 class MinLength(Validation):
@@ -115,21 +115,28 @@ class MinLength(Validation):
         super().__init__(error_message)
         self.min = min
 
-    def __call__(self, data: Data):
-        self.validation_check(data, len(data.value) >= self.min)
-        return data
+    def __call__(self, field: Field):
+        self.validation_check(field, len(field.value) >= self.min)
+        return field
 
 
 class BaseModel:
 
-    def fields(self):
-        field_list = []
-        for k in dir(self):
-            v = getattr(self, k)
-            if isinstance(v, Data):
-                field_list.append((k, v))
+    def __init__(self, **kwargs):
+        self._fields = None
+        for field, value in kwargs.items():
+            self.__class__.__dict__[field].set_value(value)
 
-        return field_list
+    def fields(self):
+        if self._fields == None:
+            field_list = []
+            for k in dir(self):
+                v = getattr(self, k)
+                if isinstance(v, Field):
+                    field_list.append((k, v))
+
+            return field_list
+        return self._fields
 
     def validate(self):
         self.errors = {}
@@ -144,29 +151,24 @@ class BaseModel:
 
 
 class Person(BaseModel):
-    first_name = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)])
-    age = Data([IsRequired(), IsInteger()])
-
-    def __init__(self, first_name, age):
-        super().__init__()
-        self.first_name.set_value(first_name)
-        self.age.set_value(age)
+    first_name = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)])
+    age = Field([IsRequired(), IsInteger()])
 
 
 if __name__ == '__main__':
-    valid = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hey there')
-    required = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='')
-    not_string = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value=123)
-    too_long = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hey there shit head')
-    too_short = Data([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hi')
+    valid = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hey there')
+    required = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='')
+    not_string = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value=123)
+    too_long = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hey there shit head')
+    too_short = Field([IsRequired(), IsString(), MaxLength(10), MinLength(3)], default_value='Hi')
     print('Valid: %s' % valid.validate())
     print('Required: %s' % required.validate())
     print('Not a String: %s' % not_string.validate())
     print('Too Long: %s' % too_long.validate())
     print('Too Short: %s' % too_short.validate())
-    person = Person('John', 54)
+    person = Person(first_name='John', age=54)
     person.validate()
     print('Valid person:', person)
-    invalid_person = Person('', 'not a number')
+    invalid_person = Person(first_name='', age='not a number')
     invalid_person.validate()
     print('Invalid person:', invalid_person)
