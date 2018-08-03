@@ -3,7 +3,7 @@ from model_validation.validations import IsString, IsRequired, IsInteger, IsFloa
 from models.base_model import BaseModel
 
 
-class ClientModel(BaseModel):
+class StaffModel(BaseModel):
     id = Field(IsInteger())
     first_name = Field(IsRequired(), IsString())
     last_name = Field(IsRequired(), IsString())

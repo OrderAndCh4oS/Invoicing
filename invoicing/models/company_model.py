@@ -4,5 +4,6 @@ from models.base_model import BaseModel
 
 
 class CompanyModel(BaseModel):
+    # Todo: find way all fields to be null or empty if not required
     name = Field([IsRequired(), IsString()])
     address = Field([IsString()])
