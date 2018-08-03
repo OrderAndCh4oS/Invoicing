@@ -13,7 +13,7 @@ wheels/
 .installed.cfg
 *.egg
 venv/
-.idea/
+/.idea
 __pycache__
 /invoicing/quote.pdf
 /invoicing/invoice.pdf

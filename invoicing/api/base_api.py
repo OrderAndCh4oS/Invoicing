@@ -18,7 +18,6 @@ class BaseAPI():
         return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())
 
     def update_by_id(self, id, data):
-        data = json.loads(data)
         self.model(**data)
         self.model.validate()
         if self.model.is_valid:
@@ -29,7 +28,6 @@ class BaseAPI():
             return json.dumps(self.model.get_errors())
 
     def add(self, data):
-        data = json.loads(data)
         self.model(**data)
         self.model.validate()
         if self.model.is_valid:
