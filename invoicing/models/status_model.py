@@ -4,6 +4,6 @@ from models.base_model import BaseModel
 
 
 class ClientModel(BaseModel):
+    id = Field(IsInteger())
     title = Field(IsRequired(), IsString())
     color = Field(IsRequired(), IsString())
-    id = Field(IsInteger())  # Todo validate relation exists

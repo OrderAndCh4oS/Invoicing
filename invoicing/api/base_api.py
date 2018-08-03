@@ -1,12 +1,14 @@
 import json
 
+from models.base_model import BaseModel
 from repository.base_repository import BaseRepository
 from transformer.json import JSONTransformer
 
 
 class BaseAPI():
 
-    def __init__(self, repository: BaseRepository):
+    def __init__(self, repository: BaseRepository, model: BaseModel):
+        self.model = model
         self.repository = repository
 
     def show_all(self):
@@ -16,14 +18,26 @@ class BaseAPI():
         return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())
 
     def update_by_id(self, id, data):
-        self.repository.update(id, json.loads(data))
-        self.repository.save()
-        return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())
+        data = json.loads(data)
+        self.model(**data)
+        self.model.validate()
+        if self.model.is_valid:
+            self.repository.update(id, data)
+            self.repository.save()
+            return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())
+        else:
+            return json.dumps(self.model.get_errors())
 
     def add(self, data):
-        self.repository.insert(json.loads(data))
-        self.repository.save()
-        return JSONTransformer.resultToJSON(self.repository.find_last_inserted(), self.repository.get_headers())
+        data = json.loads(data)
+        self.model(**data)
+        self.model.validate()
+        if self.model.is_valid:
+            self.repository.insert(data)
+            self.repository.save()
+            return JSONTransformer.resultToJSON(self.repository.find_last_inserted(), self.repository.get_headers())
+        else:
+            return json.dumps(self.model.get_errors())
 
     def delete(self, id):
         self.repository.remove(id)

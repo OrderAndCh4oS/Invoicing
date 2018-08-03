@@ -4,6 +4,7 @@ from models.base_model import BaseModel
 
 
 class ClientModel(BaseModel):
+    id = Field(IsInteger())
     fullname = Field(IsRequired(), IsString())
     email = Field(IsString())
     telephone = Field(IsString())

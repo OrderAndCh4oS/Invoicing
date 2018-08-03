@@ -3,6 +3,6 @@ from model_validation.validations import IsRequired, IsString
 from models.base_model import BaseModel
 
 
-class Company(BaseModel):
+class CompanyModel(BaseModel):
     name = Field([IsRequired(), IsString()])
     address = Field([IsString()])
