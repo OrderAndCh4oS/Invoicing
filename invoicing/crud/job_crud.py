@@ -61,7 +61,7 @@ class JobCrud(BaseCrud, JobRepository):
 
     def add(self):
         print(Style.create_title('Add Job'))
-        reference_code = self.get_reference_code()
+        reference_code = self.make_next_reference_code()
         title = input("Title: ")
         description = input("Description: ")
         estimated_time = input("Est. Time: ")
@@ -80,7 +80,7 @@ class JobCrud(BaseCrud, JobRepository):
             statusRepository.get_headers(),
             statusRepository.find_by_id
         )
-        last_project = ProjectRepository().find_last_reference_code()
+        last_project = ProjectRepository().find_last_inserted_id()
         if len(title) > 0 and len(estimated_time) > 0 and status:
             self.insert({
                 'reference_code': reference_code,
@@ -165,13 +165,6 @@ class JobCrud(BaseCrud, JobRepository):
                 self.save()
                 self.check_rows_updated('Job Deleted')
                 Menu.waitForInput()
-
-    def get_reference_code(self):
-        last_job = self.find_last_reference_code()
-        last_reference_code = last_job['last_reference_code'] if last_job else 'J-7000'
-        reference_code = 'J-' + str(int(last_reference_code[2:]) + 1)
-        print(reference_code)
-        return reference_code
 
     def delete_jobs_by_project_id(self, project_id):
         self.remove_jobs_by_project_id(project_id)

@@ -53,7 +53,7 @@ class ProjectCrud(BaseCrud, ProjectRepository):
             clientRepository.get_headers(),
             clientRepository.find_by_id
         )
-        reference_code = self.make_project_reference_code()
+        reference_code = self.make_next_reference_code()
         if client and len(reference_code) > 0:
             self.insert({
                 'client_id': client['id'],
@@ -67,12 +67,6 @@ class ProjectCrud(BaseCrud, ProjectRepository):
         else:
             print('Project not created')
         Menu.waitForInput()
-
-    def make_project_reference_code(self):
-        last_project = self.find_last_reference_code()
-        last_reference_code = last_project["last_reference_code"] if last_project else 'P-7000'
-        reference_code = 'P-' + str(int(last_reference_code[2:]) + 1)
-        return reference_code
 
     def add_jobs(self):
         while Menu.yes_no_question('Add job'):

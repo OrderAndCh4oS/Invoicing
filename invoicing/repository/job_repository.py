@@ -28,14 +28,6 @@ class JobRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
-    def find_last_reference_code(self):
-        query = QueryBuilder(self.table) \
-            .select(['reference_code as last_reference_code']) \
-            .from_() \
-            .where('id = (select max(id) from jobs)')
-        self.execute(**query.build())
-        return self.get_one()
-
     def find_jobs_by_project_id(self, project_id):
         query = QueryBuilder(self.table) \
             .select(['jobs.id', 'reference_code', 'jobs.title as title', 'description', 'estimated_time',
@@ -73,6 +65,20 @@ class JobRepository(BaseRepository):
             .andWhere('completed = ?', '1')
         self.execute(**query.build())
         return self.get_all()
+
+    def find_last_reference_code(self):
+        query = QueryBuilder(self.table) \
+            .select(['reference_code as last_reference_code']) \
+            .from_() \
+            .where('id = (select max(id) from jobs)')
+        self.execute(**query.build())
+        return self.get_one()
+
+    def make_next_reference_code(self):
+        last_job = self.find_last_reference_code()
+        last_reference_code = last_job['last_reference_code'] if last_job else 'J-1000'
+        reference_code = 'J-' + str(int(last_reference_code[2:]) + 1)
+        return reference_code
 
     def update_actual_time(self, id, time_spent):
         query = QueryBuilder(self.table) \

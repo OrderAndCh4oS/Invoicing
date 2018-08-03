@@ -56,6 +56,14 @@ class ProjectRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_last_inserted_id(self):
+        query = QueryBuilder(self.table) \
+            .select(['id']) \
+            .from_() \
+            .where('id = (select max(id) from projects)')
+        self.execute(**query.build())
+        return self.get_one()
+
     def find_last_reference_code(self):
         query = QueryBuilder(self.table) \
             .select(['id', 'reference_code as last_reference_code']) \
@@ -63,6 +71,12 @@ class ProjectRepository(BaseRepository):
             .where('id = (select max(id) from projects)')
         self.execute(**query.build())
         return self.get_one()
+
+    def make_next_reference_code(self):
+        last_project = self.find_last_reference_code()
+        last_reference_code = last_project["last_reference_code"] if last_project else 'P-1000'
+        reference_code = 'P-' + str(int(last_reference_code[2:]) + 1)
+        return reference_code
 
     def remove_projects_by_client_id(self, client_id):
         query = QueryBuilder(self.table) \

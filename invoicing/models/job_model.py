@@ -4,8 +4,7 @@ from models.base_model import BaseModel
 
 
 class JobModel(BaseModel):
-    id = Field([IsInteger()], nullable=True)
-    reference_code = Field([IsString()])
+    reference_code = Field([IsString()], nullable=True)
     title = Field([IsString()])
     description = Field([IsString()])
     status_id = Field([IsInteger()])

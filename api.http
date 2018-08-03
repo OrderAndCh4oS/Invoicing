@@ -111,13 +111,55 @@ Content-Type: application/json
 POST http://localhost:5000/project
 Content-Type: application/json
 
-{"reference_code": "P-7003", "client_id": 2}
+{"client_id": 2}
 
 ###
 
 POST http://localhost:5000/job
 Content-Type: application/json
 
-{"project_id": 4, "status_id": 1, "title": "A Job Name", "description": "Do this job", "assigned_to": 1, "estimated_time": 8.0, "reference_code": "J-7003", "deadline": "2018-09-26"}
+{"project_id": 4, "status_id": 1, "title": "A Job Name", "description": "Do this job", "assigned_to": 1, "estimated_time": 8.0, "deadline": "2018-09-26"}
+
+###
+
+POST http://localhost:5000/company/1
+Content-Type: application/json
+
+{"name": "A New Company Name", "address": "A Street"}
+
+###
+
+POST http://localhost:5000/client/1
+Content-Type: application/json
+
+{"telephone": "07020202020", "email": "new.client.name@example.com", "company_id": 1, "fullname": "New Client Name"}
+
+###
+
+POST http://localhost:5000/staff/1
+Content-Type: application/json
+
+{"first_name": "Jane", "last_name": "Spring", "job_title": "Manager", "rate": 8.0}
+
+###
+
+POST http://localhost:5000/status/1
+Content-Type: application/json
+
+{"title": "Has Started", "colour": "light-blue"}
+
+###
+
+POST http://localhost:5000/project/1
+Content-Type: application/json
+
+{"client_id": 1}
+
+###
+
+POST http://localhost:5000/job/1
+Content-Type: application/json
+
+{"project_id": 4, "status_id": 1, "title": "A New Job Name", "description": "Do this job now", "assigned_to": 2, "estimated_time": 12.0, "deadline": "2018-09-26"}
 
 ###

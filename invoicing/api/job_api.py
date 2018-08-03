@@ -16,6 +16,7 @@ class JobAPI(BaseAPI):
         self.model(**data)
         self.model.validate()
         if self.model.is_valid:
+            data["reference_code"] = self.repository.make_next_reference_code()
             data["created_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
             self.repository.insert(data)
             self.repository.save()
