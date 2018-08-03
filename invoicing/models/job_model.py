@@ -1,21 +1,21 @@
 from model_validation.field import Field
-from model_validation.validations import IsString, IsRequired, IsInteger, IsFloat
+from model_validation.validations import IsString, IsInteger, IsFloat, IsBoolean
 from models.base_model import BaseModel
 
 
 class JobModel(BaseModel):
-    # id = Field([IsInteger()])
+    id = Field([IsInteger()], nullable=True)
     reference_code = Field([IsString()])
-    title = Field([IsRequired(), IsString()])
+    title = Field([IsString()])
     description = Field([IsString()])
-    status_id = Field([IsRequired(), IsInteger()])
-    assigned_to = Field([IsRequired(), IsInteger()])
-    # created_at = Field([IsString()])
+    status_id = Field([IsInteger()])
+    assigned_to = Field([IsInteger()])
+    created_at = Field([IsString()], nullable=True)
     deadline = Field([IsString()])
-    estimated_time = Field([IsRequired(), IsFloat()])
-    # actual_time = Field([IsFloat()])
-    # billable_time = Field([IsFloat()])
-    # quote_id = Field([IsInteger()])
+    estimated_time = Field([IsFloat()])
+    actual_time = Field([IsFloat()], nullable=True)
+    billable_time = Field([IsFloat()], nullable=True)
+    quote_id = Field([IsInteger()], nullable=True)
     project_id = Field([IsInteger()])
-    # invoice_id = Field([IsInteger()])
-    # completed = Field([IsBoolean()])
+    invoice_id = Field([IsInteger()], nullable=True)
+    completed = Field([IsBoolean()], nullable=True)

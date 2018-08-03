@@ -25,7 +25,7 @@ class BaseModel:
     def validate(self):
         for field, value in self.get_fields():
             value.validate()
-            if not value.is_valid():
+            if not value.is_valid() and not (value.is_nullable() and value.is_null()):
                 self.errors[field] = value.get_error_message()
         self.is_valid = False if len(self.errors) else True
 

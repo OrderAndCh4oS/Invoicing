@@ -2,6 +2,8 @@ from model_validation.validation_link import ValidationLink
 
 
 class Validator():
+    nullable = False
+
     def __init__(self):
         self.valid = False
         self.validation_links = []
@@ -12,6 +14,9 @@ class Validator():
 
     def set_valid(self, is_valid):
         self.valid = is_valid
+
+    def is_nullable(self):
+        return self.nullable
 
     def set_validation_links(self, validation_links):
         for validation_link in validation_links:
