@@ -4,8 +4,8 @@ from models.base_model import BaseModel
 
 
 class StaffModel(BaseModel):
-    id = Field(IsInteger())
-    first_name = Field(IsRequired(), IsString())
-    last_name = Field(IsRequired(), IsString())
-    job_title = Field(IsRequired(), IsString())
-    rate = Field(IsRequired(), IsFloat())
+    id = Field([IsInteger()])
+    first_name = Field([IsRequired(), IsString()])
+    last_name = Field([IsRequired(), IsString()])
+    job_title = Field([IsRequired(), IsString()])
+    rate = Field([IsRequired(), IsFloat()])

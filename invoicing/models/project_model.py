@@ -4,7 +4,7 @@ from models.base_model import BaseModel
 
 
 class ProjectModel(BaseModel):
-    id = Field(IsInteger())
-    reference_code = Field(IsString())
-    date = Field(IsString())
-    client = Field(IsInteger())  # Todo validate relation exists
+    id = Field([IsInteger()])
+    reference_code = Field([IsString()])
+    date = Field([IsString()])
+    client = Field([IsInteger()])  # Todo validate relation exists
