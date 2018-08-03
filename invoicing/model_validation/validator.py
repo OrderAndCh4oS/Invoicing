@@ -3,6 +3,7 @@ from model_validation.validation_link import ValidationLink
 
 class Validator():
     nullable = False
+    value = None
 
     def __init__(self):
         self.valid = False
@@ -13,10 +14,13 @@ class Validator():
         return self.valid
 
     def set_valid(self, is_valid):
-        self.valid = is_valid
+        self.valid = is_valid or self.is_nullable() and self.is_null()
 
     def is_nullable(self):
         return self.nullable
+
+    def is_null(self):
+        return self.value is None
 
     def set_validation_links(self, validation_links):
         for validation_link in validation_links:

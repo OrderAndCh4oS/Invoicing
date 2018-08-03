@@ -11,8 +11,5 @@ class Field(Validator):
     def set_value(self, value):
         self.value = value
 
-    def is_null(self):
-        return self.value is None
-
     def __str__(self):
         return "Value: %s: %s (%s)" % (self.value, self.error_message, 'valid' if self.is_valid() else 'invalid')

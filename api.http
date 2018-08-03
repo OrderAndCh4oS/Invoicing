@@ -97,7 +97,7 @@ Content-Type: application/json
 POST http://localhost:5000/staff
 Content-Type: application/json
 
-{"first_name": "Diane", "last_name": "Lowe", "job_title": "Lackey", "rate": 5.0}
+{"first_name": "Jane", "last_name": "Summer", "job_title": "Lackey", "rate": 5.0}
 
 ###
 
