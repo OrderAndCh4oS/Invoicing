@@ -14,7 +14,7 @@ class Table:
             print(Table.make_row(row, col_widths))
 
     @staticmethod
-    def make_row(row, col_widths, separator = "|"):
+    def make_row(row, col_widths, separator="|"):
         string = ""
         for i, column in enumerate(row):
             padding = "".join([" " for _ in range(col_widths[i] - len(str(column)) + 2)])

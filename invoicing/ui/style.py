@@ -1,4 +1,3 @@
-
 class Style:
     @staticmethod
     def create_title(title):

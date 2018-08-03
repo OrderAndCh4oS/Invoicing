@@ -1,4 +1,3 @@
-
 class Action:
     def __init__(self, key, title, action=None):
         self.key = key

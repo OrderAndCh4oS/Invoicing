@@ -1,4 +1,3 @@
-
 class Validation:
     @staticmethod
     def isNumber(number):

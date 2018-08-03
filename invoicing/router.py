@@ -37,6 +37,7 @@ class RequestHandler:
         else:
             return json_response(api.show_by_id(id))
 
+
 @app.route('/')
 def index():
     api = IndexAPI()

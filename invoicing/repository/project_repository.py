@@ -66,7 +66,7 @@ class ProjectRepository(BaseRepository):
 
     def find_last_reference_code(self):
         query = QueryBuilder(self.table) \
-            .select(['id', 'reference_code as last_reference_code']) \
+            .select(['reference_code as last_reference_code']) \
             .from_() \
             .where('id = (select max(id) from projects)')
         self.execute(**query.build())

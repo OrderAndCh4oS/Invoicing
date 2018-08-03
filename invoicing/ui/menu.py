@@ -37,7 +37,6 @@ class Menu:
             item = find_by_id(id)
         return item
 
-
     @staticmethod
     def select_row(rows, headers, find_by_id):
         Table.create_table(rows, headers)

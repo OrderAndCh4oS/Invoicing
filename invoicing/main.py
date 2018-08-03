@@ -24,5 +24,6 @@ class Invoicing:
         ]
         Menu.create(title, actions)
 
+
 if __name__ == '__main__':
     Invoicing()
