@@ -10,11 +10,32 @@ class JSONTransformer:
             for i, header in enumerate(headers):
                 data[header] = row[i]
             results.append(data)
-        return json.dumps(results)
+        return JSONTransformer.dataToJSON(results)
 
     @staticmethod
     def resultToJSON(row, headers):
         result = {}
         for i, header in enumerate(headers):
             result[header] = row[i]
-        return json.dumps(result)
+        return JSONTransformer.dataToJSON(result)
+
+    @staticmethod
+    def dataToJSON(data):
+        response = {
+            "data": data
+        }
+        return json.dumps(response)
+
+    @staticmethod
+    def errorToJSON(errors):
+        response = {
+            "errors": errors
+        }
+        return json.dumps(response)
+
+    @staticmethod
+    def messageToJSON(message):
+        response = {
+            "message": message
+        }
+        return json.dumps(response)

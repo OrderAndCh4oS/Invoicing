@@ -1,5 +1,3 @@
-import json
-
 from models.base_model import BaseModel
 from repository.base_repository import BaseRepository
 from transformer.json import JSONTransformer
@@ -25,7 +23,7 @@ class BaseAPI():
             self.repository.save()
             return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())
         else:
-            return json.dumps(self.model.get_errors())
+            return JSONTransformer.errorToJSON(self.model.get_errors())
 
     def add(self, data):
         self.model(**data)
@@ -35,9 +33,9 @@ class BaseAPI():
             self.repository.save()
             return JSONTransformer.resultToJSON(self.repository.find_last_inserted(), self.repository.get_headers())
         else:
-            return json.dumps(self.model.get_errors())
+            return JSONTransformer.errorToJSON(self.model.get_errors())
 
     def delete(self, id):
         self.repository.remove(id)
         self.repository.save()
-        return json.dumps({"message": "deleted: %s" % id})
+        return JSONTransformer.messageToJSON("deleted: %s" % id)
