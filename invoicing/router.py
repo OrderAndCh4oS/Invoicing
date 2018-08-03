@@ -1,5 +1,8 @@
 from flask import Flask
 
+app = Flask(__name__)
+
+from api.company_api import CompanyAPI
 from api.client_api import ClientAPI
 from api.index_api import IndexAPI
 from api.invoice_api import InvoiceAPI
@@ -7,10 +10,6 @@ from api.job_api import JobAPI
 from api.project_api import ProjectAPI
 from api.staff_api import StaffAPI
 from api.status_api import StatusAPI
-
-app = Flask(__name__)
-
-from invoicing.api.company_api import CompanyAPI
 
 
 def json_response(json):
