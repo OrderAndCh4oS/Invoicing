@@ -36,6 +36,7 @@ class BaseAPI():
             return JSONTransformer.errorToJSON(self.model.get_errors())
 
     def delete(self, id):
+        # Todo: make sure id exists and deletion has actually occurred
         self.repository.remove(id)
         self.repository.save()
         return JSONTransformer.messageToJSON("deleted: %s" % id)

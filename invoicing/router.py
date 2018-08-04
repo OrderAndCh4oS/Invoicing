@@ -32,8 +32,10 @@ class RequestHandler:
 
     @staticmethod
     def detail(api, id):
-        if request.method == 'POST':
+        if request.method == 'PUT':
             return json_response(api.update_by_id(id, request.get_json()))
+        elif request.method == 'DELETE':
+            return json_response(api.delete(id))
         else:
             return json_response(api.show_by_id(id))
 
@@ -49,7 +51,7 @@ def company_list():
     return RequestHandler.list(CompanyAPI())
 
 
-@app.route('/company/<id>', methods=['GET', 'POST'])
+@app.route('/company/<id>', methods=['GET', 'PUT', 'DELETE'])
 def company_detail(id):
     return RequestHandler.detail(CompanyAPI(), id)
 
@@ -59,7 +61,7 @@ def client_list():
     return RequestHandler.list(ClientAPI())
 
 
-@app.route('/client/<id>', methods=['GET', 'POST'])
+@app.route('/client/<id>', methods=['GET', 'PUT', 'DELETE'])
 def client_detail(id):
     return RequestHandler.detail(ClientAPI(), id)
 
@@ -69,7 +71,7 @@ def staff_list():
     return RequestHandler.list(StaffAPI())
 
 
-@app.route('/staff/<id>', methods=['GET', 'POST'])
+@app.route('/staff/<id>', methods=['GET', 'PUT', 'DELETE'])
 def staff_detail(id):
     return RequestHandler.detail(StaffAPI(), id)
 
@@ -79,7 +81,7 @@ def status_list():
     return RequestHandler.list(StatusAPI())
 
 
-@app.route('/status/<id>', methods=['GET', 'POST'])
+@app.route('/status/<id>', methods=['GET', 'PUT', 'DELETE'])
 def status_detail(id):
     return RequestHandler.detail(StatusAPI(), id)
 
@@ -89,7 +91,7 @@ def project_list():
     return RequestHandler.list(ProjectAPI())
 
 
-@app.route('/project/<id>', methods=['GET', 'POST'])
+@app.route('/project/<id>', methods=['GET', 'PUT', 'DELETE'])
 def project_detail(id):
     return RequestHandler.detail(ProjectAPI(), id)
 
@@ -99,7 +101,7 @@ def job_list():
     return RequestHandler.list(JobAPI())
 
 
-@app.route('/job/<id>', methods=['GET', 'POST'])
+@app.route('/job/<id>', methods=['GET', 'PUT', 'DELETE'])
 def job_detail(id):
     return RequestHandler.detail(JobAPI(), id)
 
@@ -109,6 +111,6 @@ def invoice_list():
     return RequestHandler.list(InvoiceAPI())
 
 
-@app.route('/invoice/<id>', methods=['GET', 'POST'])
+@app.route('/invoice/<id>', methods=['GET', 'PUT', 'DELETE'])
 def invoice_detail(id):
     return RequestHandler.detail(InvoiceAPI(), id)
