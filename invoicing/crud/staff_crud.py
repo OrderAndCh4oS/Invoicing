@@ -8,10 +8,10 @@ from ui.style import Style
 
 # Todo: show jobs assigned to staff member
 # Todo: Log time against staff members jobs
-class StaffCrud(BaseCrud, StaffRepository):
+class StaffCrud(BaseCrud):
     def __init__(self):
         super().__init__('Staff')
-        super(StaffRepository, self).__init__('staff')
+        self.repository = StaffRepository()
 
     def view_staff_menu(self, staff_id):
         title = Style.create_title(self.table_name + 'Menu')
@@ -23,7 +23,7 @@ class StaffCrud(BaseCrud, StaffRepository):
 
     def show(self):
         print(Style.create_title('Show Staff'))
-        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if staff:
             print(Style.create_title('Staff Data'))
             print('First Name: ' + staff['first_name'])
@@ -39,34 +39,35 @@ class StaffCrud(BaseCrud, StaffRepository):
         job_title = input("Job Title: ")
         rate = input("Rate: ")
         if len(first_name) > 0 and len(last_name) and len(job_title) > 0:
-            self.insert({'first_name': first_name, 'last_name': last_name, 'job_title': job_title, 'rate': rate})
-            self.save()
-            self.check_rows_updated('Staff Added')
+            self.repository.insert(
+                {'first_name': first_name, 'last_name': last_name, 'job_title': job_title, 'rate': rate})
+            self.repository.save()
+            self.repository.check_rows_updated('Staff Added')
         else:
             print('Staff not added')
         Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Staff'))
-        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if staff:
             first_name = self.update_field(staff['first_name'], 'First Name')
             last_name = self.update_field(staff['last_name'], 'Last Name')
             job_title = self.update_field(staff['job_title'], 'Job Title')
             rate = self.update_field(staff['rate'], 'Rate')
-            self.update(
+            self.repository.update(
                 staff['id'],
                 {'first_name': first_name, 'last_name': last_name, 'job_title': job_title, 'rate': rate}
             )
-            self.save()
-            self.check_rows_updated('Staff Updated')
+            self.repository.save()
+            self.repository.check_rows_updated('Staff Updated')
         else:
             print('No changes made')
         Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Staff'))
-        staff = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if staff:
             user_action = False
             while not user_action == 'delete':
@@ -74,7 +75,7 @@ class StaffCrud(BaseCrud, StaffRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
-                self.remove(staff['id'])
-                self.save()
-                self.check_rows_updated('Staff Member Deleted')
+                self.repository.remove(staff['id'])
+                self.repository.save()
+                self.repository.check_rows_updated('Staff Member Deleted')
                 Menu.waitForInput()

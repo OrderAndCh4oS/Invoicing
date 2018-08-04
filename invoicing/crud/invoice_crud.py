@@ -12,10 +12,10 @@ from ui.menu import Menu
 from ui.style import Style
 
 
-class InvoiceCrud(BaseCrud, InvoiceRepository):
+class InvoiceCrud(BaseCrud):
     def __init__(self):
         super().__init__('Invoices')
-        super(InvoiceRepository, self).__init__('invoices')
+        self.repository = InvoiceRepository()
 
     def menu(self):
         title = Style.create_title('Manage ' + self.table_name)
@@ -32,9 +32,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
     def show(self):
         print(Style.create_title('Show Invoice'))
         invoice = Menu.select_row(
-            self.find_all_join_clients_and_companies(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_companies
+            self.repository.find_all_join_clients_and_companies(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_companies
         )
         if invoice:
             self.display_invoice(invoice)
@@ -58,13 +58,13 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
         )
         reference_code = self.generate_reference_code()
         if client and len(reference_code) > 0:
-            self.insert({
+            self.repository.insert({
                 'client_id': client['id'],
                 'reference_code': reference_code,
                 'date': datetime.now().strftime("%Y-%m-%d %H:%M")
             })
-            self.save()
-            self.check_rows_updated('Invoice Added')
+            self.repository.save()
+            self.repository.check_rows_updated('Invoice Added')
             self.add_client_jobs_to_invoice(client['id'])
             print('\nInvoice added\n')
         else:
@@ -72,13 +72,13 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
         Menu.waitForInput()
 
     def generate_reference_code(self):
-        last_invoice = self.find_last_reference_code()
+        last_invoice = self.repository.find_last_reference_code()
         last_reference_code = last_invoice["last_reference_code"] if last_invoice else 'Q-7000'
         reference_code = 'I-' + str(int(last_reference_code[2:]) + 1)
         return reference_code
 
     def add_client_jobs_to_invoice(self, client_id):
-        last_invoice = self.find_last_reference_code()
+        last_invoice = self.repository.find_last_reference_code()
         while True:
             add_job = Menu.yes_no_question('Add job to invoice')
             if not add_job:
@@ -97,27 +97,27 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
             # Todo: Enter billable time for job
             jobRepository.add_to_invoice(job['id'], last_invoice['id'])
             jobRepository.save()
-            self.check_rows_updated('Job Added')
+            self.repository.check_rows_updated('Job Added')
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))
         invoice = Menu.select_row(
-            self.find_all_join_clients_and_companies(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_companies
+            self.repository.find_all_join_clients_and_companies(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_companies
         )
         if invoice:
             reference_code = self.update_field(invoice['reference_code'], 'Reference Code')
-            self.update(invoice['id'], {'reference_code': reference_code})
-            self.save()
-            self.check_rows_updated('Invoice Updated')
+            self.repository.update(invoice['id'], {'reference_code': reference_code})
+            self.repository.save()
+            self.repository.check_rows_updated('Invoice Updated')
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
         invoice = Menu.select_row(
-            self.find_all_join_clients_and_companies(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_companies
+            self.repository.find_all_join_clients_and_companies(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_companies
         )
         if invoice:
             jobs = JobRepository().find_jobs_by_invoice_id(invoice['id'])
@@ -142,9 +142,9 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
     def delete(self):
         print(Style.create_title('Delete Invoice'))
         invoice = Menu.select_row(
-            self.find_all_join_clients_and_companies(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_companies
+            self.repository.find_all_join_clients_and_companies(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_companies
         )
         if invoice:
             user_action = False
@@ -154,17 +154,17 @@ class InvoiceCrud(BaseCrud, InvoiceRepository):
                     return
             if user_action == 'delete':
                 self.remove_children(invoice['id'])
-                self.remove(invoice['id'])
-                self.save()
-                self.check_rows_updated('Invoice Deleted')
+                self.repository.remove(invoice['id'])
+                self.repository.save()
+                self.repository.check_rows_updated('Invoice Deleted')
                 Menu.waitForInput()
 
     def delete_invoices_by_client_id(self, client_id):
-        invoices = self.find_invoices_by_client_id(client_id)
+        invoices = self.repository.find_invoices_by_client_id(client_id)
         for invoice in invoices:
             self.remove_children(invoice['id'])
-        self.remove_invoices_by_client_id(client_id)
-        self.save()
+        self.repository.remove_invoices_by_client_id(client_id)
+        self.repository.save()
 
     def remove_children(self, invoice_id):
         JobCrud().delete_jobs_by_invoice_id(invoice_id)

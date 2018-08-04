@@ -12,10 +12,10 @@ from ui.style import Style
 from value_validation.value_validation import Validation
 
 
-class JobCrud(BaseCrud, JobRepository):
+class JobCrud(BaseCrud):
     def __init__(self):
         super().__init__('Jobs')
-        super(JobRepository, self).__init__('jobs')
+        self.repository = JobRepository()
 
     def menu(self):
         title = Style.create_title('Manage ' + self.table_name)
@@ -40,8 +40,8 @@ class JobCrud(BaseCrud, JobRepository):
     def show(self):
         print(Style.create_title('Show Job'))
         job = Menu.select_row(
-            self.find_all_join_staff_and_status(),
-            self.get_headers(),
+            self.repository.find_all_join_staff_and_status(),
+            self.repository.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -61,7 +61,7 @@ class JobCrud(BaseCrud, JobRepository):
 
     def add(self):
         print(Style.create_title('Add Job'))
-        reference_code = self.make_next_reference_code()
+        reference_code = self.repository.make_next_reference_code()
         title = input("Title: ")
         description = input("Description: ")
         estimated_time = input("Est. Time: ")
@@ -82,7 +82,7 @@ class JobCrud(BaseCrud, JobRepository):
         )
         last_project = ProjectRepository().find_last_inserted_id()
         if len(title) > 0 and len(estimated_time) > 0 and status:
-            self.insert({
+            self.repository.insert({
                 'reference_code': reference_code,
                 'title': title,
                 'description': description,
@@ -93,16 +93,16 @@ class JobCrud(BaseCrud, JobRepository):
                 'assigned_to': staff_member_assigned['id'],
                 'project_id': last_project['id']
             })
-            self.save()
-            self.check_rows_updated('Job Added')
+            self.repository.save()
+            self.repository.check_rows_updated('Job Added')
         else:
             print('Job not added')
 
     def edit(self):
         print(Style.create_title('Edit Job'))
         job = Menu.select_row(
-            self.find_all_join_staff_and_status(),
-            self.get_headers(),
+            self.repository.find_all_join_staff_and_status(),
+            self.repository.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -115,15 +115,15 @@ class JobCrud(BaseCrud, JobRepository):
             estimated_time = self.update_field(job['estimated_time'], 'Est. Time')
             deadline = self.update_date_field(job['deadline'], 'deadline')
             deadline = Date.convert_date_for_saving(deadline)
-            self.update(job['id'], {
+            self.repository.update(job['id'], {
                 'reference_code': reference_code,
                 'title': title,
                 'description': description,
                 'estimated_time': estimated_time,
                 'deadline': deadline
             })
-            self.save()
-            self.check_rows_updated('Job Updated')
+            self.repository.save()
+            self.repository.check_rows_updated('Job Updated')
         else:
             print('No changes made')
         Menu.waitForInput()
@@ -139,16 +139,16 @@ class JobCrud(BaseCrud, JobRepository):
         print("Estimated Time: " + job['estimated_time'])
         print("Actual Time: " + job['actual_time'])
         billable_time = input("Billable Time: ")
-        self.update_billable_time(job['id'], billable_time)
-        self.save()
-        self.check_rows_updated('Job Updated')
+        self.repository.update_billable_time(job['id'], billable_time)
+        self.repository.save()
+        self.repository.check_rows_updated('Job Updated')
         Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Job'))
         job = Menu.select_row(
-            self.find_all_join_staff_and_status(),
-            self.get_headers(),
+            self.repository.find_all_join_staff_and_status(),
+            self.repository.get_headers(),
             lambda id: self.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
@@ -161,25 +161,25 @@ class JobCrud(BaseCrud, JobRepository):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
-                self.remove(job['id'])
-                self.save()
-                self.check_rows_updated('Job Deleted')
+                self.repository.remove(job['id'])
+                self.repository.save()
+                self.repository.check_rows_updated('Job Deleted')
                 Menu.waitForInput()
 
     def delete_jobs_by_project_id(self, project_id):
-        self.remove_jobs_by_project_id(project_id)
-        self.save()
+        self.repository.remove_jobs_by_project_id(project_id)
+        self.repository.save()
 
     def delete_jobs_by_invoice_id(self, invoice_id):
-        self.remove_jobs_by_invoice_id(invoice_id)
-        self.save()
+        self.repository.remove_jobs_by_invoice_id(invoice_id)
+        self.repository.save()
 
     def show_jobs_by_assigned_to(self, staff_id):
         print(Style.create_title('Select job to log time'))
         job = Menu().select_row(
-            self.find_by_assigned_to(staff_id),
-            self.get_headers(),
-            self.find_by_id
+            self.repository.find_by_assigned_to(staff_id),
+            self.repository.get_headers(),
+            self.repository.find_by_id
         )
         if job:
             self.display_job(job)
@@ -189,16 +189,16 @@ class JobCrud(BaseCrud, JobRepository):
         logged_time = ''
         while not Validation.isFloat(logged_time):
             logged_time = input('Log Time: ')
-        self.update_actual_time(job_id, logged_time)
-        self.save()
-        self.check_rows_updated('Job Updated')
+        self.repository.update_actual_time(job_id, logged_time)
+        self.repository.save()
+        self.repository.check_rows_updated('Job Updated')
         Menu.waitForInput()
 
     def mark_as_complete(self, job_id):
         if Menu.yes_no_question("Would you like to mark this job as complete?"):
-            self.update_mark_as_complete(job_id)
-            self.save()
-            self.check_rows_updated('Job Updated')
+            self.repository.update_mark_as_complete(job_id)
+            self.repository.save()
+            self.repository.check_rows_updated('Job Updated')
             Menu.waitForInput()
 
     def update_status(self, job_id):
@@ -208,9 +208,9 @@ class JobCrud(BaseCrud, JobRepository):
             statusRepository.get_headers(),
             statusRepository.find_by_id
         )
-        self.update(job_id, {
+        self.repository.update(job_id, {
             'status_id': status['id'],
         })
-        self.save()
-        self.check_rows_updated('Status Updated')
+        self.repository.save()
+        self.repository.check_rows_updated('Status Updated')
         Menu.waitForInput()

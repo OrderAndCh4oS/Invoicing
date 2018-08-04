@@ -12,10 +12,10 @@ from ui.menu import Menu
 from ui.style import Style
 
 
-class ProjectCrud(BaseCrud, ProjectRepository):
+class ProjectCrud(BaseCrud):
     def __init__(self):
         super().__init__('Projects')
-        super(ProjectRepository, self).__init__('projects')
+        self.repository = ProjectRepository()
 
     def menu(self):
         title = Style.create_title('Manage ' + self.table_name)
@@ -32,9 +32,9 @@ class ProjectCrud(BaseCrud, ProjectRepository):
     def show(self):
         print(Style.create_title('Show Project'))
         project = Menu.select_row(
-            self.find_all_join_clients_and_company(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_company
+            self.repository.find_all_join_clients_and_company(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_company
         )
         if project:
             print(Style.create_title('Project Data'))
@@ -53,15 +53,15 @@ class ProjectCrud(BaseCrud, ProjectRepository):
             clientRepository.get_headers(),
             clientRepository.find_by_id
         )
-        reference_code = self.make_next_reference_code()
+        reference_code = self.repository.make_next_reference_code()
         if client and len(reference_code) > 0:
-            self.insert({
+            self.repository.insert({
                 'client_id': client['id'],
                 'reference_code': reference_code,
                 'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
             })
-            self.save()
-            self.check_rows_updated('Project Added')
+            self.repository.save()
+            self.repository.check_rows_updated('Project Added')
             self.add_jobs()
             print('Project created')
         else:
@@ -75,24 +75,24 @@ class ProjectCrud(BaseCrud, ProjectRepository):
     def edit(self):
         print(Style.create_title('Edit Project'))
         project = Menu.select_row(
-            self.find_all_join_clients_and_company(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_company
+            self.repository.find_all_join_clients_and_company(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_company
         )
         if project:
             reference_code = self.update_field(project['reference_code'], 'Reference Code')
-            self.update(project['id'], {'reference_code': reference_code})
-            self.save()
-            self.check_rows_updated('Project Updated')
+            self.repository.update(project['id'], {'reference_code': reference_code})
+            self.repository.save()
+            self.repository.check_rows_updated('Project Updated')
             self.add_jobs()
             Menu.waitForInput()
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
         project = Menu.select_row(
-            self.find_all_join_clients_and_company(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_company
+            self.repository.find_all_join_clients_and_company(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_company
         )
         if project:
             jobs = JobRepository().find_jobs_by_project_id(project['id'])
@@ -117,9 +117,9 @@ class ProjectCrud(BaseCrud, ProjectRepository):
     def delete(self):
         print(Style.create_title('Delete Project'))
         project = Menu.select_row(
-            self.find_all_join_clients_and_company(),
-            self.get_headers(),
-            self.find_by_id_join_clients_and_company
+            self.repository.find_all_join_clients_and_company(),
+            self.repository.get_headers(),
+            self.repository.find_by_id_join_clients_and_company
         )
         if project:
             user_action = False
@@ -129,17 +129,17 @@ class ProjectCrud(BaseCrud, ProjectRepository):
                     return
             if user_action == 'delete':
                 self.remove_children(project['id'])
-                self.remove(project['id'])
-                self.save()
-                self.check_rows_updated('Project Deleted')
+                self.repository.remove(project['id'])
+                self.repository.save()
+                self.repository.check_rows_updated('Project Deleted')
                 Menu.waitForInput()
 
     def delete_projects_by_client_id(self, client_id):
-        projects = self.find_projects_by_client_id(client_id)
+        projects = self.repository.find_projects_by_client_id(client_id)
         for project in projects:
             self.remove_children(project['id'])
-        self.remove_projects_by_client_id(client_id)
-        self.save()
+        self.repository.remove_projects_by_client_id(client_id)
+        self.repository.save()
 
     def remove_children(self, project_id):
         JobCrud().delete_jobs_by_project_id(project_id)

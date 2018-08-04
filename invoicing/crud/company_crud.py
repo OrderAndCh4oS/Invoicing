@@ -5,13 +5,13 @@ from ui.menu import Menu
 from ui.style import Style
 
 
-class CompanyCrud(BaseCrud, CompanyRepository):
+class CompanyCrud(BaseCrud):
     def __init__(self):
         super().__init__('Companies')
-        super(CompanyRepository, self).__init__('companies')
+        self.repository = CompanyRepository()
 
     def show(self):
-        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        company = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if company:
             print(Style.create_title('Company Data'))
             print('Name: ' + company['name'])
@@ -23,29 +23,29 @@ class CompanyCrud(BaseCrud, CompanyRepository):
         name = input("Name: ")
         address = input("Address: ")
         if len(name) > 0:
-            self.insert({'name': name, 'address': address})
-            self.save()
-            self.check_rows_updated('Company Added')
+            self.repository.insert({'name': name, 'address': address})
+            self.repository.save()
+            self.repository.check_rows_updated('Company Added')
         else:
             print('Company not added')
         Menu.waitForInput()
 
     def edit(self):
         print(Style.create_title('Edit Company'))
-        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        company = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if company:
             name = self.update_field(company['name'], 'Name')
             address = self.update_field(company['address'], 'Address')
-            self.update(company['id'], {'name': name, 'address': address})
-            self.save()
-            self.check_rows_updated('Company Updated')
+            self.repository.update(company['id'], {'name': name, 'address': address})
+            self.repository.save()
+            self.repository.check_rows_updated('Company Updated')
         else:
             print('No changes made')
         Menu.waitForInput()
 
     def delete(self):
         print(Style.create_title('Delete Company'))
-        company = Menu.select_row(self.find_all(), self.get_headers(), self.find_by_id)
+        company = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
         if company:
             user_action = False
             while not user_action == 'delete':
@@ -55,7 +55,7 @@ class CompanyCrud(BaseCrud, CompanyRepository):
                     return
             if user_action == 'delete':
                 ClientCrud().delete_clients_by_company_id(company['id'])
-                self.remove(company['id'])
-                self.save()
-                self.check_rows_updated('Company Deleted')
+                self.repository.remove(company['id'])
+                self.repository.save()
+                self.repository.check_rows_updated('Company Deleted')
                 Menu.waitForInput()
