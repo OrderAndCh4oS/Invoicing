@@ -10,6 +10,7 @@ from repository.job_repository import JobRepository
 from ui.date import Date
 from ui.menu import Menu
 from ui.style import Style
+from value_validation.value_validation import Validation
 
 
 class InvoiceCrud(BaseCrud):
@@ -93,7 +94,8 @@ class InvoiceCrud(BaseCrud):
         jobRepository = JobRepository()
         job = Menu.pagination_menu(
             jobRepository,
-            find=lambda: jobRepository.find_jobs_by_client_id_where_complete(client_id),
+            find=lambda limit, page: jobRepository.find_paginated_jobs_by_client_id_where_not_complete(client_id, limit,
+                                                                                                       page),
             find_by_id=jobRepository.find_by_id
         )
         if job:
@@ -115,24 +117,53 @@ class InvoiceCrud(BaseCrud):
         print(Style.create_title('Generate Invoice'))
         invoice = self.make_pagination_menu()
         if invoice:
-            jobs = JobRepository().find_jobs_by_invoice_id(invoice['id'])
-            invoice_data = {
-                'reference_code': invoice['reference_code'],
-                'company_name': invoice['company_name'],
-                'company_address': invoice['company_address'],
-                'date': Date().convert_date_time_for_printing(invoice['date']),
-                'total_cost': str(sum([float(job['rate']) * float(job['billable_time']) for job in jobs])),
-                'jobs': [{
-                    'title': job['title'],
-                    'description': job['description'],
-                    'type': 'hours',
-                    'billable_time': str(job['billable_time']),
-                    'staff_rate': str(job['rate']),
-                    'cost': str(float(job['rate']) * float(job['billable_time']))
-                } for job in jobs]
-            }
+            jobRepository = JobRepository()
+            jobs = jobRepository.find_jobs_by_invoice_id(invoice['id'])
+            self.enter_billable_time(jobRepository, jobs)
+            jobs = jobRepository.find_jobs_by_invoice_id(invoice['id'])
+            invoice_data = self.make_invoice_dictionary(invoice, jobs)
             LatexInvoice().generate(**invoice_data)
+            self.mark_invoiced_jobs_as_complete(jobRepository, jobs)
             Menu.wait_for_input()
+
+    def enter_billable_time(self, jobRepository, jobs):
+        print(Style.create_title('Enter Billable Time'))
+        for job in jobs:
+            print('Title: %s' % job['title'])
+            print('Description: %s' % job['description'])
+            print('Estimated Time: %s' % job['estimated_time'])
+            print('Logged Time: %s' % job['actual_time'])
+            billable = ''
+            while not Validation.isFloat(billable):
+                billable = input('Billable Time: ')
+            jobRepository.update_billable_time(job['id'], billable)
+            jobRepository.save()
+            jobRepository.check_rows_updated('Job Updated')
+
+    def make_invoice_dictionary(self, invoice, jobs):
+        invoice_data = {
+            'reference_code': invoice['reference_code'],
+            'company_name': invoice['company_name'],
+            'company_address': invoice['company_address'],
+            'date': Date().convert_date_time_for_printing(invoice['date']),
+            'total_cost': str(sum([float(job['rate']) * float(job['billable_time']) for job in jobs])),
+            'jobs': [{
+                'title': job['title'],
+                'description': job['description'],
+                'type': 'hours',
+                'billable_time': str(job['billable_time']),
+                'staff_rate': str(job['rate']),
+                'cost': str(float(job['rate']) * float(job['billable_time']))
+            } for job in jobs]
+        }
+        return invoice_data
+
+    def mark_invoiced_jobs_as_complete(self, jobRepository, jobs):
+        if len(jobs):
+            for job in jobs:
+                jobRepository.update_mark_as_complete(job['id'])
+            jobRepository.save()
+            jobRepository.check_rows_updated('The selected jobs have been marked as completed')
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))

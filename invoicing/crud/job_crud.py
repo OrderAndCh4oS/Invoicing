@@ -71,12 +71,14 @@ class JobCrud(BaseCrud):
         deadline = input("Deadline (DD-MM-YYYY): ")
         deadline = Date().convert_date_for_saving(deadline)
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+        print(Style.create_title('Assign Job To'))
         staffRepository = StaffRepository()
         staff_member_assigned = Menu.pagination_menu(
             staffRepository,
             find=staffRepository.find_paginated,
             find_by_id=staffRepository.find_by_id
         )
+        print(Style.create_title('Set Status'))
         statusRepository = StatusRepository()
         status = Menu.pagination_menu(
             statusRepository,

@@ -55,7 +55,9 @@ class JobRepository(BaseRepository):
 
     def find_jobs_by_invoice_id(self, invoice_id):
         query = QueryBuilder(self.table) \
-            .select(['jobs.id', 'reference_code', 'jobs.title as title', 'description', 'billable_time',
+            .select(
+            ['jobs.id', 'reference_code', 'jobs.title as title', 'description', 'billable_time', 'estimated_time',
+             'actual_time',
                      'status.title as status', 'deadline',
                      '(staff.first_name || \' \' || staff.last_name) as staff_name', 'staff.rate as rate']) \
             .from_() \
@@ -76,6 +78,22 @@ class JobRepository(BaseRepository):
             .join('projects', 'project_id = projects.id') \
             .where('projects.client_id = ?', client_id) \
             .andWhere('completed = ?', '1')
+        self.execute(**query.build())
+        return self.get_all()
+
+    def find_paginated_jobs_by_client_id_where_not_complete(self, client_id, limit=5, page=1):
+        query = QueryBuilder(self.table) \
+            .select(['jobs.id', 'jobs.reference_code', 'jobs.title',
+                     'status.title as status', 'deadline',
+                     '(staff.first_name || \' \' || staff.last_name) as staff_name']) \
+            .from_() \
+            .join('staff', 'assigned_to = staff.id') \
+            .join('status', 'status_id = status.id') \
+            .join('projects', 'project_id = projects.id') \
+            .where('projects.client_id = ?', client_id) \
+            .andWhere('completed = ?', '0') \
+            .limit(limit) \
+            .offset(limit * page - limit)
         self.execute(**query.build())
         return self.get_all()
 

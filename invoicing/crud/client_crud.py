@@ -36,6 +36,7 @@ class ClientCrud(BaseCrud):
         email = input("Email: ")
         telephone = input("Telephone: ")
         companyRepository = CompanyRepository()
+        print(Style.create_title('Select Company'))
         company = Menu.pagination_menu(
             companyRepository,
             find=companyRepository.find_paginated,

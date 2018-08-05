@@ -43,6 +43,7 @@ class ProjectCrud(BaseCrud):
 
     def add(self):
         print(Style.create_title('Create Project'))
+        print(Style.create_title('Select Client'))
         clientRepository = ClientRepository()
         client = Menu.pagination_menu(
             clientRepository,
