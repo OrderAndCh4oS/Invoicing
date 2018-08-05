@@ -32,7 +32,6 @@ class JobCrud(BaseCrud):
         actions = [
             Action('1', 'Update Status', lambda: self.update_status(job_id)),
             Action('2', 'Log Time', lambda: self.log_time(job_id)),
-            Action('3', 'Mark as Complete', lambda: self.mark_as_complete(job_id)),
             Action('b', 'Back', False)
         ]
         Menu.create(title, actions)
@@ -184,13 +183,6 @@ class JobCrud(BaseCrud):
         self.repository.save()
         self.repository.check_rows_updated('Job Updated')
         Menu.wait_for_input()
-
-    def mark_as_complete(self, job_id):
-        if Menu.yes_no_question("Would you like to mark this job as complete?"):
-            self.repository.update_mark_as_complete(job_id)
-            self.repository.save()
-            self.repository.check_rows_updated('Job Updated')
-            Menu.wait_for_input()
 
     def update_status(self, job_id):
         statusRepository = StatusRepository()
