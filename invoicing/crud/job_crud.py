@@ -39,17 +39,20 @@ class JobCrud(BaseCrud):
 
     def show(self):
         print(Style.create_title('Show Job'))
-        job = Menu.select_row(
-            self.repository.find_all_join_staff_and_status(),
-            self.repository.get_headers(),
-            lambda id: self.find_by_id(
+        job = self.make_pagination_menu()
+        if job:
+            self.display_job(job)
+            self.view_job_menu(job['id'])
+
+    def make_pagination_menu(self):
+        return Menu.pagination_menu(
+            self.repository,
+            find=self.repository.find_paginated_join_staff_and_status,
+            find_by_id=lambda id: self.repository.find_by_id(
                 id,
                 ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
             )
         )
-        if job:
-            self.display_job(job)
-            self.view_job_menu(job['id'])
 
     def display_job(self, job):
         print(Style.create_title('Job Data'))
@@ -69,16 +72,16 @@ class JobCrud(BaseCrud):
         deadline = Date().convert_date_for_saving(deadline)
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
         staffRepository = StaffRepository()
-        staff_member_assigned = Menu.select_row(
-            staffRepository.find_all(),
-            staffRepository.get_headers(),
-            staffRepository.find_by_id
+        staff_member_assigned = Menu.pagination_menu(
+            staffRepository,
+            find=staffRepository.find_paginated,
+            find_by_id=staffRepository.find_by_id
         )
         statusRepository = StatusRepository()
-        status = Menu.select_row(
-            statusRepository.find_all(),
-            statusRepository.get_headers(),
-            statusRepository.find_by_id
+        status = Menu.pagination_menu(
+            statusRepository,
+            find=statusRepository.find_paginated,
+            find_by_id=statusRepository.find_by_id
         )
         last_project = ProjectRepository().find_last_inserted_id()
         if len(title) > 0 and len(estimated_time) > 0 and status:
@@ -100,14 +103,7 @@ class JobCrud(BaseCrud):
 
     def edit(self):
         print(Style.create_title('Edit Job'))
-        job = Menu.select_row(
-            self.repository.find_all_join_staff_and_status(),
-            self.repository.get_headers(),
-            lambda id: self.find_by_id(
-                id,
-                ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
-            )
-        )
+        job = self.make_pagination_menu()
         if job:
             reference_code = self.update_field(job['reference_code'], 'Reference Code')
             title = self.update_field(job['title'], 'Title')
@@ -126,7 +122,7 @@ class JobCrud(BaseCrud):
             self.repository.check_rows_updated('Job Updated')
         else:
             print('No changes made')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def update_date_field(self, date, title):
         if date != '':
@@ -142,18 +138,11 @@ class JobCrud(BaseCrud):
         self.repository.update_billable_time(job['id'], billable_time)
         self.repository.save()
         self.repository.check_rows_updated('Job Updated')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Job'))
-        job = Menu.select_row(
-            self.repository.find_all_join_staff_and_status(),
-            self.repository.get_headers(),
-            lambda id: self.find_by_id(
-                id,
-                ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline')
-            )
-        )
+        job = self.make_pagination_menu()
         if job:
             user_action = False
             while not user_action == 'delete':
@@ -164,7 +153,7 @@ class JobCrud(BaseCrud):
                 self.repository.remove(job['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Job Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()
 
     def delete_jobs_by_project_id(self, project_id):
         self.repository.remove_jobs_by_project_id(project_id)
@@ -176,10 +165,10 @@ class JobCrud(BaseCrud):
 
     def show_jobs_by_assigned_to(self, staff_id):
         print(Style.create_title('Select job to log time'))
-        job = Menu().select_row(
-            self.repository.find_by_assigned_to(staff_id),
-            self.repository.get_headers(),
-            self.repository.find_by_id
+        job = Menu().pagination_menu(
+            self.repository,
+            find=lambda: self.repository.find_by_assigned_to(staff_id),
+            find_by_id=self.repository.find_by_id
         )
         if job:
             self.display_job(job)
@@ -192,25 +181,25 @@ class JobCrud(BaseCrud):
         self.repository.update_actual_time(job_id, logged_time)
         self.repository.save()
         self.repository.check_rows_updated('Job Updated')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def mark_as_complete(self, job_id):
         if Menu.yes_no_question("Would you like to mark this job as complete?"):
             self.repository.update_mark_as_complete(job_id)
             self.repository.save()
             self.repository.check_rows_updated('Job Updated')
-            Menu.waitForInput()
+            Menu.wait_for_input()
 
     def update_status(self, job_id):
         statusRepository = StatusRepository()
-        status = Menu.select_row(
-            statusRepository.find_all(),
-            statusRepository.get_headers(),
-            statusRepository.find_by_id
+        status = Menu.pagination_menu(
+            statusRepository,
+            find=statusRepository.find_all,
+            find_by_id=statusRepository.find_by_id
         )
         self.repository.update(job_id, {
             'status_id': status['id'],
         })
         self.repository.save()
         self.repository.check_rows_updated('Status Updated')
-        Menu.waitForInput()
+        Menu.wait_for_input()

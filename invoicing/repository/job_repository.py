@@ -18,6 +18,19 @@ class JobRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated_join_staff_and_status(self, limit=5, page=1):
+        query = QueryBuilder(self.table) \
+            .select(['jobs.id', 'reference_code', 'jobs.title', 'status.title as status', 'deadline',
+                     '(staff.first_name || \' \' || staff.last_name) as assigned_to',
+                     'created_at', 'completed']) \
+            .from_() \
+            .join('staff', 'assigned_to = staff.id') \
+            .join('status', 'status_id = status.id') \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_by_assigned_to(self, staff_id):
         query = QueryBuilder(self.table) \
             .select(['jobs.id', 'reference_code', 'jobs.title', 'description', 'estimated_time', 'actual_time',

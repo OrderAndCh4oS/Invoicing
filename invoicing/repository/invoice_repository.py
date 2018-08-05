@@ -18,6 +18,19 @@ class InvoiceRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated_join_clients_and_companies(self, limit=5, page=1):
+        query = QueryBuilder(self.table) \
+            .select(['invoices.id', 'reference_code', 'date',
+                     'clients.fullname as client_fullname',
+                     'companies.name as company_name']) \
+            .from_() \
+            .join('clients', 'client_id = clients.id') \
+            .join('companies', 'clients.company_id = companies.id') \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_by_id_join_clients_and_companies(self, id):
         query = QueryBuilder(self.table) \
             .select(['invoices.id as id', 'reference_code', 'date',

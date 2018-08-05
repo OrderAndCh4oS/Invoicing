@@ -13,8 +13,7 @@ class ClientCrud(BaseCrud):
 
     def show(self):
         print(Style.create_title('Show Client'))
-        client = Menu.select_row(self.repository.find_all_join_companies(), self.repository.get_headers(),
-                                 self.repository.find_by_id_join_company)
+        client = self.make_pagination_menu()
         if client:
             print(Style.create_title('Client Data'))
             print('Fullname: ' + client['fullname'])
@@ -22,7 +21,14 @@ class ClientCrud(BaseCrud):
             print('Telephone: ' + client['telephone'])
             print('Company: ' + client['company_name'])
             print('Address: ' + client['company_address'])
-            Menu.waitForInput()
+            Menu.wait_for_input()
+
+    def make_pagination_menu(self):
+        return Menu.pagination_menu(
+            self.repository,
+            find=self.repository.find_paginated_join_companies,
+            find_by_id=self.repository.find_by_id_join_company
+        )
 
     def add(self):
         print(Style.create_title('Add Client'))
@@ -30,10 +36,10 @@ class ClientCrud(BaseCrud):
         email = input("Email: ")
         telephone = input("Telephone: ")
         companyRepository = CompanyRepository()
-        company = Menu.select_row(
-            companyRepository.find_all(),
-            companyRepository.get_headers(),
-            companyRepository.find_by_id
+        company = Menu.pagination_menu(
+            companyRepository,
+            find=companyRepository.find_paginated,
+            find_by_id=companyRepository.find_by_id
         )
         if len(fullname) > 0 and company:
             self.repository.insert({
@@ -46,12 +52,11 @@ class ClientCrud(BaseCrud):
             self.repository.check_rows_updated('Client Added')
         else:
             print('Client not added')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def edit(self):
         print(Style.create_title('Edit Client'))
-        client = Menu.select_row(self.repository.find_all_join_companies(), self.repository.get_headers(),
-                                 self.repository.find_by_id_join_company)
+        client = self.make_pagination_menu()
         if client:
             fullname = self.update_field(client['fullname'], 'Fullname')
             email = self.update_field(client['email'], 'Email')
@@ -64,12 +69,11 @@ class ClientCrud(BaseCrud):
                 })
                 self.repository.save()
                 self.repository.check_rows_updated('Client Updated')
-                Menu.waitForInput()
+                Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Client'))
-        client = Menu.select_row(self.repository.find_all_join_companies(), self.repository.get_headers(),
-                                 self.repository.find_by_id_join_company)
+        client = self.make_pagination_menu()
         if client:
             user_action = False
             while not user_action == 'delete':
@@ -81,7 +85,7 @@ class ClientCrud(BaseCrud):
                 self.repository.remove(client['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Client Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()
 
     def remove_children(self, client_id):
         ProjectCrud().delete_projects_by_client_id(client_id)

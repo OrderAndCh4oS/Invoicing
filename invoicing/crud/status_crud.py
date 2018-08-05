@@ -13,12 +13,12 @@ class StatusCrud(BaseCrud):
     #  Todo: these methods should work like controllers, the current contents should be moved to a view layer
     def show(self):
         print(Style.create_title('Show Status'))
-        status = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        status = Menu.pagination_menu(self.repository)
         if status:
             print(Style.create_title('Status Data'))
             print('Title: ' + status['title'])
             print('Colour: ' + status['colour'])
-            Menu.waitForInput()
+            Menu.wait_for_input()
 
     def add(self):
         print(Style.create_title('Add Status'))
@@ -30,11 +30,11 @@ class StatusCrud(BaseCrud):
             self.repository.check_rows_updated('Status Added')
         else:
             print('Status not added')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def edit(self):
         print(Style.create_title('Edit Status'))
-        status = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        status = Menu.pagination_menu(self.repository)
         if status:
             title = self.update_field(status['title'], 'Title')
             colour = self.update_field(status['colour'], 'Colour')
@@ -43,11 +43,11 @@ class StatusCrud(BaseCrud):
             self.repository.check_rows_updated('Status Updated')
         else:
             print('No changes made')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Status'))
-        status = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        status = Menu.pagination_menu(self.repository)
         if status:
             user_action = False
             while not user_action == 'delete':
@@ -58,4 +58,4 @@ class StatusCrud(BaseCrud):
                 self.repository.remove(status['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Status Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()

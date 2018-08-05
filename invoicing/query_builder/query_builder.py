@@ -18,6 +18,20 @@ class QueryBuilder:
         self.query += 'where {} '.format(condition)
         return self
 
+    def limit(self, limit):
+        self.addParam(limit)
+        self.query += 'limit ? '
+        return self
+
+    def offset(self, offset):
+        self.addParam(offset)
+        self.query += 'offset ? '
+        return self
+
+    def count(self):
+        self.query += 'select count(*) '
+        return self
+
     def whereIDIsLastInserted(self):
         self.query += 'where id = last_insert_rowid() '
         return self

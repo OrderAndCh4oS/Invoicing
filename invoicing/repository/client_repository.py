@@ -15,6 +15,16 @@ class ClientRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated_join_companies(self, limit=5, page=1):
+        query = QueryBuilder(self.table) \
+            .select(['clients.id', 'fullname', 'email', 'telephone', 'companies.name as company_name']) \
+            .from_() \
+            .join('companies', 'company_id = companies.id') \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_by_id_join_company(self, id):
         query = QueryBuilder(self.table) \
             .select(['clients.id', 'fullname', 'email', 'telephone',

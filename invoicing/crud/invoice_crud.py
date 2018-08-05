@@ -31,15 +31,18 @@ class InvoiceCrud(BaseCrud):
 
     def show(self):
         print(Style.create_title('Show Invoice'))
-        invoice = Menu.select_row(
-            self.repository.find_all_join_clients_and_companies(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_companies
-        )
+        invoice = self.make_pagination_menu()
         if invoice:
             self.display_invoice(invoice)
             # Todo: print invoice items or add menu
-            Menu.waitForInput()
+            Menu.wait_for_input()
+
+    def make_pagination_menu(self):
+        return Menu.pagination_menu(
+            self.repository,
+            find=self.repository.find_paginated_join_clients_and_companies,
+            find_by_id=self.repository.find_by_id_join_clients_and_companies
+        )
 
     def display_invoice(self, invoice):
         print(Style.create_title('Invoice Data'))
@@ -51,10 +54,10 @@ class InvoiceCrud(BaseCrud):
     def add(self):
         print(Style.create_title('Add Invoice'))
         clientRepository = ClientRepository()
-        client = Menu.select_row(
-            clientRepository.find_all(),
-            clientRepository.get_headers(),
-            clientRepository.find_by_id
+        client = Menu.pagination_menu(
+            clientRepository,
+            find=clientRepository.find_paginated,
+            find_by_id=clientRepository.find_by_id
         )
         reference_code = self.generate_reference_code()
         if client and len(reference_code) > 0:
@@ -69,7 +72,7 @@ class InvoiceCrud(BaseCrud):
             print('\nInvoice added\n')
         else:
             print('\nInvoice not added\n')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def generate_reference_code(self):
         last_invoice = self.repository.find_last_reference_code()
@@ -88,10 +91,10 @@ class InvoiceCrud(BaseCrud):
     def select_job(self, last_invoice, client_id):
         print(Style.create_title('Select Job'))
         jobRepository = JobRepository()
-        job = Menu.select_row(
-            jobRepository.find_jobs_by_client_id_where_complete(client_id),
-            jobRepository.get_headers(),
-            jobRepository.find_by_id
+        job = Menu.pagination_menu(
+            jobRepository,
+            find=lambda: jobRepository.find_jobs_by_client_id_where_complete(client_id),
+            find_by_id=jobRepository.find_by_id
         )
         if job:
             # Todo: Enter billable time for job
@@ -101,11 +104,7 @@ class InvoiceCrud(BaseCrud):
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))
-        invoice = Menu.select_row(
-            self.repository.find_all_join_clients_and_companies(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_companies
-        )
+        invoice = self.make_pagination_menu()
         if invoice:
             reference_code = self.update_field(invoice['reference_code'], 'Reference Code')
             self.repository.update(invoice['id'], {'reference_code': reference_code})
@@ -114,11 +113,7 @@ class InvoiceCrud(BaseCrud):
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
-        invoice = Menu.select_row(
-            self.repository.find_all_join_clients_and_companies(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_companies
-        )
+        invoice = self.make_pagination_menu()
         if invoice:
             jobs = JobRepository().find_jobs_by_invoice_id(invoice['id'])
             invoice_data = {
@@ -137,15 +132,11 @@ class InvoiceCrud(BaseCrud):
                 } for job in jobs]
             }
             LatexInvoice().generate(**invoice_data)
-            Menu.waitForInput()
+            Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))
-        invoice = Menu.select_row(
-            self.repository.find_all_join_clients_and_companies(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_companies
-        )
+        invoice = self.make_pagination_menu()
         if invoice:
             user_action = False
             while not user_action == 'delete':
@@ -157,7 +148,7 @@ class InvoiceCrud(BaseCrud):
                 self.repository.remove(invoice['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Invoice Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()
 
     def delete_invoices_by_client_id(self, client_id):
         invoices = self.repository.find_invoices_by_client_id(client_id)

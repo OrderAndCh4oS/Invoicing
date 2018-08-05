@@ -31,11 +31,7 @@ class ProjectCrud(BaseCrud):
 
     def show(self):
         print(Style.create_title('Show Project'))
-        project = Menu.select_row(
-            self.repository.find_all_join_clients_and_company(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_company
-        )
+        project = self.make_pagination_menu()
         if project:
             print(Style.create_title('Project Data'))
             print('Company: ' + project['company_name'])
@@ -43,15 +39,15 @@ class ProjectCrud(BaseCrud):
             print('Date: ' + project['date'])
             print('Reference Code: ' + project['reference_code'])
             # Todo: print project items
-            Menu.waitForInput()
+            Menu.wait_for_input()
 
     def add(self):
         print(Style.create_title('Create Project'))
         clientRepository = ClientRepository()
-        client = Menu.select_row(
-            clientRepository.find_all(),
-            clientRepository.get_headers(),
-            clientRepository.find_by_id
+        client = Menu.pagination_menu(
+            clientRepository,
+            find=clientRepository.find_paginated_join_companies,
+            find_by_id=clientRepository.find_by_id_join_company
         )
         reference_code = self.repository.make_next_reference_code()
         if client and len(reference_code) > 0:
@@ -66,7 +62,7 @@ class ProjectCrud(BaseCrud):
             print('Project created')
         else:
             print('Project not created')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def add_jobs(self):
         while Menu.yes_no_question('Add job'):
@@ -74,26 +70,25 @@ class ProjectCrud(BaseCrud):
 
     def edit(self):
         print(Style.create_title('Edit Project'))
-        project = Menu.select_row(
-            self.repository.find_all_join_clients_and_company(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_company
-        )
+        project = self.make_pagination_menu()
         if project:
             reference_code = self.update_field(project['reference_code'], 'Reference Code')
             self.repository.update(project['id'], {'reference_code': reference_code})
             self.repository.save()
             self.repository.check_rows_updated('Project Updated')
             self.add_jobs()
-            Menu.waitForInput()
+            Menu.wait_for_input()
+
+    def make_pagination_menu(self):
+        return Menu.pagination_menu(
+            self.repository,
+            find=self.repository.find_paginated_join_clients_and_company,
+            find_by_id=self.repository.find_by_id_join_clients_and_company
+        )
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
-        project = Menu.select_row(
-            self.repository.find_all_join_clients_and_company(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_company
-        )
+        project = self.make_pagination_menu()
         if project:
             jobs = JobRepository().find_jobs_by_project_id(project['id'])
             project_data = {
@@ -112,15 +107,11 @@ class ProjectCrud(BaseCrud):
                 } for job in jobs]
             }
             LatexQuote().generate(**project_data)
-            Menu.waitForInput()
+            Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Project'))
-        project = Menu.select_row(
-            self.repository.find_all_join_clients_and_company(),
-            self.repository.get_headers(),
-            self.repository.find_by_id_join_clients_and_company
-        )
+        project = self.make_pagination_menu()
         if project:
             user_action = False
             while not user_action == 'delete':
@@ -132,7 +123,7 @@ class ProjectCrud(BaseCrud):
                 self.repository.remove(project['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Project Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()
 
     def delete_projects_by_client_id(self, client_id):
         projects = self.repository.find_projects_by_client_id(client_id)

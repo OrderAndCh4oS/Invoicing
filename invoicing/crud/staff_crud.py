@@ -23,7 +23,7 @@ class StaffCrud(BaseCrud):
 
     def show(self):
         print(Style.create_title('Show Staff'))
-        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        staff = Menu.pagination_menu(self.repository)
         if staff:
             print(Style.create_title('Staff Data'))
             print('First Name: ' + staff['first_name'])
@@ -45,11 +45,11 @@ class StaffCrud(BaseCrud):
             self.repository.check_rows_updated('Staff Added')
         else:
             print('Staff not added')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def edit(self):
         print(Style.create_title('Edit Staff'))
-        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        staff = Menu.pagination_menu(self.repository)
         if staff:
             first_name = self.update_field(staff['first_name'], 'First Name')
             last_name = self.update_field(staff['last_name'], 'Last Name')
@@ -63,11 +63,11 @@ class StaffCrud(BaseCrud):
             self.repository.check_rows_updated('Staff Updated')
         else:
             print('No changes made')
-        Menu.waitForInput()
+        Menu.wait_for_input()
 
     def delete(self):
         print(Style.create_title('Delete Staff'))
-        staff = Menu.select_row(self.repository.find_all(), self.repository.get_headers(), self.repository.find_by_id)
+        staff = Menu.pagination_menu(self.repository)
         if staff:
             user_action = False
             while not user_action == 'delete':
@@ -78,4 +78,4 @@ class StaffCrud(BaseCrud):
                 self.repository.remove(staff['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('Staff Member Deleted')
-                Menu.waitForInput()
+                Menu.wait_for_input()

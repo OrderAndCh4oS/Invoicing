@@ -18,11 +18,27 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated(self, select=('*'), limit=10, page=1):
+        query = QueryBuilder(self.table) \
+            .select(select) \
+            .from_() \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_by_id(self, id, select=('*')):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_() \
             .where('id = ?', id)
+        self.execute(**query.build())
+        return self.get_one()
+
+    def get_count(self):
+        query = QueryBuilder(self.table) \
+            .count() \
+            .from_()
         self.execute(**query.build())
         return self.get_one()
 

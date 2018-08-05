@@ -1,5 +1,7 @@
 from ansi_colours import AnsiColours as Colour
 
+from repository.base_repository import BaseRepository
+from ui.style import Style
 from ui.table import Table
 from value_validation.value_validation import Validation
 
@@ -50,5 +52,38 @@ class Menu:
         return response in ['Y', 'y', '']
 
     @staticmethod
-    def waitForInput():
+    def wait_for_input():
         input('\nContinue?')
+
+    @staticmethod
+    def pagination_menu(repository: BaseRepository, limit=5, find=None, find_by_id=None):
+        page = 1
+        total = repository.get_count()[0]
+        while True:
+            find_paginated = repository.find_paginated if not find else find
+            Table.create_table(
+                find_paginated(limit=limit, page=page),
+                repository.get_headers()
+            )
+            input_dialog = ""
+            if page > 1:
+                input_dialog += "'<' previous | "
+            input_dialog += "page %d" % page
+            if page * limit < total:
+                input_dialog += " | next '>'"
+            print(Style.create_underline(input_dialog))
+            print(input_dialog)
+            print(Style.create_underline(input_dialog))
+            user_input = input('\nEnter an id, use \'<\' and \'>\' to navigate, or \'b\' to go back: ')
+            if (user_input == 'b'):
+                return False
+            if page is not 1 and user_input is '<':
+                page -= 1
+            elif page * limit < total and user_input is '>':
+                page += 1
+            elif not Validation.isNumber(user_input):
+                print('Not a valid number')
+                continue
+            else:
+                find_by = repository.find_by_id if not find_by_id else find_by_id
+                return find_by(user_input)
