@@ -11,7 +11,7 @@ from ui.style import Style
 
 class ProjectCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Projects', ProjectRepository(), ProjectModel())
+        super().__init__('Projects', ProjectRepository, ProjectModel)
         self.repository = ProjectRepository()
         self.menu_actions.add_action('Generate', self.generate)
 
@@ -62,8 +62,7 @@ class ProjectCrud(BaseCrud):
             Menu.wait_for_input()
 
     def make_pagination_menu(self):
-        return Menu.pagination_menu(
-            self.repository,
+        return self.paginated_menu(
             find=self.repository.find_paginated_join_clients_and_company,
             find_by_id=self.repository.find_by_id_join_clients_and_company
         )

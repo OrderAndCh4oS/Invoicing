@@ -1,9 +1,9 @@
 from abc import ABCMeta
 
-from actions.action import Action
 from actions.action_collection import ActionCollection
 from model_validation.field import RelationshipField
 from ui.menu import Menu
+from ui.pagination import Pagination
 from ui.style import Style
 
 
@@ -12,8 +12,9 @@ class BaseCrud(metaclass=ABCMeta):
 
     def __init__(self, table_name, repository, model):
         self.table_name = table_name
-        self.repository = repository
-        self.model = model
+        self.repository = repository()
+        self.model = model()
+        self.paginated_menu = Pagination(self.repository)
         self.menu_actions = ActionCollection(
             ('View', self.show),
             ('Add', self.add),
@@ -22,8 +23,7 @@ class BaseCrud(metaclass=ABCMeta):
         )
 
     def menu(self):
-        title = Style.create_title('Manage ' + self.table_name)
-        Menu.create(title, self.menu_actions.actions)
+        Menu.create('Manage ' + self.table_name, self.menu_actions)
 
     def update_field(self, current_value, field_name):
         value = input(field_name + "(" + str(current_value) + "): ")
@@ -31,18 +31,14 @@ class BaseCrud(metaclass=ABCMeta):
         return new_value
 
     def show_item_menu(self, id):
-        title = Style.create_title(self.table_name + ' Menu')
-        actions = [
-            Action('b', 'Back', False)
-        ]
-        Menu.create(title, actions)
+        Menu.create(self.table_name + ' Menu', ActionCollection())
 
     def make_label(self, header):
         return " ".join([word.capitalize() for word in header.split('_')])
 
     def show(self):
         print(Style.create_title('Show %s' % self.table_name))
-        item = Menu.pagination_menu(self.repository)
+        item = self.paginated_menu()
         if item:
             print(Style.create_title('%s Data' % self.table_name))
             for header in self.repository.get_headers():
@@ -54,8 +50,8 @@ class BaseCrud(metaclass=ABCMeta):
         print(Style.create_title('Add %s' % self.table_name))
         data = {}
         for (key, field) in self.model:
-            if field.value is not None:
-                data[key] = field.value
+            if field.initial_value is not None:
+                data[key] = field.initial_value
             elif isinstance(field, RelationshipField):
                 data[key] = self.select_relationship(field.relationship)
             else:
@@ -76,8 +72,8 @@ class BaseCrud(metaclass=ABCMeta):
     def select_relationship(self, relationship_field):
         repository = relationship_field.repository()
         print(Style.create_title('Select %s' % relationship_field.name))
-        item = Menu.pagination_menu(
-            repository,
+        paginated_menu = Pagination(repository)
+        item = paginated_menu(
             find=repository.find_paginated,
             find_by_id=repository.find_by_id
         )
@@ -85,7 +81,7 @@ class BaseCrud(metaclass=ABCMeta):
 
     def edit(self):
         print(Style.create_title('Edit %s' % self.table_name))
-        item = Menu.pagination_menu(self.repository)
+        item = self.paginated_menu()
         if item:
             print(Style.create_title('Add %s' % self.table_name))
             data = {}
@@ -117,7 +113,7 @@ class BaseCrud(metaclass=ABCMeta):
 
     def delete(self):
         print(Style.create_title('Delete %s' % self.table_name))
-        item = Menu.pagination_menu(self.repository)
+        item = self.paginated_menu()
         if item:
             user_action = False
             while not user_action == 'delete':

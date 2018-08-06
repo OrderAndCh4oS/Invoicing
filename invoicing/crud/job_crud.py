@@ -9,31 +9,28 @@ from repository.staff_repository import StaffRepository
 from repository.status_repository import StatusRepository
 from ui.date import Date
 from ui.menu import Menu
+from ui.pagination import Pagination
 from ui.style import Style
 from value_validation.value_validation import Validation
 
 
 class JobCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Jobs', JobRepository(), JobModel())
+        super().__init__('Jobs', JobRepository, JobModel)
         self.repository = JobRepository()
 
     def menu(self):
-        title = Style.create_title('Manage ' + self.table_name)
-        actions = ActionCollection(
+        Menu.create('Manage ' + self.table_name, ActionCollection(
             ('View', self.show),
             ('Edit', self.edit),
             ('Delete', self.delete),
-        )
-        Menu.create(title, actions)
+        ))
 
     def view_job_menu(self, job_id):
-        title = Style.create_title('Job Menu')
-        actions = ActionCollection(
+        Menu.create('Job Menu', ActionCollection(
             ('Update Status', lambda: self.update_status(job_id)),
             ('Log Time', lambda: self.log_time(job_id)),
-        )
-        Menu.create(title, actions)
+        ))
 
     def show(self):
         print(Style.create_title('Show Job'))
@@ -43,8 +40,7 @@ class JobCrud(BaseCrud):
             self.view_job_menu(job['id'])
 
     def make_pagination_menu(self):
-        return Menu.pagination_menu(
-            self.repository,
+        return self.paginated_menu(
             find=self.repository.find_paginated_join_staff_and_status,
             find_by_id=lambda id: self.repository.find_by_id(
                 id,
@@ -70,16 +66,16 @@ class JobCrud(BaseCrud):
         deadline = Date().convert_date_for_saving(deadline)
         created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
         print(Style.create_title('Assign Job To'))
-        staffRepository = StaffRepository()
-        staff_member_assigned = Menu.pagination_menu(
-            staffRepository,
-            find=staffRepository.find_paginated,
-            find_by_id=staffRepository.find_by_id
+        staff_repository = StaffRepository()
+        staff_paginated_menu = Pagination(staff_repository)
+        staff_member_assigned = staff_paginated_menu(
+            find=staff_repository.find_paginated,
+            find_by_id=staff_repository.find_by_id
         )
         print(Style.create_title('Set Status'))
         statusRepository = StatusRepository()
-        status = Menu.pagination_menu(
-            statusRepository,
+        status_paginated_menu = Pagination(statusRepository)
+        status = status_paginated_menu(
             find=statusRepository.find_paginated,
             find_by_id=statusRepository.find_by_id
         )
@@ -165,8 +161,7 @@ class JobCrud(BaseCrud):
 
     def show_jobs_by_assigned_to(self, staff_id):
         print(Style.create_title('Select job to log time'))
-        job = Menu().pagination_menu(
-            self.repository,
+        job = self.paginated_menu(
             find=lambda: self.repository.find_by_assigned_to(staff_id),
             find_by_id=self.repository.find_by_id
         )
@@ -185,8 +180,8 @@ class JobCrud(BaseCrud):
 
     def update_status(self, job_id):
         statusRepository = StatusRepository()
-        status = Menu.pagination_menu(
-            statusRepository,
+        paginated_menu = Pagination(statusRepository)
+        status = paginated_menu(
             find=statusRepository.find_all,
             find_by_id=statusRepository.find_by_id
         )

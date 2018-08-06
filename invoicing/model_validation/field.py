@@ -9,6 +9,7 @@ class Field(Validator):
         validation_links = validation_links if validation_links is not None else []
         if validation_links:
             self.set_validation_links(validation_links)
+        self.initial_value = initial_value
         self.value = initial_value
         self.nullable = nullable
         self.updatable = updatable

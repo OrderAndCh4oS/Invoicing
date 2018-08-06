@@ -3,12 +3,12 @@ from actions.action import Action
 
 class ActionCollection:
 
-    def __init__(self, *actions, exit_action=None):
+    def __init__(self, *args, exit_action=None):
         self.actions = []
         self.count = 0
-        for action in actions:
+        for arg in args:
             self.count += 1
-            self.actions.append(Action(str(self.count), action[0], action[1]))
+            self.actions.append(Action(str(self.count), arg[0], arg[1]))
         self.actions.append(exit_action or Action('b', 'Back', False))
 
     def add_action(self, label, action):

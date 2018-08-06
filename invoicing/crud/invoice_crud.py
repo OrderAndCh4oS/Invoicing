@@ -9,19 +9,19 @@ from repository.invoice_repository import InvoiceRepository
 from repository.job_repository import JobRepository
 from ui.date import Date
 from ui.menu import Menu
+from ui.pagination import Pagination
 from ui.style import Style
 from value_validation.value_validation import Validation
 
 
 class InvoiceCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Invoices', InvoiceRepository(), InvoiceModel())
+        super().__init__('Invoices', InvoiceRepository, InvoiceModel)
         self.repository = InvoiceRepository()
         self.menu_actions.add_action('Generate', self.generate)
 
     def make_pagination_menu(self):
-        return Menu.pagination_menu(
-            self.repository,
+        return self.paginated_menu(
             find=self.repository.find_paginated_join_clients_and_companies,
             find_by_id=self.repository.find_by_id_join_clients_and_companies
         )
@@ -29,8 +29,8 @@ class InvoiceCrud(BaseCrud):
     def add(self):
         print(Style.create_title('Add Invoice'))
         clientRepository = ClientRepository()
-        client = Menu.pagination_menu(
-            clientRepository,
+        paginated_menu = Pagination(clientRepository)
+        client = paginated_menu(
             find=clientRepository.find_paginated,
             find_by_id=clientRepository.find_by_id
         )
@@ -66,8 +66,8 @@ class InvoiceCrud(BaseCrud):
     def select_job(self, last_invoice, client_id):
         print(Style.create_title('Select Job'))
         jobRepository = JobRepository()
-        job = Menu.pagination_menu(
-            jobRepository,
+        paginated_menu = Pagination(jobRepository)
+        job = paginated_menu(
             find=lambda limit, page: jobRepository.find_paginated_jobs_by_client_id_where_not_complete(client_id, limit,
                                                                                                        page),
             find_by_id=jobRepository.find_by_id

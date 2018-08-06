@@ -11,4 +11,4 @@ class ClientModel(BaseModel):
     telephone = StringField(nullable=True)
     company_id = RelationshipField(
         BaseRelationship('Company', CompanyRepository, CompanyModel)
-    )  # Todo validate relation exists
+    )

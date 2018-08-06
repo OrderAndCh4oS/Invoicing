@@ -5,4 +5,4 @@ from repository.status_repository import StatusRepository
 
 class StatusCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Statuses', StatusRepository(), StatusModel())
+        super().__init__('Statuses', StatusRepository, StatusModel)
