@@ -1,8 +1,11 @@
 class ValidationLink():
-    def __init__(self, chain, validation):
+    def __init__(self, chain, validation, front=False):
         self.validation = validation
         self.chain = chain
-        self.chain.append(self)
+        if not front:
+            self.chain.append(self)
+        else:
+            self.chain.insert(0, validation)
 
     def next(self):
         location = self.chain.index(self)

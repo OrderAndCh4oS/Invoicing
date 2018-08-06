@@ -26,6 +26,9 @@ class Validator():
         for validation_link in validation_links:
             ValidationLink(self.validation_links, validation_link)
 
+    def set_validation_link(self, validation_link, front=False):
+        ValidationLink(self.validation_links, validation_link, front)
+
     def set_error_message(self, message):
         self.error_message = message
 

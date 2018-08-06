@@ -30,27 +30,12 @@ class InvoiceCrud(BaseCrud):
         ]
         Menu.create(title, actions)
 
-    def show(self):
-        print(Style.create_title('Show Invoice'))
-        invoice = self.make_pagination_menu()
-        if invoice:
-            self.display_invoice(invoice)
-            # Todo: print invoice items or add menu
-            Menu.wait_for_input()
-
     def make_pagination_menu(self):
         return Menu.pagination_menu(
             self.repository,
             find=self.repository.find_paginated_join_clients_and_companies,
             find_by_id=self.repository.find_by_id_join_clients_and_companies
         )
-
-    def display_invoice(self, invoice):
-        print(Style.create_title('Invoice Data'))
-        print('Company: ' + invoice['company_name'])
-        print('Client: ' + invoice['client_fullname'])
-        print('Date: ' + invoice['date'])
-        print('Reference Code: ' + invoice['reference_code'])
 
     def add(self):
         print(Style.create_title('Add Invoice'))

@@ -1,5 +1,6 @@
 from crud.base_crud import BaseCrud
 from crud.client_crud import ClientCrud
+from models.company_model import CompanyModel
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
 from ui.style import Style
@@ -7,32 +8,11 @@ from ui.style import Style
 
 class CompanyCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Companies')
-        self.repository = CompanyRepository()
-
-    def show(self):
-        company = Menu.pagination_menu(self.repository)
-        if company:
-            print(Style.create_title('Company Data'))
-            print('Name: ' + company['name'])
-            print('Address: ' + company['address'])
-            Menu.wait_for_input()
+        super().__init__('Companies', CompanyRepository(), CompanyModel())
 
     def make_paginated_data(self, limit, page):
         return {"data": self.repository.find_paginated(limit=limit, page=page),
                 "headers": self.repository.get_headers()}
-
-    def add(self):
-        print(Style.create_title('Add Company'))
-        name = input("Name: ")
-        address = input("Address: ")
-        if len(name) > 0:
-            self.repository.insert({'name': name, 'address': address})
-            self.repository.save()
-            self.repository.check_rows_updated('Company Added')
-        else:
-            print('Company not added')
-        Menu.wait_for_input()
 
     def edit(self):
         print(Style.create_title('Edit Company'))

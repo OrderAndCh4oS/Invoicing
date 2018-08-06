@@ -1,7 +1,21 @@
+import collections
+
 from model_validation.field import Field
 
 
-class BaseModel:
+class OrderedClassMembers(type):
+    @classmethod
+    def __prepare__(self, name, bases):
+        return collections.OrderedDict()
+
+    def __new__(cls, name, bases, classdict):
+        result = type.__new__(cls, name, bases, dict(classdict))
+        exclude = set(dir(type))
+        result.__fields__ = list(f for f in classdict.keys() if f not in exclude)
+        return result
+
+
+class BaseModel(metaclass=OrderedClassMembers):
     is_valid = False
     errors = {}
     fields = None
@@ -14,16 +28,13 @@ class BaseModel:
             if field in attributes and isinstance(attributes[field], Field):
                 attributes[field].set_value(value)
 
-    def get_fields(self):
-        if not self.fields:
-            self.fields = []
-            for field, value in self.__class__.__dict__.items():
-                if isinstance(value, Field):
-                    self.fields.append((field, value))
-        return self.fields
+    def __iter__(self):
+        for field in self.__fields__:
+            if isinstance(self.__class__.__dict__[field], Field):
+                yield (field, self.__class__.__dict__[field])
 
     def validate(self):
-        for field, value in self.get_fields():
+        for field, value in self:
             value.validate()
             if not value.is_valid():
                 self.errors[field] = value.get_error_message()

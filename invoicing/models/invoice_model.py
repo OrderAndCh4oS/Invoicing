@@ -1,9 +1,9 @@
-from model_validation.field import Field
-from model_validation.validations import IsString, IsInteger
+from model_validation.field import Field, StringField, IntegerField
+from model_validation.validations import IsString
 from models.base_model import BaseModel
 
 
 class InvoiceModel(BaseModel):
     reference_code = Field([IsString()])
-    date = Field([IsString()], nullable=True)
-    client = Field([IsInteger()])  # Todo validate relation exists
+    date = StringField(nullable=True)
+    client = IntegerField()  # Todo validate relation exists

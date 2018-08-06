@@ -1,10 +1,9 @@
-from model_validation.field import Field
-from model_validation.validations import IsString, IsFloat
+from model_validation.field import FloatField, StringField
 from models.base_model import BaseModel
 
 
 class StaffModel(BaseModel):
-    first_name = Field([IsString()])
-    last_name = Field([IsString()])
-    job_title = Field([IsString()])
-    rate = Field([IsFloat()])
+    first_name = StringField()
+    last_name = StringField()
+    job_title = StringField()
+    rate = FloatField()

@@ -1,5 +1,6 @@
 from crud.base_crud import BaseCrud
 from crud.project_crud import ProjectCrud
+from models.client_model import ClientModel
 from repository.client_repository import ClientRepository
 from repository.company_repository import CompanyRepository
 from ui.menu import Menu
@@ -8,20 +9,7 @@ from ui.style import Style
 
 class ClientCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Clients')
-        self.repository = ClientRepository()
-
-    def show(self):
-        print(Style.create_title('Show Client'))
-        client = self.make_pagination_menu()
-        if client:
-            print(Style.create_title('Client Data'))
-            print('Fullname: ' + client['fullname'])
-            print('Email: ' + client['email'])
-            print('Telephone: ' + client['telephone'])
-            print('Company: ' + client['company_name'])
-            print('Address: ' + client['company_address'])
-            Menu.wait_for_input()
+        super().__init__('Clients', ClientRepository(), ClientModel())
 
     def make_pagination_menu(self):
         return Menu.pagination_menu(

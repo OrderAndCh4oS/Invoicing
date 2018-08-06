@@ -29,18 +29,6 @@ class ProjectCrud(BaseCrud):
         ]
         Menu.create(title, actions)
 
-    def show(self):
-        print(Style.create_title('Show Project'))
-        project = self.make_pagination_menu()
-        if project:
-            print(Style.create_title('Project Data'))
-            print('Company: ' + project['company_name'])
-            print('Client: ' + project['client_fullname'])
-            print('Date: ' + project['date'])
-            print('Reference Code: ' + project['reference_code'])
-            # Todo: print project items
-            Menu.wait_for_input()
-
     def add(self):
         print(Style.create_title('Create Project'))
         print(Style.create_title('Select Client'))
