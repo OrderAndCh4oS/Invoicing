@@ -54,7 +54,9 @@ class BaseCrud(metaclass=ABCMeta):
         print(Style.create_title('Add %s' % self.table_name))
         data = {}
         for (key, field) in self.model:
-            if isinstance(field, RelationshipField):
+            if field.value is not None:
+                data[key] = field.value
+            elif isinstance(field, RelationshipField):
                 data[key] = self.select_relationship(field.relationship)
             else:
                 data[key] = input("%s: " % self.make_label(key))
@@ -64,6 +66,7 @@ class BaseCrud(metaclass=ABCMeta):
             self.repository.insert(data)
             self.repository.save()
             self.repository.check_rows_updated('%s Added' % self.table_name)
+            self.add_relations()
         else:
             print(Style.create_title('%s not added' % self.table_name))
             for (key, value) in self.model.get_errors().items():
@@ -87,13 +90,14 @@ class BaseCrud(metaclass=ABCMeta):
             print(Style.create_title('Add %s' % self.table_name))
             data = {}
             for (key, field) in self.model:
-                if (isinstance(field, RelationshipField)):
-                    if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
-                        data[key] = self.select_relationship(field.relationship)
+                if field.updatable:
+                    if (isinstance(field, RelationshipField)):
+                        if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
+                            data[key] = self.select_relationship(field.relationship)
+                        else:
+                            data[key] = item[key]
                     else:
-                        data[key] = item[key]
-                else:
-                    data[key] = self.update_field(item[key], self.make_label(key))
+                        data[key] = self.update_field(item[key], self.make_label(key))
             self.model(**data)
             self.model.validate()
             if self.model.is_valid:
@@ -121,7 +125,14 @@ class BaseCrud(metaclass=ABCMeta):
                 if user_action == 'c':
                     return
             if user_action == 'delete':
+                self.remove_relations(item['id'])
                 self.repository.remove(item['id'])
                 self.repository.save()
                 self.repository.check_rows_updated('%s Deleted' % self.table_name)
                 Menu.wait_for_input()
+
+    def add_relations(self):
+        pass
+
+    def remove_relations(self, id):
+        pass

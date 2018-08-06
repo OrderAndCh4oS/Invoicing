@@ -52,8 +52,8 @@ class Menu:
         return response in ['Y', 'y', '']
 
     @staticmethod
-    def wait_for_input():
-        input('\nContinue?')
+    def wait_for_input(text=None):
+        input('\nContinue?' if not text else "\n%s" % text)
 
     @staticmethod
     def pagination_menu(repository: BaseRepository, limit=5, find=None, find_by_id=None):
@@ -86,4 +86,8 @@ class Menu:
                 continue
             else:
                 find_by = repository.find_by_id if not find_by_id else find_by_id
-                return find_by(user_input)
+                if find_by(user_input):
+                    return find_by(user_input)
+                else:
+                    print('An item with that ID was not found.')
+                    Menu.wait_for_input()

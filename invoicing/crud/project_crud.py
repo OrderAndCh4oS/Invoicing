@@ -1,10 +1,7 @@
-import datetime
-
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from latex.latex_quote import LatexQuote
 from models.project_model import ProjectModel
-from repository.client_repository import ClientRepository
 from repository.job_repository import JobRepository
 from repository.project_repository import ProjectRepository
 from ui.date import Date
@@ -18,29 +15,36 @@ class ProjectCrud(BaseCrud):
         self.repository = ProjectRepository()
         self.menu_actions.add_action('Generate', self.generate)
 
-    def add(self):
-        print(Style.create_title('Create Project'))
-        print(Style.create_title('Select Client'))
-        clientRepository = ClientRepository()
-        client = Menu.pagination_menu(
-            clientRepository,
-            find=clientRepository.find_paginated_join_companies,
-            find_by_id=clientRepository.find_by_id_join_company
-        )
-        reference_code = self.repository.make_next_reference_code()
-        if client and len(reference_code) > 0:
-            self.repository.insert({
-                'client_id': client['id'],
-                'reference_code': reference_code,
-                'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            })
-            self.repository.save()
-            self.repository.check_rows_updated('Project Added')
-            self.add_jobs()
-            print('Project created')
-        else:
-            print('Project not created')
-        Menu.wait_for_input()
+    # def add(self):
+    #     print(Style.create_title('Create Project'))
+    #     print(Style.create_title('Select Client'))
+    #     clientRepository = ClientRepository()
+    #     client = Menu.pagination_menu(
+    #         clientRepository,
+    #         find=clientRepository.find_paginated_join_companies,
+    #         find_by_id=clientRepository.find_by_id_join_company
+    #     )
+    #     reference_code = self.repository.make_next_reference_code()
+    #     if client and len(reference_code) > 0:
+    #         self.repository.insert({
+    #             'client_id': client['id'],
+    #             'reference_code': reference_code,
+    #             'date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    #         })
+    #         self.repository.save()
+    #         self.repository.check_rows_updated('Project Added')
+    #         self.add_jobs()
+    #         print('Project created')
+    #     else:
+    #         print('Project not created')
+    #     Menu.wait_for_input()
+
+    # Todo: one to many relationships
+    # Todo: Reference code set by sqlite3 trigger
+    # Todo: Date created at can be set with sqlite3
+
+    def add_relations(self):
+        self.add_jobs()
 
     def add_jobs(self):
         while Menu.yes_no_question('Add job'):
