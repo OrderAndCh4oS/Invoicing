@@ -1,4 +1,4 @@
-from actions.action import Action
+from actions.action_collection import ActionCollection
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from models.staff_model import StaffModel
@@ -15,8 +15,7 @@ class StaffCrud(BaseCrud):
 
     def show_item_menu(self, id):
         title = Style.create_title(self.table_name + 'Menu')
-        actions = [
-            Action('1', 'Show Assigned Jobs', lambda: JobCrud().show_jobs_by_assigned_to(id)),
-            Action('b', 'Back', False)
-        ]
+        actions = ActionCollection(
+            ('Show Assigned Jobs', lambda: JobCrud().show_jobs_by_assigned_to(id)),
+        )
         Menu.create(title, actions)

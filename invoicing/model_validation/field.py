@@ -1,5 +1,6 @@
 from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean
 from model_validation.validator import Validator
+from relationships.base_relationship import BaseRelationship
 
 
 class Field(Validator):
@@ -62,5 +63,18 @@ class FloatField(Field):
     def set_value(self, value):
         try:
             self.value = float(value)
+        except:
+            self.value = value
+
+
+class RelationshipField(Field):
+    def __init__(self, relationship: BaseRelationship, validation_links=None, default_value=None, nullable=False):
+        super().__init__(validation_links, default_value, nullable)
+        self.relationship = relationship
+        self.set_validation_link(IsInteger(), front=True)
+
+    def set_value(self, value):
+        try:
+            self.value = int(value)
         except:
             self.value = value

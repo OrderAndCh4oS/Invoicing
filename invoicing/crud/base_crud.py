@@ -1,6 +1,8 @@
 from abc import ABCMeta
 
 from actions.action import Action
+from actions.action_collection import ActionCollection
+from model_validation.field import RelationshipField
 from ui.menu import Menu
 from ui.style import Style
 
@@ -12,17 +14,16 @@ class BaseCrud(metaclass=ABCMeta):
         self.table_name = table_name
         self.repository = repository
         self.model = model
+        self.menu_actions = ActionCollection(
+            ('View', self.show),
+            ('Add', self.add),
+            ('Edit', self.edit),
+            ('Delete', self.delete)
+        )
 
     def menu(self):
         title = Style.create_title('Manage ' + self.table_name)
-        actions = [
-            Action('1', 'View', self.show),
-            Action('2', 'Add', self.add),
-            Action('3', 'Edit', self.edit),
-            Action('4', 'Delete', self.delete),
-            Action('b', 'Back', False)
-        ]
-        Menu.create(title, actions)
+        Menu.create(title, self.menu_actions.actions)
 
     def update_field(self, current_value, field_name):
         value = input(field_name + "(" + str(current_value) + "): ")
@@ -53,7 +54,10 @@ class BaseCrud(metaclass=ABCMeta):
         print(Style.create_title('Add %s' % self.table_name))
         data = {}
         for (key, field) in self.model:
-            data[key] = input("%s: " % self.make_label(key))
+            if isinstance(field, RelationshipField):
+                data[key] = self.select_relationship(field.relationship)
+            else:
+                data[key] = input("%s: " % self.make_label(key))
         self.model(**data)
         self.model.validate()
         if self.model.is_valid:
@@ -66,6 +70,16 @@ class BaseCrud(metaclass=ABCMeta):
                 print("%s: %s" % (key.capitalize(), value))
         Menu.wait_for_input()
 
+    def select_relationship(self, relationship_field):
+        repository = relationship_field.repository()
+        print(Style.create_title('Select %s' % relationship_field.name))
+        item = Menu.pagination_menu(
+            repository,
+            find=repository.find_paginated,
+            find_by_id=repository.find_by_id
+        )
+        return item[0]
+
     def edit(self):
         print(Style.create_title('Edit %s' % self.table_name))
         item = Menu.pagination_menu(self.repository)
@@ -73,7 +87,13 @@ class BaseCrud(metaclass=ABCMeta):
             print(Style.create_title('Add %s' % self.table_name))
             data = {}
             for (key, field) in self.model:
-                data[key] = self.update_field(item[key], self.make_label(key))
+                if (isinstance(field, RelationshipField)):
+                    if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
+                        data[key] = self.select_relationship(field.relationship)
+                    else:
+                        data[key] = item[key]
+                else:
+                    data[key] = self.update_field(item[key], self.make_label(key))
             self.model(**data)
             self.model.validate()
             if self.model.is_valid:

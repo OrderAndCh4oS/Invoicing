@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from latex.latex_invoice import LatexInvoice
+from models.invoice_model import InvoiceModel
 from repository.client_repository import ClientRepository
 from repository.invoice_repository import InvoiceRepository
 from repository.job_repository import JobRepository
@@ -15,20 +15,9 @@ from value_validation.value_validation import Validation
 
 class InvoiceCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Invoices')
+        super().__init__('Invoices', InvoiceRepository(), InvoiceModel())
         self.repository = InvoiceRepository()
-
-    def menu(self):
-        title = Style.create_title('Manage ' + self.table_name)
-        actions = [
-            Action('1', 'View', self.show),
-            Action('2', 'Add', self.add),
-            Action('3', 'Edit', self.edit),
-            Action('4', 'Delete', self.delete),
-            Action('5', 'Generate', self.generate),
-            Action('b', 'Back', False)
-        ]
-        Menu.create(title, actions)
+        self.menu_actions.add_action('Generate', self.generate)
 
     def make_pagination_menu(self):
         return Menu.pagination_menu(

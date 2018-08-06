@@ -1,7 +1,8 @@
 from _datetime import datetime
 
-from actions.action import Action
+from actions.action_collection import ActionCollection
 from crud.base_crud import BaseCrud
+from models.job_model import JobModel
 from repository.job_repository import JobRepository
 from repository.project_repository import ProjectRepository
 from repository.staff_repository import StaffRepository
@@ -14,26 +15,24 @@ from value_validation.value_validation import Validation
 
 class JobCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Jobs')
+        super().__init__('Jobs', JobRepository(), JobModel())
         self.repository = JobRepository()
 
     def menu(self):
         title = Style.create_title('Manage ' + self.table_name)
-        actions = [
-            Action('1', 'View', self.show),
-            Action('2', 'Edit', self.edit),
-            Action('3', 'Delete', self.delete),
-            Action('b', 'Back', False)
-        ]
+        actions = ActionCollection(
+            ('View', self.show),
+            ('Edit', self.edit),
+            ('Delete', self.delete),
+        )
         Menu.create(title, actions)
 
     def view_job_menu(self, job_id):
         title = Style.create_title('Job Menu')
-        actions = [
-            Action('1', 'Update Status', lambda: self.update_status(job_id)),
-            Action('2', 'Log Time', lambda: self.log_time(job_id)),
-            Action('b', 'Back', False)
-        ]
+        actions = ActionCollection(
+            ('Update Status', lambda: self.update_status(job_id)),
+            ('Log Time', lambda: self.log_time(job_id)),
+        )
         Menu.create(title, actions)
 
     def show(self):

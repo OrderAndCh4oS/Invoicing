@@ -1,9 +1,9 @@
 import datetime
 
-from actions.action import Action
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from latex.latex_quote import LatexQuote
+from models.project_model import ProjectModel
 from repository.client_repository import ClientRepository
 from repository.job_repository import JobRepository
 from repository.project_repository import ProjectRepository
@@ -14,20 +14,9 @@ from ui.style import Style
 
 class ProjectCrud(BaseCrud):
     def __init__(self):
-        super().__init__('Projects')
+        super().__init__('Projects', ProjectRepository(), ProjectModel())
         self.repository = ProjectRepository()
-
-    def menu(self):
-        title = Style.create_title('Manage ' + self.table_name)
-        actions = [
-            Action('1', 'View', self.show),
-            Action('2', 'Add', self.add),
-            Action('3', 'Edit', self.edit),
-            Action('4', 'Delete', self.delete),
-            Action('5', 'Generate', self.generate),
-            Action('b', 'Back', False)
-        ]
-        Menu.create(title, actions)
+        self.menu_actions.add_action('Generate', self.generate)
 
     def add(self):
         print(Style.create_title('Create Project'))

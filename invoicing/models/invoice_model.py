@@ -6,4 +6,4 @@ from models.base_model import BaseModel
 class InvoiceModel(BaseModel):
     reference_code = Field([IsString()])
     date = StringField(nullable=True)
-    client = IntegerField()  # Todo validate relation exists
+    client_id = IntegerField()  # Todo validate relation exists

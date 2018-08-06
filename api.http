@@ -164,7 +164,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:5000/company/3
+DELETE http://localhost:5000/company/
 Accept: application/json
 
 ###
