@@ -87,14 +87,15 @@ class BaseCrud(metaclass=ABCMeta):
             print(Style.create_title('Add %s' % self.table_name))
             data = {}
             for (key, field) in self.model:
-                if field.updatable:
-                    if (isinstance(field, RelationshipField)):
-                        if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
-                            data[key] = self.select_relationship(field.relationship)
-                        else:
-                            data[key] = item[key]
+                if not field.updatable:
+                    continue
+                if (isinstance(field, RelationshipField)):
+                    if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
+                        data[key] = self.select_relationship(field.relationship)
                     else:
-                        data[key] = self.update_field(item[key], self.make_label(key))
+                        data[key] = item[key]
+                else:
+                    data[key] = self.update_field(item[key], self.make_label(key))
             self.model(**data)
             self.model.validate()
             if self.model.is_valid:
@@ -104,6 +105,7 @@ class BaseCrud(metaclass=ABCMeta):
                 )
                 self.repository.save()
                 self.repository.check_rows_updated('%s Updated' % self.table_name)
+                self.add_relations()
             else:
                 print(Style.create_title('%s not updated' % self.table_name))
                 for (key, value) in self.model.get_errors().items():

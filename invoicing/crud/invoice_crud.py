@@ -17,7 +17,6 @@ from value_validation.value_validation import Validation
 class InvoiceCrud(BaseCrud):
     def __init__(self):
         super().__init__('Invoices', InvoiceRepository, InvoiceModel)
-        self.repository = InvoiceRepository()
         self.menu_actions.add_action('Generate', self.generate)
 
     def make_pagination_menu(self):

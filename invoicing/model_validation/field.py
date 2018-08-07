@@ -7,7 +7,7 @@ class Field(Validator):
     def __init__(self, validation_links=None, **kwargs):
         super().__init__()
         kwargs.setdefault('initial_value', None)
-        kwargs.setdefault('updatable', False)
+        kwargs.setdefault('updatable', True)
         validation_links = validation_links if validation_links is not None else []
         if validation_links:
             self.set_validation_links(validation_links)

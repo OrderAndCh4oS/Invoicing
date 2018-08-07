@@ -17,7 +17,6 @@ from value_validation.value_validation import Validation
 class JobCrud(BaseCrud):
     def __init__(self):
         super().__init__('Jobs', JobRepository, JobModel)
-        self.repository = JobRepository()
 
     def menu(self):
         Menu.create('Manage ' + self.table_name, ActionCollection(
