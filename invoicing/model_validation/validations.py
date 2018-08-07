@@ -1,13 +1,12 @@
 from model_validation.validation import Validation
 
 
-class IsType(Validation):
-    def __init__(self, field_type, error_message='is not a string'):
+class IsRequired(Validation):
+    def __init__(self, error_message='is required'):
         super().__init__(error_message)
-        self.field_type = field_type
 
     def __call__(self, field):
-        self.validation_check(field, isinstance(field.value, self.field_type))
+        self.validation_check(field, bool(field.value))
         return field
 
 
@@ -30,7 +29,7 @@ class IsInteger(Validation):
 
 
 class IsBoolean(Validation):
-    def __init__(self, error_message='is not an integer'):
+    def __init__(self, error_message='is not a boolean'):
         super().__init__(error_message)
 
     def __call__(self, field):
@@ -39,7 +38,7 @@ class IsBoolean(Validation):
 
 
 class IsFloat(Validation):
-    def __init__(self, error_message='is not an integer'):
+    def __init__(self, error_message='is not a float'):
         super().__init__(error_message)
 
     def __call__(self, field):

@@ -1,19 +1,20 @@
 from model_validation.field import StringField, IntegerField, FloatField, BooleanField
+from model_validation.validations import IsRequired
 from models.base_model import BaseModel
 
 
 class JobModel(BaseModel):
-    reference_code = StringField(nullable=True)
-    title = StringField()
-    description = StringField()
-    assigned_to = IntegerField()
-    status_id = IntegerField()
-    deadline = StringField()
-    estimated_time = FloatField()
-    actual_time = FloatField(nullable=True)
-    billable_time = FloatField(nullable=True)
-    project_id = IntegerField()
-    quote_id = IntegerField(nullable=True)
-    invoice_id = IntegerField(nullable=True)
-    created_at = StringField(nullable=True)
-    completed = BooleanField(nullable=True)
+    reference_code = StringField()
+    title = StringField([IsRequired()])
+    description = StringField([IsRequired()])
+    assigned_to = IntegerField([IsRequired()])
+    status_id = IntegerField([IsRequired()])
+    deadline = StringField([IsRequired()])
+    estimated_time = FloatField([IsRequired()])
+    actual_time = FloatField()
+    billable_time = FloatField()
+    project_id = IntegerField([IsRequired()])
+    quote_id = IntegerField()
+    invoice_id = IntegerField()
+    created_at = StringField()
+    completed = BooleanField()

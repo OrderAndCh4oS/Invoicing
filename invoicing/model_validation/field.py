@@ -4,15 +4,16 @@ from relationships.base_relationship import BaseRelationship
 
 
 class Field(Validator):
-    def __init__(self, validation_links=None, initial_value=None, nullable=False, updatable=True):
+    def __init__(self, validation_links=None, **kwargs):
         super().__init__()
+        kwargs.setdefault('initial_value', None)
+        kwargs.setdefault('updatable', False)
         validation_links = validation_links if validation_links is not None else []
         if validation_links:
             self.set_validation_links(validation_links)
-        self.initial_value = initial_value
-        self.value = initial_value
-        self.nullable = nullable
-        self.updatable = updatable
+        self.initial_value = kwargs.get('initial_value')
+        self.value = kwargs.get('initial_value')
+        self.updatable = kwargs.get('updatable')
 
     def set_value(self, value):
         self.value = value
@@ -22,8 +23,8 @@ class Field(Validator):
 
 
 class IntegerField(Field):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
         self.set_validation_link(IsInteger(), front=True)
 
     def set_value(self, value):
@@ -34,8 +35,8 @@ class IntegerField(Field):
 
 
 class StringField(Field):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
         self.set_validation_link(IsString(), front=True)
 
     def set_value(self, value):
@@ -46,8 +47,8 @@ class StringField(Field):
 
 
 class BooleanField(Field):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
         self.set_validation_link(IsBoolean(), front=True)
 
     def set_value(self, value):
@@ -58,8 +59,8 @@ class BooleanField(Field):
 
 
 class FloatField(Field):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
         self.set_validation_link(IsFloat(), front=True)
 
     def set_value(self, value):
@@ -70,8 +71,8 @@ class FloatField(Field):
 
 
 class RelationshipField(Field):
-    def __init__(self, relationship: BaseRelationship, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, relationship: BaseRelationship, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
         self.relationship = relationship
         self.set_validation_link(IsInteger(), front=True)
 

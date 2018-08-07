@@ -5,7 +5,7 @@ class ValidationLink():
         if not front:
             self.chain.append(self)
         else:
-            self.chain.insert(0, validation)
+            self.chain.insert(0, self)
 
     def next(self):
         location = self.chain.index(self)

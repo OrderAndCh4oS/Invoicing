@@ -90,7 +90,7 @@ Content-Type: application/json
 POST http://localhost:5000/client
 Content-Type: application/json
 
-{"telephone": "07010101010", "email": "client.name@example.com", "company_id": 1, "fullname": "A Client Name"}
+{"telephone": "07010101010", "email": "client.name@example.com", "company_id": 1, "fullname": ""}
 
 ###
 

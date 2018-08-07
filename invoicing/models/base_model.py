@@ -16,13 +16,13 @@ class OrderedClassMembers(type):
 
 
 class BaseModel(metaclass=OrderedClassMembers):
-    is_valid = False
+    valid = False
     errors = {}
     fields = None
 
     def __call__(self, **kwargs):
+        self.valid = False
         self.errors = {}
-        self.is_valid = False
         for field, value in kwargs.items():
             attributes = self.__class__.__dict__
             if field in attributes and isinstance(attributes[field], Field):
@@ -38,7 +38,10 @@ class BaseModel(metaclass=OrderedClassMembers):
             value.validate()
             if not value.is_valid():
                 self.errors[field] = value.get_error_message()
-        self.is_valid = False if len(self.errors) else True
+        self.valid = False if len(self.errors) else True
+
+    def is_valid(self):
+        return self.valid
 
     def get_errors(self):
         return self.errors

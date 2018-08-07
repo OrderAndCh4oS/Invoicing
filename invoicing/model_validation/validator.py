@@ -14,7 +14,7 @@ class Validator():
         return self.valid
 
     def set_valid(self, is_valid):
-        self.valid = is_valid or self.is_nullable() and self.is_null()
+        self.valid = is_valid
 
     def is_nullable(self):
         return self.nullable

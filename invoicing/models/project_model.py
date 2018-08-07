@@ -9,7 +9,7 @@ from repository.client_repository import ClientRepository
 
 
 class ProjectModel(BaseModel):
-    reference_code = StringField(nullable=True)
+    reference_code = StringField()
     date = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
     client_id = RelationshipField(
         BaseRelationship('Client', ClientRepository, ClientModel)

@@ -18,7 +18,7 @@ class BaseAPI():
     def update_by_id(self, id, data):
         self.model(**data)
         self.model.validate()
-        if self.model.is_valid:
+        if self.model.is_valid():
             self.repository.update(id, data)
             self.repository.save()
             return JSONTransformer.resultToJSON(self.repository.find_by_id(id), self.repository.get_headers())

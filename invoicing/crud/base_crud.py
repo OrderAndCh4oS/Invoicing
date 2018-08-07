@@ -49,6 +49,7 @@ class BaseCrud(metaclass=ABCMeta):
     def add(self):
         print(Style.create_title('Add %s' % self.table_name))
         data = {}
+        # Todo: Model data is hanging around after each update. At the moment it is overridden here but something is up. Fix it.
         for (key, field) in self.model:
             if field.initial_value is not None:
                 data[key] = field.initial_value
@@ -58,7 +59,7 @@ class BaseCrud(metaclass=ABCMeta):
                 data[key] = input("%s: " % self.make_label(key))
         self.model(**data)
         self.model.validate()
-        if self.model.is_valid:
+        if self.model.is_valid():
             self.repository.insert(data)
             self.repository.save()
             self.repository.check_rows_updated('%s Added' % self.table_name)
