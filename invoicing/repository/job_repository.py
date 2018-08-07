@@ -41,6 +41,18 @@ class JobRepository(BaseRepository):
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated_by_assigned_to(self, staff_id, limit=5, page=1):
+        query = QueryBuilder(self.table) \
+            .select(['jobs.id', 'reference_code', 'jobs.title', 'description', 'estimated_time', 'actual_time',
+                     'status.title as status', 'deadline']) \
+            .from_() \
+            .join('status', 'status_id = status.id') \
+            .where('assigned_to = ?', staff_id) \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_jobs_by_project_id(self, project_id):
         query = QueryBuilder(self.table) \
             .select(['jobs.id', 'reference_code', 'jobs.title as title', 'description', 'estimated_time',

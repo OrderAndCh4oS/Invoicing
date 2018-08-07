@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from model_validation.validation import Validation
 
 
@@ -17,7 +19,6 @@ class IsString(Validation):
     def __call__(self, field):
         self.validation_check(field, isinstance(field.value, str))
         return field
-
 
 class IsInteger(Validation):
     def __init__(self, error_message='is not an integer'):
@@ -64,3 +65,20 @@ class MinLength(Validation):
     def __call__(self, field):
         self.validation_check(field, len(field.value) >= self.min)
         return field
+
+
+class IsDate(Validation):
+    def __init__(self, format="%d-%m-%y", error_message='is not a valid date'):
+        super().__init__(error_message)
+        self.format = format
+
+    def __call__(self, field):
+        self.validation_check(field, self.check_date(field.value))
+        return field
+
+    def check_date(self, value):
+        try:
+            datetime.strptime(value, self.format)
+            return True
+        except ValueError:
+            return False

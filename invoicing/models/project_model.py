@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from model_validation.field import RelationshipField, Field
+from model_validation.field import ForeignKeyField, Field
 from model_validation.validations import IsString
 from models.base_model import BaseModel
 from models.client_model import ClientModel
@@ -10,7 +10,7 @@ from repository.client_repository import ClientRepository
 
 class ProjectModel(BaseModel):
     date = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
-    client_id = RelationshipField(
+    client_id = ForeignKeyField(
         BaseRelationship('Client', ClientRepository, ClientModel)
     )
     # Todo: add one to many relationship type

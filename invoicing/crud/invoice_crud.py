@@ -19,7 +19,7 @@ class InvoiceCrud(BaseCrud):
         super().__init__('Invoices', InvoiceRepository, InvoiceModel)
         self.menu_actions.add_action('Generate', self.generate)
 
-    def make_pagination_menu(self):
+    def make_paginated_menu(self):
         return self.paginated_menu(
             find=self.repository.find_paginated_join_clients_and_companies,
             find_by_id=self.repository.find_by_id_join_clients_and_companies
@@ -79,7 +79,7 @@ class InvoiceCrud(BaseCrud):
 
     def edit(self):
         print(Style.create_title('Edit Invoice'))
-        invoice = self.make_pagination_menu()
+        invoice = self.make_paginated_menu()
         if invoice:
             reference_code = self.update_field(invoice['reference_code'], 'Reference Code')
             self.repository.update(invoice['id'], {'reference_code': reference_code})
@@ -88,7 +88,7 @@ class InvoiceCrud(BaseCrud):
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
-        invoice = self.make_pagination_menu()
+        invoice = self.make_paginated_menu()
         if invoice:
             jobRepository = JobRepository()
             jobs = jobRepository.find_jobs_by_invoice_id(invoice['id'])
@@ -140,7 +140,7 @@ class InvoiceCrud(BaseCrud):
 
     def delete(self):
         print(Style.create_title('Delete Invoice'))
-        invoice = self.make_pagination_menu()
+        invoice = self.make_paginated_menu()
         if invoice:
             user_action = False
             while not user_action == 'delete':

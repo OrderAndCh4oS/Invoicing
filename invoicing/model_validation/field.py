@@ -1,4 +1,4 @@
-from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean
+from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean, IsDate
 from model_validation.validator import Validator
 from relationships.base_relationship import BaseRelationship
 
@@ -30,6 +30,19 @@ class IntegerField(Field):
     def set_value(self, value):
         try:
             self.value = int(value)
+        except:
+            self.value = value
+
+
+class DateField(Field):
+    def __init__(self, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
+        self.set_validation_link(IsDate(), front=True)
+        self.set_validation_link(IsString(), front=True)
+
+    def set_value(self, value):
+        try:
+            self.value = str(value)
         except:
             self.value = value
 
@@ -70,7 +83,7 @@ class FloatField(Field):
             self.value = value
 
 
-class RelationshipField(Field):
+class ForeignKeyField(Field):
     def __init__(self, relationship: BaseRelationship, validation_links=None, **kwargs):
         super().__init__(validation_links=validation_links, **kwargs)
         self.relationship = relationship

@@ -1,29 +1,26 @@
 from datetime import datetime
 
-from model_validation.field import StringField, IntegerField, FloatField, BooleanField, Field, RelationshipField
+from model_validation.field import StringField, FloatField, Field, ForeignKeyField, \
+    DateField, IntegerField
 from model_validation.validations import IsRequired, IsString
 from models.base_model import BaseModel
-from models.invoice_model import InvoiceModel
-from models.project_model import ProjectModel
+from models.staff_model import StaffModel
+from models.status_model import StatusModel
 from relationships.base_relationship import BaseRelationship
-from repository.invoice_repository import InvoiceRepository
-from repository.project_repository import ProjectRepository
+from repository.staff_repository import StaffRepository
+from repository.status_repository import StatusRepository
 
 
 class JobModel(BaseModel):
     title = StringField([IsRequired()])
     description = StringField([IsRequired()])
-    assigned_to = IntegerField([IsRequired()])
-    status_id = IntegerField([IsRequired()])
-    deadline = StringField([IsRequired()])
     estimated_time = FloatField([IsRequired()])
-    actual_time = FloatField()
-    billable_time = FloatField()
-    project_id = RelationshipField(
-        BaseRelationship('Project', ProjectRepository, ProjectModel)
+    deadline = DateField([IsRequired()])
+    assigned_to = ForeignKeyField(
+        BaseRelationship('Staff', StaffRepository, StaffModel)
     )
-    invoice_id = RelationshipField(
-        BaseRelationship('Invoice', InvoiceRepository, InvoiceModel)
+    status_id = ForeignKeyField(
+        BaseRelationship('Status', StatusRepository, StatusModel)
     )
-    date = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
-    completed = BooleanField()
+    project_id = IntegerField([IsRequired()], initial_value=0, updatable=False)
+    created_at = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
