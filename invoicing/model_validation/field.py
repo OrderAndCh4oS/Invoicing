@@ -1,6 +1,6 @@
-from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean, IsDate
+from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean, IsDate, IsCallable
 from model_validation.validator import Validator
-from relationships.base_relationship import BaseRelationship
+from relationships.base_relationship import BaseRelationship, OneToManyRelationship
 
 
 class Field(Validator):
@@ -94,3 +94,13 @@ class ForeignKeyField(Field):
             self.value = int(value)
         except:
             self.value = value
+
+
+class OneToManyField(Field):
+    def __init__(self, relationship: OneToManyRelationship, validation_links=None, **kwargs):
+        super().__init__(validation_links=validation_links, **kwargs)
+        self.relationship = relationship
+        self.set_validation_link(IsCallable(), front=True)
+
+    def set_value(self, value):
+        self.value = value

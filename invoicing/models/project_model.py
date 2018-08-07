@@ -9,7 +9,7 @@ from repository.client_repository import ClientRepository
 
 
 class ProjectModel(BaseModel):
-    date = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
+    created_at = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
     client_id = ForeignKeyField(
         BaseRelationship('Client', ClientRepository, ClientModel)
     )

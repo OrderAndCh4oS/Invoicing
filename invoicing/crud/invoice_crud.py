@@ -1,15 +1,11 @@
-from datetime import datetime
-
 from crud.base_crud import BaseCrud
 from crud.job_crud import JobCrud
 from latex.latex_invoice import LatexInvoice
 from models.invoice_model import InvoiceModel
-from repository.client_repository import ClientRepository
 from repository.invoice_repository import InvoiceRepository
 from repository.job_repository import JobRepository
 from ui.date import Date
 from ui.menu import Menu
-from ui.pagination import Pagination
 from ui.style import Style
 from value_validation.value_validation import Validation
 
@@ -24,67 +20,6 @@ class InvoiceCrud(BaseCrud):
             find=self.repository.find_paginated_join_clients_and_companies,
             find_by_id=self.repository.find_by_id_join_clients_and_companies
         )
-
-    def add(self):
-        print(Style.create_title('Add Invoice'))
-        clientRepository = ClientRepository()
-        paginated_menu = Pagination(clientRepository)
-        client = paginated_menu(
-            find=clientRepository.find_paginated,
-            find_by_id=clientRepository.find_by_id
-        )
-        reference_code = self.generate_reference_code()
-        if client and len(reference_code) > 0:
-            self.repository.insert({
-                'client_id': client['id'],
-                'reference_code': reference_code,
-                'date': datetime.now().strftime("%Y-%m-%d %H:%M")
-            })
-            self.repository.save()
-            self.repository.check_rows_updated('Invoice Added')
-            self.add_client_jobs_to_invoice(client['id'])
-            print('\nInvoice added\n')
-        else:
-            print('\nInvoice not added\n')
-        Menu.wait_for_input()
-
-    def generate_reference_code(self):
-        last_invoice = self.repository.find_last_reference_code()
-        last_reference_code = last_invoice["last_reference_code"] if last_invoice else 'Q-7000'
-        reference_code = 'I-' + str(int(last_reference_code[2:]) + 1)
-        return reference_code
-
-    def add_client_jobs_to_invoice(self, client_id):
-        last_invoice = self.repository.find_last_reference_code()
-        while True:
-            add_job = Menu.yes_no_question('Add job to invoice')
-            if not add_job:
-                break
-            self.select_job(last_invoice, client_id)
-
-    def select_job(self, last_invoice, client_id):
-        print(Style.create_title('Select Job'))
-        jobRepository = JobRepository()
-        paginated_menu = Pagination(jobRepository)
-        job = paginated_menu(
-            find=lambda limit, page: jobRepository.find_paginated_jobs_by_client_id_where_not_complete(client_id, limit,
-                                                                                                       page),
-            find_by_id=jobRepository.find_by_id
-        )
-        if job:
-            # Todo: Enter billable time for job
-            jobRepository.add_to_invoice(job['id'], last_invoice['id'])
-            jobRepository.save()
-            self.repository.check_rows_updated('Job Added')
-
-    def edit(self):
-        print(Style.create_title('Edit Invoice'))
-        invoice = self.make_paginated_menu()
-        if invoice:
-            reference_code = self.update_field(invoice['reference_code'], 'Reference Code')
-            self.repository.update(invoice['id'], {'reference_code': reference_code})
-            self.repository.save()
-            self.repository.check_rows_updated('Invoice Updated')
 
     def generate(self):
         print(Style.create_title('Generate Invoice'))
@@ -118,7 +53,7 @@ class InvoiceCrud(BaseCrud):
             'reference_code': invoice['reference_code'],
             'company_name': invoice['company_name'],
             'company_address': invoice['company_address'],
-            'date': Date().convert_date_time_for_printing(invoice['date']),
+            'created_at': Date().convert_date_time_for_printing(invoice['created_at']),
             'total_cost': str(sum([float(job['rate']) * float(job['billable_time']) for job in jobs])),
             'jobs': [{
                 'title': job['title'],
@@ -138,28 +73,12 @@ class InvoiceCrud(BaseCrud):
             jobRepository.save()
             jobRepository.check_rows_updated('The selected jobs have been marked as completed')
 
-    def delete(self):
-        print(Style.create_title('Delete Invoice'))
-        invoice = self.make_paginated_menu()
-        if invoice:
-            user_action = False
-            while not user_action == 'delete':
-                user_action = input('Type \'delete\' to remove this invoice or \'c\' to cancel: ')
-                if user_action == 'c':
-                    return
-            if user_action == 'delete':
-                self.remove_children(invoice['id'])
-                self.repository.remove(invoice['id'])
-                self.repository.save()
-                self.repository.check_rows_updated('Invoice Deleted')
-                Menu.wait_for_input()
-
     def delete_invoices_by_client_id(self, client_id):
         invoices = self.repository.find_invoices_by_client_id(client_id)
         for invoice in invoices:
-            self.remove_children(invoice['id'])
+            self.remove_relations(invoice['id'])
         self.repository.remove_invoices_by_client_id(client_id)
         self.repository.save()
 
-    def remove_children(self, invoice_id):
-        JobCrud().delete_jobs_by_invoice_id(invoice_id)
+    def remove_relations(self, id):
+        JobCrud().delete_jobs_by_invoice_id(id)

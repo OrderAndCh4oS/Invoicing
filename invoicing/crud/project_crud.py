@@ -30,7 +30,7 @@ class ProjectCrud(BaseCrud):
                 'reference_code': project['reference_code'],
                 'company_name': project['company_name'],
                 'company_address': project['company_address'],
-                'date': Date().convert_date_time_for_printing(project['date']),
+                'created_at': Date().convert_date_time_for_printing(project['created_at']),
                 'total_cost': '£' + str(sum([float(job['rate']) * float(job['estimated_time']) for job in jobs])),
                 'jobs': [{
                     'title': job['title'],

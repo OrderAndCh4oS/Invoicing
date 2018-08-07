@@ -11,14 +11,14 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         super().__init__()
         self.table = table
 
-    def find_all(self, select=('*')):
+    def find_all(self, select='*'):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_()
         self.execute(**query.build())
         return self.get_all()
 
-    def find_paginated(self, select=('*'), limit=10, page=1):
+    def find_paginated(self, select='*', limit=10, page=1):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_() \
@@ -27,7 +27,7 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         self.execute(**query.build())
         return self.get_all()
 
-    def find_by_id(self, id, select=('*')):
+    def find_by_id(self, id, select='*'):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_() \
@@ -42,7 +42,7 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         self.execute(**query.build())
         return self.get_one()
 
-    def find_last_inserted(self, select=('*')):
+    def find_last_inserted(self, select='*'):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_() \

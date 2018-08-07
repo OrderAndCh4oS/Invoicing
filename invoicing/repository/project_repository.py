@@ -9,7 +9,7 @@ class ProjectRepository(BaseRepository):
 
     def find_all_join_clients_and_company(self):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'date',
+            .select(['projects.id', 'reference_code', 'created_at',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name']) \
             .from_() \
@@ -20,7 +20,7 @@ class ProjectRepository(BaseRepository):
 
     def find_paginated_join_clients_and_company(self, limit=5, page=1):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'date',
+            .select(['projects.id', 'reference_code', 'created_at',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name']) \
             .from_() \
@@ -33,7 +33,7 @@ class ProjectRepository(BaseRepository):
 
     def find_by_id_join_clients_and_company(self, id):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'date',
+            .select(['projects.id', 'reference_code', 'created_at',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name', 'companies.address as company_address']) \
             .from_() \
@@ -45,7 +45,7 @@ class ProjectRepository(BaseRepository):
 
     def find_by_id_with_jobs(self, id):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'projects.reference_code', 'date',
+            .select(['projects.id', 'projects.reference_code', 'created_at',
                      'clients.fullname as client_fullname',
                      'companies.name as company_name',
                      'companies.address as company_address',
@@ -63,7 +63,7 @@ class ProjectRepository(BaseRepository):
 
     def find_projects_by_client_id(self, client_id):
         query = QueryBuilder(self.table) \
-            .select(['id', 'reference_code', 'date']) \
+            .select(['id', 'reference_code', 'created_at']) \
             .from_() \
             .where('client_id = ?', client_id)
         self.execute(**query.build())

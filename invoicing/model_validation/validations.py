@@ -29,6 +29,23 @@ class IsInteger(Validation):
         return field
 
 
+class IsList(Validation):
+    def __init__(self, error_message='is not a list'):
+        super().__init__(error_message)
+
+    def __call__(self, field):
+        self.validation_check(field, isinstance(field.value, list))
+        return field
+
+
+class IsCallable(Validation):
+    def __init__(self, error_message='is not a list'):
+        super().__init__(error_message)
+
+    def __call__(self, field):
+        self.validation_check(field, True)
+        return field
+
 class IsBoolean(Validation):
     def __init__(self, error_message='is not a boolean'):
         super().__init__(error_message)

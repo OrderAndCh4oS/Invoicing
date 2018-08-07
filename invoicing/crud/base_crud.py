@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 from actions.action_collection import ActionCollection
-from model_validation.field import ForeignKeyField
+from model_validation.field import ForeignKeyField, OneToManyField
 from ui.menu import Menu
 from ui.pagination import Pagination
 from ui.style import Style
@@ -38,11 +38,14 @@ class BaseCrud(metaclass=ABCMeta):
     def add(self):
         print(Style.create_title('Add %s' % self.table_name))
         data = {}
+        relationships = {}
         for (key, field) in self.model:
             if field.initial_value is not None:
                 data[key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
                 data[key] = self.select_foreign_key_relationship(field.relationship)
+            elif isinstance(field, OneToManyField):
+                relationships[key] = self.select_foreign_key_relationship_inverse(field.relationship)
             else:
                 data[key] = input("%s: " % self.make_label(key))
         self.model(**data)
@@ -52,6 +55,9 @@ class BaseCrud(metaclass=ABCMeta):
             self.repository.save()
             self.repository.check_rows_updated('%s Added' % self.table_name)
             self.add_relations()
+            last_insert = self.repository.find_last_inserted()
+            for key, update in relationships.items():
+                update(last_insert['id'])
         else:
             print(Style.create_title('%s not added' % self.table_name))
             for (key, value) in self.model.get_errors().items():
@@ -132,12 +138,35 @@ class BaseCrud(metaclass=ABCMeta):
         )
         return item[0]
 
-    # Todo create and implement add_one_to_many_relationships
-    def add_one_to_many_relationships(self, one_to_many_field):
-        repository = one_to_many_field.repository()
-        print(Style.create_title('Add %s' % one_to_many_field.name))
-        while Menu.yes_no_question('Add job'):
-            pass
+    # Todo sort out this utter shitshow
+    def select_foreign_key_relationship_inverse(self, one_to_many_relationship_field):
+        foreign_keys = []
+        repository = one_to_many_relationship_field.repository()
+        while Menu.yes_no_question('Add %s' % one_to_many_relationship_field.name):
+            print(Style.create_title('Select %s' % one_to_many_relationship_field.name))
+            paginated_menu = Pagination(repository)
+            item = paginated_menu(
+                find=repository.find_paginated,
+                find_by_id=repository.find_by_id
+            )
+            foreign_keys.append(item['id'])
+        return self.prepare_foreign_key_relationship_inverse(one_to_many_relationship_field, foreign_keys)
+
+    def prepare_foreign_key_relationship_inverse(self, one_to_many_relationship_field, foreign_keys):
+        return lambda id: self.insert_foreign_keys_relationship_inverse(one_to_many_relationship_field, foreign_keys,
+                                                                        id)
+
+    def insert_foreign_keys_relationship_inverse(self, one_to_many_relationship_field, foreign_keys, id):
+        for foreign_key in foreign_keys:
+            self.insert_foreign_key_relationship_inverse(one_to_many_relationship_field, foreign_key, id)
+
+    def insert_foreign_key_relationship_inverse(self, one_to_many_relationship_field, foreign_key_id, id):
+        repository = one_to_many_relationship_field.repository()
+        repository.update(
+            foreign_key_id,
+            {one_to_many_relationship_field.related_name: id}
+        )
+        repository.save()
 
     def show_item_menu(self, id):
         Menu.create(self.table_name + ' Menu', ActionCollection())

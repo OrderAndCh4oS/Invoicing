@@ -2,7 +2,7 @@ from latex.latex_templating import LatexTemplating
 
 
 class LatexQuote(LatexTemplating):
-    def generate(self, reference_code, company_name, company_address, date, total_cost, jobs):
+    def generate(self, reference_code, company_name, company_address, created_at, total_cost, jobs):
         template = self.latex_jinja_env.get_template('templates/Quote.tex')
         if len(jobs) == 0:
             jobs.append({
@@ -17,7 +17,7 @@ class LatexQuote(LatexTemplating):
             reference_code=self.tex_escape(reference_code),
             company_name=self.tex_escape(company_name),
             company_address=self.tex_escape(company_address),
-            date=self.tex_escape(date),
+            date=self.tex_escape(created_at),
             total_cost=self.tex_escape(total_cost),
             jobs=[(lambda job: {k: self.tex_escape(v) for k, v in job.items()})(job) for job in jobs]
         )
