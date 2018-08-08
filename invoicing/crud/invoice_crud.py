@@ -1,5 +1,4 @@
 from crud.base_crud import BaseCrud
-from crud.job_crud import JobCrud
 from latex.latex_invoice import LatexInvoice
 from models.invoice_model import InvoiceModel
 from repository.invoice_repository import InvoiceRepository
@@ -73,12 +72,3 @@ class InvoiceCrud(BaseCrud):
             jobRepository.save()
             jobRepository.check_rows_updated('The selected jobs have been marked as completed')
 
-    def delete_invoices_by_client_id(self, client_id):
-        invoices = self.repository.find_invoices_by_client_id(client_id)
-        for invoice in invoices:
-            self.remove_relations(invoice['id'])
-        self.repository.remove_invoices_by_client_id(client_id)
-        self.repository.save()
-
-    def remove_relations(self, id):
-        JobCrud().delete_jobs_by_invoice_id(id)

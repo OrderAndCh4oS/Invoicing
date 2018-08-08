@@ -1,5 +1,4 @@
 from crud.base_crud import BaseCrud
-from crud.job_crud import JobCrud
 from latex.latex_quote import LatexQuote
 from models.project_model import ProjectModel
 from repository.job_repository import JobRepository
@@ -13,10 +12,6 @@ class ProjectCrud(BaseCrud):
     def __init__(self):
         super().__init__('Projects', ProjectRepository, ProjectModel)
         self.menu_actions.add_action('Generate', self.generate)
-
-    def add_relations(self):
-        while Menu.yes_no_question('Add job'):
-            JobCrud().add()
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
@@ -44,12 +39,3 @@ class ProjectCrud(BaseCrud):
             LatexQuote().generate(**project_data)
             Menu.wait_for_input()
 
-    def delete_projects_by_client_id(self, client_id):
-        projects = self.repository.find_projects_by_client_id(client_id)
-        for project in projects:
-            self.remove_relations(project['id'])
-        self.repository.remove_projects_by_client_id(client_id)
-        self.repository.save()
-
-    def remove_relations(self, project_id):
-        JobCrud().delete_jobs_by_project_id(project_id)

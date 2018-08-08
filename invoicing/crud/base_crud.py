@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 from actions.action_collection import ActionCollection
-from model_validation.field import ForeignKeyField, OneToManyField
+from model_validation.field import ForeignKeyField
 from ui.menu import Menu
 from ui.pagination import Pagination
 from ui.style import Style
@@ -22,6 +22,9 @@ class BaseCrud(metaclass=ABCMeta):
             ('Delete', self.delete)
         )
 
+    def menu(self):
+        Menu.create('Manage ' + self.table_name, self.menu_actions)
+
     def show(self):
         print(Style.create_title('Show %s' % self.table_name))
         item = self.make_paginated_menu()
@@ -35,68 +38,80 @@ class BaseCrud(metaclass=ABCMeta):
             label = self.make_label(header)
             print('%s: %s' % (label, item[header]))
 
+    def show_item_menu(self, id):
+        Menu.create(self.table_name + ' Menu', ActionCollection())
+
     def add(self):
         print(Style.create_title('Add %s' % self.table_name))
+        data = self.input_add_data()
+        data = self.validate_model_data(data)
+        if self.model.is_valid():
+            self.save_insert(data)
+        else:
+            self.display_errors('%s not added' % self.table_name)
+        Menu.wait_for_input()
+
+    def save_insert(self, data):
+        self.repository.insert(data)
+        self.repository.save()
+        self.repository.check_rows_updated('%s Added' % self.table_name)
+
+    def input_add_data(self):
         data = {}
-        relationships = {}
         for (key, field) in self.model:
             if field.initial_value is not None:
                 data[key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
                 data[key] = self.select_foreign_key_relationship(field.relationship)
-            elif isinstance(field, OneToManyField):
-                relationships[key] = self.select_foreign_key_relationship_inverse(field.relationship)
             else:
                 data[key] = input("%s: " % self.make_label(key))
-        self.model(**data)
-        self.model.validate()
-        if self.model.is_valid():
-            self.repository.insert(data)
-            self.repository.save()
-            self.repository.check_rows_updated('%s Added' % self.table_name)
-            self.add_relations()
-            last_insert = self.repository.find_last_inserted()
-            for key, update in relationships.items():
-                update(last_insert['id'])
-        else:
-            print(Style.create_title('%s not added' % self.table_name))
-            for (key, value) in self.model.get_errors().items():
-                print("%s: %s" % (key.capitalize(), value))
-        Menu.wait_for_input()
+        return data
 
     def edit(self):
         print(Style.create_title('Edit %s' % self.table_name))
         item = self.make_paginated_menu()
         if item:
-            print(Style.create_title('Add %s' % self.table_name))
-            data = {}
-            for (key, field) in self.model:
-                if not field.updatable:
-                    continue
-                if (isinstance(field, ForeignKeyField)):
-                    if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
-                        data[key] = self.select_foreign_key_relationship(field.relationship)
-                    else:
-                        data[key] = item[key]
-                else:
-                    data[key] = self.update_field(item[key], self.make_label(key))
-            self.model(**data)
-            self.model.validate()
+            data = self.input_edit_data(item)
+            data = self.validate_model_data(data)
             if self.model.is_valid:
-                self.repository.update(
-                    item['id'],
-                    data
-                )
-                self.repository.save()
-                self.repository.check_rows_updated('%s Updated' % self.table_name)
-                self.add_relations()
+                self.save_update(data, item)
             else:
-                print(Style.create_title('%s not updated' % self.table_name))
-                for (key, value) in self.model.get_errors().items():
-                    print("%s: %s" % (key.capitalize(), value))
+                self.display_errors('%s not updated' % self.table_name)
         else:
             print('No changes made')
         Menu.wait_for_input()
+
+    def input_edit_data(self, item):
+        data = {}
+        for (key, field) in self.model:
+            if not field.updatable:
+                continue
+            if (isinstance(field, ForeignKeyField)):
+                if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
+                    data[key] = self.select_foreign_key_relationship(field.relationship)
+            else:
+                data[key] = self.update_field(item[key], self.make_label(key))
+        return data
+
+    def validate_model_data(self, data):
+        self.model(**data)
+        self.model.validate()
+        return data
+
+    def save_update(self, data, item):
+        self.repository.update(item['id'], data)
+        self.repository.save()
+        self.repository.check_rows_updated('%s Updated' % self.table_name)
+
+    def update_field(self, current_value, field_name):
+        value = input(field_name + "(" + str(current_value) + "): ")
+        new_value = value if len(value) > 0 else current_value
+        return new_value
+
+    def display_errors(self, message):
+        print(Style.create_title(message))
+        for (key, value) in self.model.get_errors().items():
+            print("%s: %s" % (key.capitalize(), value))
 
     def delete(self):
         print(Style.create_title('Delete %s' % self.table_name))
@@ -107,26 +122,13 @@ class BaseCrud(metaclass=ABCMeta):
                 user_action = input('Type \'delete\' to remove this item or \'c\' to cancel: ')
                 if user_action == 'c':
                     return
-            if user_action == 'delete':
-                self.remove_relations(item['id'])
-                self.repository.remove(item['id'])
-                self.repository.save()
-                self.repository.check_rows_updated('%s Deleted' % self.table_name)
-                Menu.wait_for_input()
+            self.save_remove(item)
+            Menu.wait_for_input()
 
-    def menu(self):
-        Menu.create('Manage ' + self.table_name, self.menu_actions)
-
-    def make_paginated_menu(self):
-        return self.paginated_menu()
-
-    def make_label(self, header):
-        return " ".join([word.capitalize() for word in header.split('_')])
-
-    def update_field(self, current_value, field_name):
-        value = input(field_name + "(" + str(current_value) + "): ")
-        new_value = value if len(value) > 0 else current_value
-        return new_value
+    def save_remove(self, item):
+        self.repository.remove(item['id'])
+        self.repository.save()
+        self.repository.check_rows_updated('%s Deleted' % self.table_name)
 
     def select_foreign_key_relationship(self, relationship_field):
         repository = relationship_field.repository()
@@ -138,41 +140,8 @@ class BaseCrud(metaclass=ABCMeta):
         )
         return item[0]
 
-    # Todo sort out this utter shitshow
-    def select_foreign_key_relationship_inverse(self, one_to_many_relationship_field):
-        foreign_keys = []
-        repository = one_to_many_relationship_field.repository()
-        while Menu.yes_no_question('Add %s' % one_to_many_relationship_field.name):
-            print(Style.create_title('Select %s' % one_to_many_relationship_field.name))
-            paginated_menu = Pagination(repository)
-            item = paginated_menu(
-                find=repository.find_paginated,
-                find_by_id=repository.find_by_id
-            )
-            foreign_keys.append(item['id'])
-        return self.prepare_foreign_key_relationship_inverse(one_to_many_relationship_field, foreign_keys)
+    def make_paginated_menu(self):
+        return self.paginated_menu()
 
-    def prepare_foreign_key_relationship_inverse(self, one_to_many_relationship_field, foreign_keys):
-        return lambda id: self.insert_foreign_keys_relationship_inverse(one_to_many_relationship_field, foreign_keys,
-                                                                        id)
-
-    def insert_foreign_keys_relationship_inverse(self, one_to_many_relationship_field, foreign_keys, id):
-        for foreign_key in foreign_keys:
-            self.insert_foreign_key_relationship_inverse(one_to_many_relationship_field, foreign_key, id)
-
-    def insert_foreign_key_relationship_inverse(self, one_to_many_relationship_field, foreign_key_id, id):
-        repository = one_to_many_relationship_field.repository()
-        repository.update(
-            foreign_key_id,
-            {one_to_many_relationship_field.related_name: id}
-        )
-        repository.save()
-
-    def show_item_menu(self, id):
-        Menu.create(self.table_name + ' Menu', ActionCollection())
-
-    def add_relations(self):
-        pass
-
-    def remove_relations(self, id):
-        pass
+    def make_label(self, header):
+        return " ".join([word.capitalize() for word in header.split('_')])

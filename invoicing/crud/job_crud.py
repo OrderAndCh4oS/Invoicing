@@ -1,9 +1,7 @@
 from actions.action_collection import ActionCollection
 from crud.base_crud import BaseCrud
-from model_validation.field import ForeignKeyField
 from models.job_model import JobModel
 from repository.job_repository import JobRepository
-from repository.project_repository import ProjectRepository
 from repository.status_repository import StatusRepository
 from ui.menu import Menu
 from ui.pagination import Pagination
@@ -14,13 +12,6 @@ from value_validation.value_validation import Validation
 class JobCrud(BaseCrud):
     def __init__(self):
         super().__init__('Jobs', JobRepository, JobModel)
-
-    def menu(self):
-        Menu.create('Manage ' + self.table_name, ActionCollection(
-            ('View', self.show),
-            ('Edit', self.edit),
-            ('Delete', self.delete),
-        ))
 
     def show_item_menu(self, id):
         Menu.create(self.table_name + ' Menu', ActionCollection(
@@ -37,30 +28,6 @@ class JobCrud(BaseCrud):
                  'assigned_to', 'status_id')
             )
         )
-
-    def add(self):
-        print(Style.create_title('Add %s' % self.table_name))
-        data = {}
-        for (key, field) in self.model:
-            if field.initial_value is not None:
-                data[key] = field.initial_value
-            elif isinstance(field, ForeignKeyField):
-                data[key] = self.select_foreign_key_relationship(field.relationship)
-            else:
-                data[key] = input("%s: " % self.make_label(key))
-        data['project_id'] = ProjectRepository().find_last_inserted_id()['id']
-        self.model(**data)
-        self.model.validate()
-        if self.model.is_valid():
-            self.repository.insert(data)
-            self.repository.save()
-            self.repository.check_rows_updated('%s Added' % self.table_name)
-            self.add_relations()
-        else:
-            print(Style.create_title('%s not added' % self.table_name))
-            for (key, value) in self.model.get_errors().items():
-                print("%s: %s" % (key.capitalize(), value))
-        Menu.wait_for_input()
 
     def log_time(self, job_id):
         logged_time = ''
@@ -103,11 +70,3 @@ class JobCrud(BaseCrud):
         if job:
             self.show_item_detail(job)
             self.show_item_menu(job['id'])
-
-    def delete_jobs_by_project_id(self, project_id):
-        self.repository.remove_jobs_by_project_id(project_id)
-        self.repository.save()
-
-    def delete_jobs_by_invoice_id(self, invoice_id):
-        self.repository.remove_jobs_by_invoice_id(invoice_id)
-        self.repository.save()
