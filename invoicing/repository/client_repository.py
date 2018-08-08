@@ -5,21 +5,21 @@ from repository.base_repository import BaseRepository
 class ClientRepository(BaseRepository):
 
     def __init__(self):
-        super().__init__('clients')
+        super().__init__('client')
 
     def find_all_join_companies(self):
         query = QueryBuilder(self.table) \
-            .select(['clients.id', 'fullname', 'email', 'telephone', 'companies.name as company_name']) \
+            .select(['client.id', 'fullname', 'email', 'telephone', 'company.name as company_name']) \
             .from_() \
-            .join('companies', 'company_id = companies.id')
+            .join('company', 'company_id = company.id')
         self.execute(**query.build())
         return self.get_all()
 
     def find_paginated_join_companies(self, limit=5, page=1):
         query = QueryBuilder(self.table) \
-            .select(['clients.id', 'fullname', 'email', 'telephone', 'companies.name as company_name']) \
+            .select(['client.id', 'fullname', 'email', 'telephone', 'company.name as company_name']) \
             .from_() \
-            .join('companies', 'company_id = companies.id') \
+            .join('company', 'company_id = company.id') \
             .limit(limit) \
             .offset(page * limit - limit)
         self.execute(**query.build())
@@ -27,12 +27,12 @@ class ClientRepository(BaseRepository):
 
     def find_by_id_join_company(self, id):
         query = QueryBuilder(self.table) \
-            .select(['clients.id', 'fullname', 'email', 'telephone',
-                     'companies.name as company_name',
-                     'companies.address as company_address']) \
+            .select(['client.id', 'fullname', 'email', 'telephone',
+                     'company.name as company_name',
+                     'company.address as company_address']) \
             .from_() \
-            .join('companies', 'company_id = companies.id') \
-            .where('clients.id = ?', id)
+            .join('company', 'company_id = company.id') \
+            .where('client.id = ?', id)
         self.execute(**query.build())
         return self.get_one()
 

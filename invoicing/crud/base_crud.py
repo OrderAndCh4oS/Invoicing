@@ -1,7 +1,9 @@
 from abc import ABCMeta
 
+from ansi_colours import AnsiColours as Colour
+
 from actions.action_collection import ActionCollection
-from model_validation.field import ForeignKeyField
+from model_validation.field import ForeignKeyField, OneToManyField
 from ui.menu import Menu
 from ui.pagination import Pagination
 from ui.style import Style
@@ -36,7 +38,7 @@ class BaseCrud(metaclass=ABCMeta):
         print(Style.create_title('%s Data' % self.table_name))
         for header in self.repository.get_headers():
             label = self.make_label(header)
-            print('%s: %s' % (label, item[header]))
+            print('%s: %s' % (label, Colour.blue(str(item[header]))))
 
     def show_item_menu(self, id):
         Menu.create(self.table_name + ' Menu', ActionCollection())
@@ -44,35 +46,38 @@ class BaseCrud(metaclass=ABCMeta):
     def add(self):
         print(Style.create_title('Add %s' % self.table_name))
         data = self.input_add_data()
-        data = self.validate_model_data(data)
+        data['own'] = self.validate_model_data(data['own'])
         if self.model.is_valid():
-            self.save_insert(data)
+            self.save_data(data)
         else:
             self.display_errors('%s not added' % self.table_name)
         Menu.wait_for_input()
 
-    def save_insert(self, data):
-        self.repository.insert(data)
-        self.repository.save()
-        self.repository.check_rows_updated('%s Added' % self.table_name)
-
     def input_add_data(self):
-        data = {}
+        data = {'own': {}, 'relation': {}}
         for (key, field) in self.model:
             if field.initial_value is not None:
-                data[key] = field.initial_value
+                data['own'][key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
-                data[key] = self.select_foreign_key_relationship(field.relationship)
+                data['own'][key] = self.select_foreign_key_relationship(field.relationship)
+            elif isinstance(field, OneToManyField):
+                data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
             else:
-                data[key] = input("%s: " % self.make_label(key))
+                data['own'][key] = input("%s: " % self.make_label(key))
         return data
+
+    def save_data(self, data):
+        self.repository.insert(data['own'])
+        self.repository.update_parent_foreign_keys(data['relation'])
+        self.repository.save()
+        self.repository.check_rows_updated('%s Added' % self.table_name)
 
     def edit(self):
         print(Style.create_title('Edit %s' % self.table_name))
         item = self.make_paginated_menu()
         if item:
             data = self.input_edit_data(item)
-            data = self.validate_model_data(data)
+            data['own'] = self.validate_model_data(data['own'])
             if self.model.is_valid:
                 self.save_update(data, item)
             else:
@@ -82,15 +87,17 @@ class BaseCrud(metaclass=ABCMeta):
         Menu.wait_for_input()
 
     def input_edit_data(self, item):
-        data = {}
+        data = {'own': {}, 'relation': {}}
         for (key, field) in self.model:
             if not field.updatable:
                 continue
             if (isinstance(field, ForeignKeyField)):
-                if Menu.yes_no_question('Update %s Relationship?' % field.relationship.name):
-                    data[key] = self.select_foreign_key_relationship(field.relationship)
+                if Menu.yes_no_question('Change %s?' % field.relationship.name):
+                    data['own'][key] = self.select_foreign_key_relationship(field.relationship)
+            elif (isinstance(field, OneToManyField)):
+                data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
             else:
-                data[key] = self.update_field(item[key], self.make_label(key))
+                data['own'][key] = self.update_field(item[key], self.make_label(key))
         return data
 
     def validate_model_data(self, data):
@@ -99,7 +106,8 @@ class BaseCrud(metaclass=ABCMeta):
         return data
 
     def save_update(self, data, item):
-        self.repository.update(item['id'], data)
+        self.repository.update(item['id'], data['own'])
+        self.repository.update_parent_foreign_keys(data['relation'])
         self.repository.save()
         self.repository.check_rows_updated('%s Updated' % self.table_name)
 
@@ -111,7 +119,7 @@ class BaseCrud(metaclass=ABCMeta):
     def display_errors(self, message):
         print(Style.create_title(message))
         for (key, value) in self.model.get_errors().items():
-            print("%s: %s" % (key.capitalize(), value))
+            print("%s: %s" % (key.capitalize(), Colour.red(value)))
 
     def delete(self):
         print(Style.create_title('Delete %s' % self.table_name))
@@ -119,7 +127,10 @@ class BaseCrud(metaclass=ABCMeta):
         if item:
             user_action = False
             while not user_action == 'delete':
-                user_action = input('Type \'delete\' to remove this item or \'c\' to cancel: ')
+                user_action = input('Type \'%s\' to remove this item or %s to cancel: ' % (
+                    Colour.green('delete'),
+                    Colour.green('c')
+                ))
                 if user_action == 'c':
                     return
             self.save_remove(item)
@@ -145,3 +156,16 @@ class BaseCrud(metaclass=ABCMeta):
 
     def make_label(self, header):
         return " ".join([word.capitalize() for word in header.split('_')])
+
+    def select_foreign_key_relationship_inverse(self, relationship):
+        foreign_keys = []
+        repository = relationship.repository()
+        while Menu.yes_no_question('Add %s' % relationship.name):
+            print(Style.create_title('Select %s' % relationship.name))
+            paginated_menu = Pagination(repository)
+            item = paginated_menu(
+                find=repository.find_paginated,
+                find_by_id=repository.find_by_id
+            )
+            foreign_keys.append(item['id'])
+        return (relationship.related_name, foreign_keys)

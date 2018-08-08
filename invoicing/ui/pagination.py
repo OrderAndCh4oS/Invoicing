@@ -1,3 +1,5 @@
+from ansi_colours import AnsiColours as Colour
+
 from repository.base_repository import BaseRepository
 from ui.menu import Menu
 from ui.style import Style
@@ -23,7 +25,12 @@ class Pagination:
         while not result:
             self.paginated_table()
             self.pagination_text()
-            user_input = input('\nEnter an id, use \'<\' and \'>\' to navigate, or \'b\' to go back: ')
+            user_input = input('\nEnter an %s, use %s and %s to navigate, or %s to go back: ' % (
+                Colour.green("'id'"),
+                Colour.green("<"),
+                Colour.green(">"),
+                Colour.green("b")
+            ))
             if (user_input == 'b'):
                 break
             if self.should_change_page(user_input):
@@ -46,10 +53,10 @@ class Pagination:
     def pagination_text(self):
         text = ""
         if self.page > 1:
-            text += "'<' previous | "
+            text += "%s previous | " % Colour.green('<')
         text += "page %d" % self.page
         if self.page * self.limit < self.total:
-            text += " | next '>'"
+            text += " | next %s" % Colour.green('>')
         print(Style.create_underline(text))
         print(text)
         print(Style.create_underline(text))

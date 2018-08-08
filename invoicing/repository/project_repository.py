@@ -5,27 +5,27 @@ from repository.base_repository import BaseRepository
 class ProjectRepository(BaseRepository):
 
     def __init__(self):
-        super().__init__('projects')
+        super().__init__('project')
 
     def find_all_join_clients_and_company(self):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'created_at',
-                     'clients.fullname as client_fullname',
-                     'companies.name as company_name']) \
+            .select(['project.id', 'reference_code', 'created_at',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id')
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id')
         self.execute(**query.build())
         return self.get_all()
 
     def find_paginated_join_clients_and_company(self, limit=5, page=1):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'created_at',
-                     'clients.fullname as client_fullname',
-                     'companies.name as company_name']) \
+            .select(['project.id', 'reference_code', 'created_at',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id') \
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
             .limit(limit) \
             .offset(page * limit - limit)
         self.execute(**query.build())
@@ -33,31 +33,31 @@ class ProjectRepository(BaseRepository):
 
     def find_by_id_join_clients_and_company(self, id):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'reference_code', 'created_at',
-                     'clients.fullname as client_fullname',
-                     'companies.name as company_name', 'companies.address as company_address']) \
+            .select(['project.id', 'reference_code', 'created_at',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name', 'company.address as company_address']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id') \
-            .where('projects.id = ?', id)
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
+            .where('project.id = ?', id)
         self.execute(**query.build())
         return self.get_one()
 
     def find_by_id_with_jobs(self, id):
         query = QueryBuilder(self.table) \
-            .select(['projects.id', 'projects.reference_code', 'created_at',
-                     'clients.fullname as client_fullname',
-                     'companies.name as company_name',
-                     'companies.address as company_address',
-                     'jobs.title as job_title',
-                     'jobs.description as job_description',
+            .select(['project.id', 'projects.reference_code', 'created_at',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name',
+                     'company.address as company_address',
+                     'job.title as job_title',
+                     'job.description as job_description',
                      'staff.rate as rate']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id') \
-            .join('jobs', 'projects.id = jobs.project_id') \
-            .join('staff', 'jobs.assigned_to = staff.id') \
-            .where('projects.id = ?', id)
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
+            .join('job', 'project.id = job.project_id') \
+            .join('staff', 'job.assigned_to = staff.id') \
+            .where('project.id = ?', id)
         self.execute(**query.build())
         return self.get_all()
 

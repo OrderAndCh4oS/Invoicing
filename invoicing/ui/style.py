@@ -1,3 +1,5 @@
+from ansi_colours import AnsiColours as Colour
+
 class Style:
     @staticmethod
     def create_title(title):
@@ -5,4 +7,4 @@ class Style:
 
     @staticmethod
     def create_underline(title):
-        return "".join(['-' for _ in range(len(title))])
+        return Colour.blue("".join(['-' for _ in range(len(title))]))

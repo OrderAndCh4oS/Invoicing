@@ -5,27 +5,27 @@ from repository.base_repository import BaseRepository
 class InvoiceRepository(BaseRepository):
 
     def __init__(self):
-        super().__init__('invoices')
+        super().__init__('invoice')
 
     def find_all_join_clients_and_companies(self):
         query = QueryBuilder(self.table) \
-            .select(['invoices.id', 'reference_code', 'created_at',
-                     'clients.fullname as client_fullname',
-                     'companies.name as company_name']) \
+            .select(['invoice.id', 'reference_code', 'created_at',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id')
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id')
         self.execute(**query.build())
         return self.get_all()
 
     def find_paginated_join_clients_and_companies(self, limit=5, page=1):
         query = QueryBuilder(self.table) \
-            .select(['invoices.id', 'reference_code', 'created_at',
-                     'clients.id as client_id, clients.fullname as client_fullname',
-                     'companies.name as company_name']) \
+            .select(['invoice.id', 'reference_code', 'created_at',
+                     'client.id as client_id, client.fullname as client_fullname',
+                     'company.name as company_name']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id') \
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
             .limit(limit) \
             .offset(page * limit - limit)
         self.execute(**query.build())
@@ -33,13 +33,13 @@ class InvoiceRepository(BaseRepository):
 
     def find_by_id_join_clients_and_companies(self, id):
         query = QueryBuilder(self.table) \
-            .select(['invoices.id as id', 'reference_code', 'created_at',
-                     'clients.id as client_id, clients.fullname as client_fullname',
-                     'companies.name as company_name', 'companies.address as company_address']) \
+            .select(['invoice.id as id', 'reference_code', 'created_at',
+                     'client.id as client_id, client.fullname as client_fullname',
+                     'company.name as company_name', 'company.address as company_address']) \
             .from_() \
-            .join('clients', 'client_id = clients.id') \
-            .join('companies', 'clients.company_id = companies.id') \
-            .where('invoices.id = ?', id)
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
+            .where('invoice.id = ?', id)
         self.execute(**query.build())
         return self.get_one()
 

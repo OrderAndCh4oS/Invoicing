@@ -55,6 +55,19 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
             .insert(values)
         self.execute(**query.build())
 
+    def update_parent_foreign_keys(self, related_keys):
+        """
+        :param related_keys:  {"related_table": ("related_name", [1, 2, 3])}
+        :return: []
+        """
+        last_id = self.cursor.lastrowid
+        for related_table, relations in related_keys.items():
+            for id in relations[1]:
+                query = QueryBuilder(related_table) \
+                    .update({relations[0]: last_id}) \
+                    .where('id = ?', id)
+                self.execute(**query.build())
+
     def update(self, id, set):
         query = QueryBuilder(self.table) \
             .update(set) \

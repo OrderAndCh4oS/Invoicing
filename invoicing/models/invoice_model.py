@@ -14,7 +14,7 @@ class InvoiceModel(BaseModel):
     client_id = ForeignKeyField(
         BaseRelationship('Client', ClientRepository, ClientModel)
     )
-    jobs = OneToManyField(
+    job = OneToManyField(
         OneToManyRelationship('invoice_id', 'Job', JobRepository, JobModel)
     )
     created_at = Field([IsString()], initial_value=datetime.now().strftime("%Y-%m-%d %H:%M"), updatable=False)
