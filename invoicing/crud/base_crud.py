@@ -94,6 +94,8 @@ class BaseCrud(metaclass=ABCMeta):
             if (isinstance(field, ForeignKeyField)):
                 if Menu.yes_no_question('Change %s?' % field.relationship.name):
                     data['own'][key] = self.select_foreign_key_relationship(field.relationship)
+                else:
+                    data['own'][key] = item[key]
             elif (isinstance(field, OneToManyField)):
                 data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
             else:
@@ -128,7 +130,7 @@ class BaseCrud(metaclass=ABCMeta):
             user_action = False
             while not user_action == 'delete':
                 user_action = input('Type \'%s\' to remove this item or %s to cancel: ' % (
-                    Colour.green('delete'),
+                    Colour.red('delete'),
                     Colour.green('c')
                 ))
                 if user_action == 'c':
