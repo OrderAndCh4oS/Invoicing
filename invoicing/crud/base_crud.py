@@ -59,9 +59,9 @@ class BaseCrud(metaclass=ABCMeta):
             if field.initial_value is not None:
                 data['own'][key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
-                foreignKey = self.select_foreign_key_relationship(field.relationship)
-                if foreignKey:
-                    data['own'][key] = foreignKey
+                foreign_key = self.select_foreign_key_relationship(field.relationship)
+                if foreign_key:
+                    data['own'][key] = foreign_key
                 else:
                     break
             elif isinstance(field, OneToManyField):
@@ -102,7 +102,9 @@ class BaseCrud(metaclass=ABCMeta):
                 continue
             if isinstance(field, ForeignKeyField):
                 if Menu.yes_no_question('Change %s?' % field.relationship.name):
-                    data['own'][key] = self.select_foreign_key_relationship(field.relationship)
+                    foreign_key = self.select_foreign_key_relationship(field.relationship)
+                    if foreign_key:
+                        data['own'][key] = foreign_key
                 else:
                     data['own'][key] = item[key]
             elif isinstance(field, OneToManyField):
