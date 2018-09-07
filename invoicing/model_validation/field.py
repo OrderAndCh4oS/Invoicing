@@ -7,11 +7,13 @@ class Field(Validator):
     def __init__(self, validation_links=None, **kwargs):
         super().__init__()
         kwargs.setdefault('initial_value', None)
+        kwargs.setdefault('default_value', None)
         kwargs.setdefault('updatable', True)
         validation_links = validation_links if validation_links is not None else []
         if validation_links:
             self.set_validation_links(validation_links)
         self.initial_value = kwargs.get('initial_value')
+        self.default_value = kwargs.get('default_value')
         self.value = kwargs.get('initial_value')
         self.updatable = kwargs.get('updatable')
 

@@ -13,6 +13,12 @@ class ProjectCrud(BaseCrud):
         super().__init__('Projects', ProjectRepository, ProjectModel)
         self.menu_actions.add_action('Generate', self.generate)
 
+    def make_paginated_menu(self):
+        return self.paginated_menu(
+            find=self.repository.find_paginated_join_clients_and_company,
+            find_by_id=self.repository.find_by_id_join_clients_and_company
+        )
+
     def generate(self):
         print(Style.create_title('Generate Quote'))
         project = self.paginated_menu(

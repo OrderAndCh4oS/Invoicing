@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from model_validation.field import StringField, FloatField, Field, ForeignKeyField, \
     DateField
 from model_validation.validations import IsRequired, IsString
@@ -20,7 +22,8 @@ class JobModel(BaseModel):
     title = StringField([IsRequired()])
     description = StringField([IsRequired()])
     estimated_time = FloatField([IsRequired()])
-    deadline = DateField([IsRequired()])
+    deadline = DateField([IsRequired()],
+                         default_value=(datetime.today() + relativedelta(months=1)).strftime("%d-%m-%y"))
     assigned_to = ForeignKeyField(
         BaseRelationship('Staff', StaffRepository, StaffModel)
     )

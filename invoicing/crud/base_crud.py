@@ -46,7 +46,7 @@ class BaseCrud(metaclass=ABCMeta):
     def add(self):
         print(Style.create_title('Add %s' % self.table_name))
         data = self.input_add_data()
-        data['own'] = self.validate_model_data(data['own'])
+        self.validate_model_data(data['own'])
         if self.model.is_valid():
             self.save_data(data)
         else:
@@ -59,9 +59,18 @@ class BaseCrud(metaclass=ABCMeta):
             if field.initial_value is not None:
                 data['own'][key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
-                data['own'][key] = self.select_foreign_key_relationship(field.relationship)
+                foreignKey = self.select_foreign_key_relationship(field.relationship)
+                if foreignKey:
+                    data['own'][key] = foreignKey
+                else:
+                    break
             elif isinstance(field, OneToManyField):
                 data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
+            elif field.default_value is not None:
+                user_input = input("%s (%s): " % (self.make_label(key), field.default_value))
+                if user_input is '':
+                    user_input = field.default_value
+                data['own'][key] = user_input
             else:
                 data['own'][key] = input("%s: " % self.make_label(key))
         return data
@@ -91,13 +100,14 @@ class BaseCrud(metaclass=ABCMeta):
         for (key, field) in self.model:
             if not field.updatable:
                 continue
-            if (isinstance(field, ForeignKeyField)):
+            if isinstance(field, ForeignKeyField):
                 if Menu.yes_no_question('Change %s?' % field.relationship.name):
                     data['own'][key] = self.select_foreign_key_relationship(field.relationship)
                 else:
                     data['own'][key] = item[key]
-            elif (isinstance(field, OneToManyField)):
+            elif isinstance(field, OneToManyField):
                 data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
+                # Todo: handle removing relationships
             else:
                 data['own'][key] = self.update_field(item[key], self.make_label(key))
         return data
@@ -151,7 +161,10 @@ class BaseCrud(metaclass=ABCMeta):
             find=repository.find_paginated,
             find_by_id=repository.find_by_id
         )
-        return item[0]
+        if item:
+            return item[0]
+        else:
+            return False
 
     def make_paginated_menu(self):
         return self.paginated_menu()
@@ -170,4 +183,4 @@ class BaseCrud(metaclass=ABCMeta):
                 find_by_id=repository.find_by_id
             )
             foreign_keys.append(item['id'])
-        return (relationship.related_name, foreign_keys)
+        return relationship.related_name, foreign_keys

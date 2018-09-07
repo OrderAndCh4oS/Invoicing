@@ -9,20 +9,40 @@ class ProjectRepository(BaseRepository):
 
     def find_all_join_clients_and_company(self):
         query = QueryBuilder(self.table) \
-            .select(['project.id', 'reference_code', 'created_at',
+            .select(['project.id', 'reference_code', 'project.title'
                      'client.fullname as client_fullname',
-                     'company.name as company_name']) \
+                     'company.name as company_name',
+                     'client.id as client_id',
+                     'created_at']) \
             .from_() \
             .join('client', 'client_id = client.id') \
             .join('company', 'client.company_id = company.id')
         self.execute(**query.build())
         return self.get_all()
 
+    def find_paginated(self, limit=5, page=1, **kwargs):
+        query = QueryBuilder(self.table) \
+            .select(['project.id', 'project.reference_code', 'project.title',
+                     'client.fullname as client_fullname',
+                     'company.name as company_name',
+                     'created_at',
+                     ]) \
+            .from_() \
+            .join('client', 'client_id = client.id') \
+            .join('company', 'client.company_id = company.id') \
+            .limit(limit) \
+            .offset(page * limit - limit)
+        self.execute(**query.build())
+        return self.get_all()
+
     def find_paginated_join_clients_and_company(self, limit=5, page=1):
         query = QueryBuilder(self.table) \
-            .select(['project.id', 'reference_code', 'created_at',
+            .select(['project.id', 'reference_code', 'project.title',
                      'client.fullname as client_fullname',
-                     'company.name as company_name']) \
+                     'company.name as company_name',
+                     'client.id as client_id',
+                     'created_at',
+                     ]) \
             .from_() \
             .join('client', 'client_id = client.id') \
             .join('company', 'client.company_id = company.id') \
@@ -33,9 +53,14 @@ class ProjectRepository(BaseRepository):
 
     def find_by_id_join_clients_and_company(self, id):
         query = QueryBuilder(self.table) \
-            .select(['project.id', 'reference_code', 'created_at',
+            .select(['project.id', 'reference_code', 'project.title',
                      'client.fullname as client_fullname',
-                     'company.name as company_name', 'company.address as company_address']) \
+                     'company.name as company_name',
+                     'company.address as company_address',
+                     'company.id as company_id',
+                     'client.id as client_id',
+                     'created_at',
+                     ]) \
             .from_() \
             .join('client', 'client_id = client.id') \
             .join('company', 'client.company_id = company.id') \
@@ -45,13 +70,15 @@ class ProjectRepository(BaseRepository):
 
     def find_by_id_with_jobs(self, id):
         query = QueryBuilder(self.table) \
-            .select(['project.id', 'projects.reference_code', 'created_at',
+            .select(['project.id', 'projects.reference_code', 'project.title',
                      'client.fullname as client_fullname',
+                     'client.id as client_id',
                      'company.name as company_name',
                      'company.address as company_address',
+                     'company.id as company_id',
                      'job.title as job_title',
                      'job.description as job_description',
-                     'staff.rate as rate']) \
+                     'staff.rate as rate', 'created_at']) \
             .from_() \
             .join('client', 'client_id = client.id') \
             .join('company', 'client.company_id = company.id') \
@@ -63,7 +90,7 @@ class ProjectRepository(BaseRepository):
 
     def find_projects_by_client_id(self, client_id):
         query = QueryBuilder(self.table) \
-            .select(['id', 'reference_code', 'created_at']) \
+            .select(['id', 'reference_code', 'title', 'created_at']) \
             .from_() \
             .where('client_id = ?', client_id)
         self.execute(**query.build())

@@ -1,5 +1,6 @@
 from ansi_colours import AnsiColours as Colour
 
+
 class Table:
     @staticmethod
     def create_table(rows, headers):

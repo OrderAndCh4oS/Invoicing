@@ -1,5 +1,8 @@
 from flask import Flask, request
 
+from api.client_api import ClientAPI
+from api.company_api import CompanyAPI
+from api.index_api import IndexAPI
 from api.invoice_api import InvoiceAPI
 from api.job_api import JobAPI
 from api.project_api import ProjectAPI
@@ -7,10 +10,6 @@ from api.staff_api import StaffAPI
 from api.status_api import StatusAPI
 
 app = Flask(__name__)
-
-from api.company_api import CompanyAPI
-from api.client_api import ClientAPI
-from api.index_api import IndexAPI
 
 
 def json_response(json):
@@ -42,8 +41,7 @@ class RequestHandler:
 
 @app.route('/')
 def index():
-    api = IndexAPI()
-    return json_response(api.get())
+    return json_response(IndexAPI.get())
 
 
 @app.route('/company', methods=['GET', 'POST'])

@@ -31,7 +31,7 @@ class Menu:
         item = False
         while not item:
             id = input('\nEnter an id to view or \'b\' to go back: ')
-            if (id == 'b'):
+            if id == 'b':
                 return False
             if not Validation.isNumber(id):
                 print('Not a valid number')

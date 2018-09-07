@@ -22,11 +22,11 @@ class JobCrud(BaseCrud):
     def make_paginated_menu(self):
         return self.paginated_menu(
             find=self.repository.find_paginated_join_staff_and_status,
-            find_by_id=lambda id: self.repository.find_by_id(
-                id,
-                ('id', 'reference_code', 'title', 'description', 'estimated_time', 'actual_time', 'deadline',
-                 'assigned_to', 'status_id')
-            )
+            find_by_id=lambda id: self.repository.find_by_id(id, (
+                'id', 'reference_code', 'title', 'description',
+                'estimated_time', 'actual_time', 'deadline',
+                'assigned_to', 'status_id', 'project_id'
+            ))
         )
 
     def log_time(self, job_id):

@@ -6,9 +6,6 @@ from ui.menu import Menu
 
 class Invoicing:
     def __init__(self):
-        self.main()
-
-    def main(self):
         controller = MainController()
         Menu.create('Manage', ActionCollection(
             ('Companies', controller.companyAction),
