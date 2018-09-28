@@ -20,6 +20,7 @@ class IsString(Validation):
         self.validation_check(field, isinstance(field.value, str))
         return field
 
+
 class IsInteger(Validation):
     def __init__(self, error_message='is not an integer'):
         super().__init__(error_message)
