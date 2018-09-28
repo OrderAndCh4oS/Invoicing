@@ -4,4 +4,4 @@
 
 Console script for producing quotes and invoices from a LaTeX template
 
-**Work in progress**
+![alt text](screenshot.gif "Demonstration")
