@@ -65,7 +65,11 @@ class BaseCrud(metaclass=ABCMeta):
                 else:
                     break
             elif isinstance(field, OneToManyField):
-                data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
+                foreign_key = self.select_foreign_key_relationship_inverse(field.relationship)
+                if foreign_key:
+                    data['relation'][key] = foreign_key
+                else:
+                    break
             elif field.default_value is not None:
                 user_input = input("%s (%s): " % (self.make_label(key), field.default_value))
                 if user_input is '':
@@ -108,7 +112,11 @@ class BaseCrud(metaclass=ABCMeta):
                 else:
                     data['own'][key] = item[key]
             elif isinstance(field, OneToManyField):
-                data['relation'][key] = self.select_foreign_key_relationship_inverse(field.relationship)
+                foreign_key = self.select_foreign_key_relationship_inverse(field.relationship)
+                if foreign_key:
+                    data['relation'][key] = foreign_key
+                else:
+                    data['relation'][key] = item[key]
                 # Todo: handle removing relationships
             else:
                 data['own'][key] = self.update_field(item[key], self.make_label(key))
@@ -155,14 +163,11 @@ class BaseCrud(metaclass=ABCMeta):
         self.repository.save()
         self.repository.check_rows_updated('%s Deleted' % self.table_name)
 
-    def select_foreign_key_relationship(self, relationship_field):
-        repository = relationship_field.repository()
-        print(Style.create_title('Select %s' % relationship_field.name))
-        paginated_menu = Pagination(repository)
-        item = paginated_menu(
-            find=repository.find_paginated,
-            find_by_id=repository.find_by_id
-        )
+    def select_foreign_key_relationship(self, relationship):
+        repository = relationship.repository()
+        print(Style.create_title('Select %s' % relationship.name))
+        paginated_menu = relationship.paginated_menu or Pagination(repository)
+        item = paginated_menu()
         if item:
             return item[0]
         else:
@@ -179,10 +184,7 @@ class BaseCrud(metaclass=ABCMeta):
         repository = relationship.repository()
         while Menu.yes_no_question('Add %s' % relationship.name):
             print(Style.create_title('Select %s' % relationship.name))
-            paginated_menu = Pagination(repository)
-            item = paginated_menu(
-                find=repository.find_paginated,
-                find_by_id=repository.find_by_id
-            )
+            paginated_menu = relationship.paginated_menu or Pagination(repository)
+            item = paginated_menu()
             foreign_keys.append(item['id'])
         return relationship.related_name, foreign_keys

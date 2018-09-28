@@ -1,0 +1,763 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: bash -l
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /home/sarcoma/PycharmProjects/Invoicing/invoicing
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 140
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 17
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: Invoicing
+    style:
+      border: 0px black solid
+      # boxShadow: none
+      # margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a url, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Grafista, Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 14
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 200
+    content: "\e]0;sarcoma@sarcoma-Lemur ~/PycharmProjects/Invoicing/invoicing\a\e[01;32msarcoma@sarcoma-Lemur\e[00m \e[01;34m~/PycharmProjects/Invoicing/invoicing $\e[00m "
+  - delay: 60
+    content: p
+  - delay: 60
+    content: 'y'
+  - delay: 60
+    content: t
+  - delay: 60
+    content: h
+  - delay: 60
+    content: o
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: m
+  - delay: 60
+    content: a
+  - delay: 60
+    content: 'in.py '
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nManage Companies\r\n\e[0;34m----------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Companies\r\n\e[0;34m-------------\e[0m\r\nName: "
+  - delay: 60
+    content: A
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: C
+  - delay: 60
+    content: o
+  - delay: 60
+    content: m
+  - delay: 60
+    content: p
+  - delay: 60
+    content: a
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: 'y'
+  - delay: 1300
+    content: "\r\nAddress: "
+  - delay: 60
+    content: '2'
+  - delay: 60
+    content: '4'
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: S
+  - delay: 60
+    content: o
+  - delay: 60
+    content: m
+  - delay: 60
+    content: e
+  - delay: 60
+    content: w
+  - delay: 60
+    content: h
+  - delay: 60
+    content: e
+  - delay: 60
+    content: r
+  - delay: 60
+    content: e
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: S
+  - delay: 60
+    content: t
+  - delay: 60
+    content: r
+  - delay: 60
+    content: e
+  - delay: 60
+    content: e
+  - delay: 60
+    content: t
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nCompanies Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Companies\r\n\e[0;34m----------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Companies\r\n\e[0;34m--------------\e[0m\r\n  id  \e[0;37m|\e[0m  name       \e[0;37m|\e[0m  address              \e[0;37m|\e[0m\r\n\e[0;37m---------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  A Company  \e[0;37m|\e[0m  24 Somewhere Street  \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nCompanies Data\r\n\e[0;34m--------------\e[0m\r\nId: \e[0;34m1\e[0m\r\nName: \e[0;34mA Company\e[0m\r\nAddress: \e[0;34m24 Somewhere Street\e[0m\r\n\r\nCompanies Menu\r\n\e[0;34m--------------\e[0m\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Companies\r\n\e[0;34m----------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nManage Clients\r\n\e[0;34m--------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Clients\r\n\e[0;34m-----------\e[0m\r\nFullname: "
+  - delay: 60
+    content: C
+  - delay: 60
+    content: l
+  - delay: 60
+    content: i
+  - delay: 60
+    content: e
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: t
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: 'N'
+  - delay: 60
+    content: a
+  - delay: 60
+    content: m
+  - delay: 60
+    content: e
+  - delay: 1300
+    content: "\r\nEmail: "
+  - delay: 60
+    content: c
+  - delay: 60
+    content: l
+  - delay: 60
+    content: i
+  - delay: 60
+    content: e
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: t
+  - delay: 60
+    content: '@'
+  - delay: 60
+    content: e
+  - delay: 60
+    content: x
+  - delay: 60
+    content: a
+  - delay: 60
+    content: m
+  - delay: 60
+    content: p
+  - delay: 60
+    content: l
+  - delay: 60
+    content: e
+  - delay: 60
+    content: .
+  - delay: 60
+    content: c
+  - delay: 60
+    content: o
+  - delay: 60
+    content: m
+  - delay: 1300
+    content: "\r\nTelephone: "
+  - delay: 60
+    content: '0'
+  - delay: 60
+    content: '7'
+  - delay: 60
+    content: '5'
+  - delay: 60
+    content: '9'
+  - delay: 60
+    content: '5'
+  - delay: 60
+    content: '9'
+  - delay: 60
+    content: '5'
+  - delay: 60
+    content: '0'
+  - delay: 60
+    content: '2'
+  - delay: 60
+    content: '4'
+  - delay: 60
+    content: '9'
+  - delay: 1300
+    content: "\r\n\r\nSelect Company\r\n\e[0;34m--------------\e[0m\r\n  id  \e[0;37m|\e[0m  name       \e[0;37m|\e[0m  address              \e[0;37m|\e[0m\r\n\e[0;37m---------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  A Company  \e[0;37m|\e[0m  24 Somewhere Street  \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nClients Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Clients\r\n\e[0;34m--------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Clients\r\n\e[0;34m------------\e[0m\r\n  id  \e[0;37m|\e[0m  fullname     \e[0;37m|\e[0m  email               \e[0;37m|\e[0m  telephone    \e[0;37m|\e[0m  company_name  \e[0;37m|\e[0m\r\n\e[0;37m-------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Client Name  \e[0;37m|\e[0m  client@example.com  \e[0;37m|\e[0m  07595950249  \e[0;37m|\e[0m  A Company     \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nClients Data\r\n\e[0;34m------------\e[0m\r\nId: \e[0;34m1\e[0m\r\nFullname: \e[0;34mClient Name\e[0m\r\nEmail: \e[0;34mclient@example.com\e[0m\r\nTelephone: \e[0;34m07595950249\e[0m\r\nCompany Name: \e[0;34mA Company\e[0m\r\nCompany Address: \e[0;34m24 Somewhere Street\e[0m\r\n\r\nClients Menu\r\n\e[0;34m------------\e[0m\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Clients\r\n\e[0;34m--------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '3'
+  - delay: 1300
+    content: "\r\n\r\nManage Staff\r\n\e[0;34m------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Staff\r\n\e[0;34m---------\e[0m\r\nFirst Name: "
+  - delay: 60
+    content: S
+  - delay: 60
+    content: t
+  - delay: 60
+    content: a
+  - delay: 60
+    content: f
+  - delay: 60
+    content: f
+  - delay: 1300
+    content: "\r\nLast Name: "
+  - delay: 60
+    content: 'N'
+  - delay: 60
+    content: a
+  - delay: 60
+    content: m
+  - delay: 60
+    content: e
+  - delay: 1300
+    content: "\r\nJob Title: "
+  - delay: 60
+    content: L
+  - delay: 60
+    content: a
+  - delay: 60
+    content: c
+  - delay: 60
+    content: k
+  - delay: 60
+    content: e
+  - delay: 60
+    content: 'y'
+  - delay: 1300
+    content: "\r\nRate: "
+  - delay: 60
+    content: '5'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nStaff Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Staff\r\n\e[0;34m------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Staff\r\n\e[0;34m----------\e[0m\r\n  id  \e[0;37m|\e[0m  first_name  \e[0;37m|\e[0m  last_name  \e[0;37m|\e[0m  job_title  \e[0;37m|\e[0m  rate  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Staff       \e[0;37m|\e[0m  Name       \e[0;37m|\e[0m  Lackey     \e[0;37m|\e[0m  5.0   \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nStaff Data\r\n\e[0;34m----------\e[0m\r\nId: \e[0;34m1\e[0m\r\nFirst Name: \e[0;34mStaff\e[0m\r\nLast Name: \e[0;34mName\e[0m\r\nJob Title: \e[0;34mLackey\e[0m\r\nRate: \e[0;34m5.0\e[0m\r\n\r\nStaffMenu\r\n\e[0;34m---------\e[0m\r\n\e[0;32m1\e[0m: Show Assigned Jobs\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Staff\r\n\e[0;34m------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '4'
+  - delay: 1300
+    content: "\r\n\r\nManage Statuses\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Statuses\r\n\e[0;34m------------\e[0m\r\nTitle: "
+  - delay: 60
+    content: T
+  - delay: 60
+    content: o
+  - delay: 60
+    content: d
+  - delay: 60
+    content: o
+  - delay: 1300
+    content: "\r\nColour: "
+  - delay: 60
+    content: b
+  - delay: 60
+    content: l
+  - delay: 60
+    content: u
+  - delay: 60
+    content: e
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nStatuses Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Statuses\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Statuses\r\n\e[0;34m------------\e[0m\r\nTitle: "
+  - delay: 60
+    content: I
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: P
+  - delay: 60
+    content: r
+  - delay: 60
+    content: o
+  - delay: 60
+    content: g
+  - delay: 60
+    content: r
+  - delay: 60
+    content: e
+  - delay: 60
+    content: s
+  - delay: 60
+    content: s
+  - delay: 1300
+    content: "\r\nColour: "
+  - delay: 60
+    content: 'y'
+  - delay: 60
+    content: e
+  - delay: 60
+    content: l
+  - delay: 60
+    content: l
+  - delay: 60
+    content: o
+  - delay: 60
+    content: w
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nStatuses Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Statuses\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Statuses\r\n\e[0;34m------------\e[0m\r\nTitle: "
+  - delay: 60
+    content: D
+  - delay: 60
+    content: o
+  - delay: 60
+    content: 'n'
+  - delay: 60
+    content: e
+  - delay: 1300
+    content: "\r\nColour: "
+  - delay: 60
+    content: g
+  - delay: 60
+    content: r
+  - delay: 60
+    content: e
+  - delay: 60
+    content: e
+  - delay: 60
+    content: 'n'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nStatuses Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Statuses\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Statuses\r\n\e[0;34m-------------\e[0m\r\n  id  \e[0;37m|\e[0m  title        \e[0;37m|\e[0m  colour  \e[0;37m|\e[0m\r\n\e[0;37m----------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Todo         \e[0;37m|\e[0m  blue    \e[0;37m|\e[0m\r\n  \e[0;32m2\e[0m   \e[0;37m|\e[0m  In Progress  \e[0;37m|\e[0m  yellow  \e[0;37m|\e[0m\r\n  \e[0;32m3\e[0m   \e[0;37m|\e[0m  Done         \e[0;37m|\e[0m  green   \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Statuses\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '5'
+  - delay: 1300
+    content: "\r\n\r\nManage Projects\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Projects\r\n\e[0;34m------------\e[0m\r\nTitle: "
+  - delay: 60
+    content: P
+  - delay: 60
+    content: r
+  - delay: 60
+    content: o
+  - delay: 60
+    content: j
+  - delay: 60
+    content: e
+  - delay: 60
+    content: c
+  - delay: 60
+    content: t
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: T
+  - delay: 60
+    content: i
+  - delay: 60
+    content: t
+  - delay: 60
+    content: l
+  - delay: 60
+    content: e
+  - delay: 1300
+    content: "\r\n\r\nSelect Client\r\n\e[0;34m-------------\e[0m\r\n  id  \e[0;37m|\e[0m  fullname     \e[0;37m|\e[0m  email               \e[0;37m|\e[0m  telephone    \e[0;37m|\e[0m  company_id  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Client Name  \e[0;37m|\e[0m  client@example.com  \e[0;37m|\e[0m  07595950249  \e[0;37m|\e[0m  1           \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nProjects Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Projects\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Projects\r\n\e[0;34m-------------\e[0m\r\n  id  \e[0;37m|\e[0m  reference_code  \e[0;37m|\e[0m  title          \e[0;37m|\e[0m  client_fullname  \e[0;37m|\e[0m  company_name  \e[0;37m|\e[0m  client_id  \e[0;37m|\e[0m  created_at        \e[0;37m|\e[0m\r\n\e[0;37m--------------------------------------------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  P-1000          \e[0;37m|\e[0m  Project Title  \e[0;37m|\e[0m  Client Name      \e[0;37m|\e[0m  A Company     \e[0;37m|\e[0m  1          \e[0;37m|\e[0m  2018-09-28 14:29  \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nProjects Data\r\n\e[0;34m-------------\e[0m\r\nId: \e[0;34m1\e[0m\r\nReference Code: \e[0;34mP-1000\e[0m\r\nTitle: \e[0;34mProject Title\e[0m\r\nClient Fullname: \e[0;34mClient Name\e[0m\r\nCompany Name: \e[0;34mA Company\e[0m\r\nCompany Address: \e[0;34m24 Somewhere Street\e[0m\r\nCompany Id: \e[0;34m1\e[0m\r\nClient Id: \e[0;34m1\e[0m\r\nCreated At: \e[0;34m2018-09-28 14:29\e[0m\r\n\r\nProjects Menu\r\n\e[0;34m-------------\e[0m\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Projects\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '6'
+  - delay: 1300
+    content: "\r\n\r\nManage Jobs\r\n\e[0;34m-----------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Jobs\r\n\e[0;34m--------\e[0m\r\n\r\nSelect Project\r\n\e[0;34m--------------\e[0m\r\n  id  \e[0;37m|\e[0m  reference_code  \e[0;37m|\e[0m  title          \e[0;37m|\e[0m  client_fullname  \e[0;37m|\e[0m  company_name  \e[0;37m|\e[0m  created_at        \e[0;37m|\e[0m\r\n\e[0;37m------------------------------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  P-1000          \e[0;37m|\e[0m  Project Title  \e[0;37m|\e[0m  Client Name      \e[0;37m|\e[0m  A Company     \e[0;37m|\e[0m  2018-09-28 14:29  \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\nTitle: "
+  - delay: 60
+    content: D
+  - delay: 60
+    content: o
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: T
+  - delay: 60
+    content: h
+  - delay: 60
+    content: i
+  - delay: 60
+    content: s
+  - delay: 1300
+    content: "\r\nDescription: "
+  - delay: 60
+    content: A
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: t
+  - delay: 60
+    content: a
+  - delay: 60
+    content: s
+  - delay: 60
+    content: k
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: t
+  - delay: 60
+    content: o
+  - delay: 60
+    content: ' '
+  - delay: 60
+    content: d
+  - delay: 60
+    content: o
+  - delay: 1300
+    content: "\r\nEstimated Time: "
+  - delay: 60
+    content: '4'
+  - delay: 1300
+    content: "\r\nDeadline (28-10-18): "
+  - delay: 1300
+    content: "\r\n\r\nSelect Staff\r\n\e[0;34m------------\e[0m\r\n  id  \e[0;37m|\e[0m  first_name  \e[0;37m|\e[0m  last_name  \e[0;37m|\e[0m  job_title  \e[0;37m|\e[0m  rate  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Staff       \e[0;37m|\e[0m  Name       \e[0;37m|\e[0m  Lackey     \e[0;37m|\e[0m  5.0   \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nSelect Status\r\n\e[0;34m-------------\e[0m\r\n  id  \e[0;37m|\e[0m  title        \e[0;37m|\e[0m  colour  \e[0;37m|\e[0m\r\n\e[0;37m----------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Todo         \e[0;37m|\e[0m  blue    \e[0;37m|\e[0m\r\n  \e[0;32m2\e[0m   \e[0;37m|\e[0m  In Progress  \e[0;37m|\e[0m  yellow  \e[0;37m|\e[0m\r\n  \e[0;32m3\e[0m   \e[0;37m|\e[0m  Done         \e[0;37m|\e[0m  green   \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nJobs Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Jobs\r\n\e[0;34m-----------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nShow Jobs\r\n\e[0;34m---------\e[0m\r\n  id  \e[0;37m|\e[0m  reference_code  \e[0;37m|\e[0m  title    \e[0;37m|\e[0m  status  \e[0;37m|\e[0m  deadline  \e[0;37m|\e[0m  assigned_to  \e[0;37m|\e[0m  created_at        \e[0;37m|\e[0m  completed  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  J-1000          \e[0;37m|\e[0m  Do This  \e[0;37m|\e[0m  Todo    \e[0;37m|\e[0m  28-10-18  \e[0;37m|\e[0m  Staff Name   \e[0;37m|\e[0m  2018-09-28 14:29  \e[0;37m|\e[0m  0          \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nJobs Data\r\n\e[0;34m---------\e[0m\r\nId: \e[0;34m1\e[0m\r\nReference Code: \e[0;34mJ-1000\e[0m\r\nTitle: \e[0;34mDo This\e[0m\r\nDescription: \e[0;34mA task to do\e[0m\r\nEstimated Time: \e[0;34m4.0\e[0m\r\nActual Time: \e[0;34m0.0\e[0m\r\nDeadline: \e[0;34m28-10-18\e[0m\r\nAssigned To: \e[0;34m1\e[0m\r\nStatus Id: \e[0;34m1\e[0m\r\nProject Id: \e[0;34m1\e[0m\r\n\r\nJobs Menu\r\n\e[0;34m---------\e[0m\r\n\e[0;32m1\e[0m: Update Status\r\n\e[0;32m2\e[0m: Log Time\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\nLog Time: "
+  - delay: 60
+    content: '4'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nJob Updated\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nJobs Menu\r\n\e[0;34m---------\e[0m\r\n\e[0;32m1\e[0m: Update Status\r\n\e[0;32m2\e[0m: Log Time\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n  id  \e[0;37m|\e[0m  title        \e[0;37m|\e[0m  colour  \e[0;37m|\e[0m\r\n\e[0;37m----------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Todo         \e[0;37m|\e[0m  blue    \e[0;37m|\e[0m\r\n  \e[0;32m2\e[0m   \e[0;37m|\e[0m  In Progress  \e[0;37m|\e[0m  yellow  \e[0;37m|\e[0m\r\n  \e[0;32m3\e[0m   \e[0;37m|\e[0m  Done         \e[0;37m|\e[0m  green   \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '3'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nStatus Updated\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nJobs Menu\r\n\e[0;34m---------\e[0m\r\n\e[0;32m1\e[0m: Update Status\r\n\e[0;32m2\e[0m: Log Time\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage Jobs\r\n\e[0;34m-----------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '7'
+  - delay: 1300
+    content: "\r\n\r\nManage Invoices\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '2'
+  - delay: 1300
+    content: "\r\n\r\nAdd Invoices\r\n\e[0;34m------------\e[0m\r\n\r\nSelect Client\r\n\e[0;34m-------------\e[0m\r\n  id  \e[0;37m|\e[0m  fullname     \e[0;37m|\e[0m  email               \e[0;37m|\e[0m  telephone    \e[0;37m|\e[0m  company_id  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  Client Name  \e[0;37m|\e[0m  client@example.com  \e[0;37m|\e[0m  07595950249  \e[0;37m|\e[0m  1           \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\nAdd Job (Y/n): "
+  - delay: 1300
+    content: "\r\n\r\nSelect Job\r\n\e[0;34m----------\e[0m\r\n  id  \e[0;37m|\e[0m  reference_code  \e[0;37m|\e[0m  title    \e[0;37m|\e[0m  status  \e[0;37m|\e[0m  deadline  \e[0;37m|\e[0m  assigned_to  \e[0;37m|\e[0m  created_at        \e[0;37m|\e[0m  completed  \e[0;37m|\e[0m\r\n\e[0;37m-----------------------------------------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  J-1000          \e[0;37m|\e[0m  Do This  \e[0;37m|\e[0m  Done    \e[0;37m|\e[0m  28-10-18  \e[0;37m|\e[0m  Staff Name   \e[0;37m|\e[0m  2018-09-28 14:29  \e[0;37m|\e[0m  0          \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\nAdd Job (Y/n): "
+  - delay: 60
+    content: 'n'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nInvoices Added\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Invoices\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: '5'
+  - delay: 1300
+    content: "\r\n\r\nGenerate Invoice\r\n\e[0;34m----------------\e[0m\r\n  id  \e[0;37m|\e[0m  reference_code  \e[0;37m|\e[0m  created_at        \e[0;37m|\e[0m  client_id  \e[0;37m|\e[0m  client_fullname  \e[0;37m|\e[0m  company_name  \e[0;37m|\e[0m\r\n\e[0;37m--------------------------------------------------------------------------------------------------\e[0m\r\n  \e[0;32m1\e[0m   \e[0;37m|\e[0m  I-1000          \e[0;37m|\e[0m  2018-09-28 14:29  \e[0;37m|\e[0m  1          \e[0;37m|\e[0m  Client Name      \e[0;37m|\e[0m  A Company     \e[0;37m|\e[0m\r\n\e[0;34m------\e[0m\r\npage 1\r\n\e[0;34m------\e[0m\r\n\r\nEnter an \e[0;32m'id'\e[0m, use \e[0;32m<\e[0m and \e[0;32m>\e[0m to navigate, or \e[0;32mb\e[0m to go back: "
+  - delay: 60
+    content: '1'
+  - delay: 1300
+    content: "\r\n\r\nEnter Billable Time\r\n\e[0;34m-------------------\e[0m\r\nTitle: Do This\r\nDescription: A task to do\r\nEstimated Time: 4.0\r\nLogged Time: 4.0\r\nBillable Time: "
+  - delay: 60
+    content: '4'
+  - delay: 1300
+    content: "\r\n"
+  - delay: 1300
+    content: "\r\nJob Updated\r\n"
+  - delay: 1300
+    content: "\r\nI-1000 A Company.pdf has been generated\r\n\r\n"
+  - delay: 1300
+    content: "\r\nThe selected jobs have been marked as completed\r\n\r\nPress \e[0;32menter\e[0m to continue."
+  - delay: 1300
+    content: "\r\n\r\nManage Invoices\r\n\e[0;34m---------------\e[0m\r\n\e[0;32m1\e[0m: View\r\n\e[0;32m2\e[0m: Add\r\n\e[0;32m3\e[0m: Edit\r\n\e[0;32m4\e[0m: Delete\r\n\e[0;32m5\e[0m: Generate\r\n\e[0;32mb\e[0m: Back\r\n\r\nSelect an option: "
+  - delay: 60
+    content: b
+  - delay: 1300
+    content: "\r\n\r\nManage\r\n\e[0;34m------\e[0m\r\n\e[0;32m1\e[0m: Companies\r\n\e[0;32m2\e[0m: Clients\r\n\e[0;32m3\e[0m: Staff\r\n\e[0;32m4\e[0m: Statuses\r\n\e[0;32m5\e[0m: Projects\r\n\e[0;32m6\e[0m: Jobs\r\n\e[0;32m7\e[0m: Invoices\r\n\e[0;32mq\e[0m: Quit\r\n\r\nSelect an option: "
+  - delay: 60
+    content: q
+  - delay: 1300
+    content: "\r\n"
+  - delay: 60
+    content: "\e]0;sarcoma@sarcoma-Lemur ~/PycharmProjects/Invoicing/invoicing\a\e[01;32msarcoma@sarcoma-Lemur\e[00m \e[01;34m~/PycharmProjects/Invoicing/invoicing $\e[00m "
+  - delay: 60
+    content: "logout\r\n"
