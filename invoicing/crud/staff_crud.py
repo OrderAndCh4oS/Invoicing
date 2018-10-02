@@ -1,9 +1,9 @@
-from actions.action_collection import ActionCollection
-from crud.base_crud import BaseCrud
-from crud.job_crud import JobCrud
-from models.staff_model import StaffModel
-from repository.staff_repository import StaffRepository
-from ui.menu import Menu
+from invoicing.actions.action_collection import ActionCollection
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.crud.job_crud import JobCrud
+from invoicing.models.staff_model import StaffModel
+from invoicing.repository.staff_repository import StaffRepository
+from invoicing.ui.menu import Menu
 
 
 # Todo: show jobs assigned to staff member

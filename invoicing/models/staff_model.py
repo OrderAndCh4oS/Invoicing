@@ -1,6 +1,6 @@
-from model_validation.field import FloatField, StringField
-from model_validation.validations import IsRequired
-from models.base_model import BaseModel
+from invoicing.model_validation.field import FloatField, StringField
+from invoicing.model_validation.validations import IsRequired
+from invoicing.models.base_model import BaseModel
 
 
 class StaffModel(BaseModel):

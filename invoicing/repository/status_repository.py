@@ -1,4 +1,4 @@
-from repository.base_repository import BaseRepository
+from invoicing.repository.base_repository import BaseRepository
 
 
 class StatusRepository(BaseRepository):

@@ -1,10 +1,10 @@
 from ansi_colours import AnsiColours as Colour
 
-from repository.base_repository import BaseRepository
-from ui.menu import Menu
-from ui.style import Style
-from ui.table import Table
-from value_validation.value_validation import Validation
+from invoicing.repository.base_repository import BaseRepository
+from invoicing.ui.menu import Menu
+from invoicing.ui.style import Style
+from invoicing.ui.table import Table
+from invoicing.value_validation.value_validation import Validation
 
 
 class Pagination:

@@ -1,12 +1,12 @@
-from actions.action_collection import ActionCollection
-from crud.base_crud import BaseCrud
-from models.job_model import JobModel
-from repository.job_repository import JobRepository
-from repository.status_repository import StatusRepository
-from ui.menu import Menu
-from ui.pagination import Pagination
-from ui.style import Style
-from value_validation.value_validation import Validation
+from invoicing.actions.action_collection import ActionCollection
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.models.job_model import JobModel
+from invoicing.repository.job_repository import JobRepository
+from invoicing.repository.status_repository import StatusRepository
+from invoicing.ui.menu import Menu
+from invoicing.ui.pagination import Pagination
+from invoicing.ui.style import Style
+from invoicing.value_validation.value_validation import Validation
 
 
 class JobCrud(BaseCrud):

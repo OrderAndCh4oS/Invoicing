@@ -1,12 +1,12 @@
-from crud.base_crud import BaseCrud
-from latex.latex_invoice import LatexInvoice
-from models.invoice_model import InvoiceModel
-from repository.invoice_repository import InvoiceRepository
-from repository.job_repository import JobRepository
-from ui.date import Date
-from ui.menu import Menu
-from ui.style import Style
-from value_validation.value_validation import Validation
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.latex.latex_invoice import LatexInvoice
+from invoicing.models.invoice_model import InvoiceModel
+from invoicing.repository.invoice_repository import InvoiceRepository
+from invoicing.repository.job_repository import JobRepository
+from invoicing.ui.date import Date
+from invoicing.ui.menu import Menu
+from invoicing.ui.style import Style
+from invoicing.value_validation.value_validation import Validation
 
 
 class InvoiceCrud(BaseCrud):

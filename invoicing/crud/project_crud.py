@@ -1,11 +1,11 @@
-from crud.base_crud import BaseCrud
-from latex.latex_quote import LatexQuote
-from models.project_model import ProjectModel
-from repository.job_repository import JobRepository
-from repository.project_repository import ProjectRepository
-from ui.date import Date
-from ui.menu import Menu
-from ui.style import Style
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.latex.latex_quote import LatexQuote
+from invoicing.models.project_model import ProjectModel
+from invoicing.repository.job_repository import JobRepository
+from invoicing.repository.project_repository import ProjectRepository
+from invoicing.ui.date import Date
+from invoicing.ui.menu import Menu
+from invoicing.ui.style import Style
 
 
 class ProjectCrud(BaseCrud):

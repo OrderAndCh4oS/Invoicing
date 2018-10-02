@@ -1,9 +1,9 @@
 from ansi_colours import AnsiColours as Colour
 
-from actions.action_collection import ActionCollection
-from ui.style import Style
-from ui.table import Table
-from value_validation.value_validation import Validation
+from invoicing.actions.action_collection import ActionCollection
+from invoicing.ui.style import Style
+from invoicing.ui.table import Table
+from invoicing.value_validation.value_validation import Validation
 
 
 class Menu:

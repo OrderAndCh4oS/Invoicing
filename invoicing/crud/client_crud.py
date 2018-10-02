@@ -1,6 +1,6 @@
-from crud.base_crud import BaseCrud
-from models.client_model import ClientModel
-from repository.client_repository import ClientRepository
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.models.client_model import ClientModel
+from invoicing.repository.client_repository import ClientRepository
 
 
 class ClientCrud(BaseCrud):
