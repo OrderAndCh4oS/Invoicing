@@ -1,6 +1,6 @@
-from crud.base_crud import BaseCrud
-from models.status_model import StatusModel
-from repository.status_repository import StatusRepository
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.models.status_model import StatusModel
+from invoicing.repository.status_repository import StatusRepository
 
 
 class StatusCrud(BaseCrud):

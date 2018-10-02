@@ -1,6 +1,6 @@
 import collections
 
-from model_validation.field import Field
+from invoicing.model_validation.field import Field
 
 
 class OrderedClassMembers(type):

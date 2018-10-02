@@ -1,10 +1,10 @@
-from crud.client_crud import ClientCrud
-from crud.company_crud import CompanyCrud
-from crud.invoice_crud import InvoiceCrud
-from crud.job_crud import JobCrud
-from crud.project_crud import ProjectCrud
-from crud.staff_crud import StaffCrud
-from crud.status_crud import StatusCrud
+from invoicing.crud.client_crud import ClientCrud
+from invoicing.crud.company_crud import CompanyCrud
+from invoicing.crud.invoice_crud import InvoiceCrud
+from invoicing.crud.job_crud import JobCrud
+from invoicing.crud.project_crud import ProjectCrud
+from invoicing.crud.staff_crud import StaffCrud
+from invoicing.crud.status_crud import StatusCrud
 
 
 class MainController:

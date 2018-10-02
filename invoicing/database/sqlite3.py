@@ -1,14 +1,17 @@
+import os
 import sqlite3
 from abc import ABCMeta
 
-from constants.resource_path import DB_PATH
+from invoicing.constants.constants import DB
 
 
 class Sqlite3Database(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        self.connection = sqlite3.connect(DB_PATH)
+        if not os.path.isfile(DB):
+            raise OSError("Template was not found: " + DB)
+        self.connection = sqlite3.connect(DB)
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 

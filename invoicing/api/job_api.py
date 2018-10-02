@@ -1,10 +1,10 @@
 import json
 from datetime import datetime
 
-from api.base_api import BaseAPI
-from models.job_model import JobModel
-from repository.job_repository import JobRepository
-from transformer.json import JSONTransformer
+from invoicing.api.base_api import BaseAPI
+from invoicing.models.job_model import JobModel
+from invoicing.repository.job_repository import JobRepository
+from invoicing.transformer.json import JSONTransformer
 
 
 class JobAPI(BaseAPI):

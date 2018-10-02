@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
-from database.sqlite3 import Sqlite3Database
-from query_builder.query_builder import QueryBuilder
+from invoicing.database.sqlite3 import Sqlite3Database
+from invoicing.query_builder.query_builder import QueryBuilder
 
 
 class BaseRepository(Sqlite3Database, metaclass=ABCMeta):

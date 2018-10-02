@@ -2,11 +2,11 @@ from abc import ABCMeta
 
 from ansi_colours import AnsiColours as Colour
 
-from actions.action_collection import ActionCollection
-from model_validation.field import ForeignKeyField, OneToManyField
-from ui.menu import Menu
-from ui.pagination import Pagination
-from ui.style import Style
+from invoicing.actions.action_collection import ActionCollection
+from invoicing.model_validation.field import ForeignKeyField, OneToManyField
+from invoicing.ui.menu import Menu
+from invoicing.ui.pagination import Pagination
+from invoicing.ui.style import Style
 
 
 class BaseCrud(metaclass=ABCMeta):

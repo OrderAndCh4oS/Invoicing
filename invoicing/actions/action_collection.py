@@ -1,4 +1,4 @@
-from actions.action import Action
+from invoicing.actions.action import Action
 
 
 class ActionCollection:

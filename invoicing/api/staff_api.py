@@ -1,6 +1,6 @@
-from api.base_api import BaseAPI
-from models.staff_model import StaffModel
-from repository.staff_repository import StaffRepository
+from invoicing.api.base_api import BaseAPI
+from invoicing.models.staff_model import StaffModel
+from invoicing.repository.staff_repository import StaffRepository
 
 
 class StaffAPI(BaseAPI):

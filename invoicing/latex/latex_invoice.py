@@ -1,4 +1,4 @@
-from latex.latex_templating import LatexTemplating
+from invoicing.latex.latex_templating import LatexTemplating
 
 
 class LatexInvoice(LatexTemplating):

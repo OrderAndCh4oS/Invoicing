@@ -2,17 +2,17 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-from model_validation.field import StringField, FloatField, Field, ForeignKeyField, \
+from invoicing.model_validation.field import StringField, FloatField, Field, ForeignKeyField, \
     DateField
-from model_validation.validations import IsRequired, IsString
-from models.base_model import BaseModel
-from models.project_model import ProjectModel
-from models.staff_model import StaffModel
-from models.status_model import StatusModel
-from relationships.base_relationship import BaseRelationship
-from repository.project_repository import ProjectRepository
-from repository.staff_repository import StaffRepository
-from repository.status_repository import StatusRepository
+from invoicing.model_validation.validations import IsRequired, IsString
+from invoicing.models.base_model import BaseModel
+from invoicing.models.project_model import ProjectModel
+from invoicing.models.staff_model import StaffModel
+from invoicing.models.status_model import StatusModel
+from invoicing.relationships.base_relationship import BaseRelationship
+from invoicing.repository.project_repository import ProjectRepository
+from invoicing.repository.staff_repository import StaffRepository
+from invoicing.repository.status_repository import StatusRepository
 
 
 class JobModel(BaseModel):

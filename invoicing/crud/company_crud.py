@@ -1,6 +1,6 @@
-from crud.base_crud import BaseCrud
-from models.company_model import CompanyModel
-from repository.company_repository import CompanyRepository
+from invoicing.crud.base_crud import BaseCrud
+from invoicing.models.company_model import CompanyModel
+from invoicing.repository.company_repository import CompanyRepository
 
 
 class CompanyCrud(BaseCrud):

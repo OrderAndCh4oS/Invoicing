@@ -27,8 +27,10 @@ __pycache__
 /invoicing/templates/Quote.tex
 /invoicing/Invoicing-DB.db
 Invoicing-old.db
-/invoicing/invoicing-live.db
+/sqlite3/invoicing-live.db
 /invoicing/I-1030 Ipswich Institute.tex
-/invoicing/invoicing.db
+/sqlite3/invoicing.db
 /example.yml
 /invoicing/I-1000 A Company.tex
+/sqlite/invoicing.db
+/sqlite/invoicing-live.db
