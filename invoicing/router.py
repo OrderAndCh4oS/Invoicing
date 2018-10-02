@@ -1,3 +1,7 @@
+"""
+This is an alternative entry point for a Flask HTTP API it uses the api modules.
+"""
+
 from flask import Flask, request
 
 from invoicing.api.client_api import ClientAPI
