@@ -2,7 +2,7 @@ import os
 import sqlite3
 from abc import ABCMeta
 
-from invoicing.constants.constants import DB
+from invoicing.settings import DB
 
 
 class Sqlite3Database(metaclass=ABCMeta):
