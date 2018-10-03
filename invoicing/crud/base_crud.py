@@ -7,6 +7,7 @@ from invoicing.model_validation.field import ForeignKeyField, OneToManyField
 from invoicing.ui.menu import Menu
 from invoicing.ui.pagination import Pagination
 from invoicing.ui.style import Style
+from ui.relationship import Relationship
 
 
 class BaseCrud(metaclass=ABCMeta):
@@ -37,7 +38,7 @@ class BaseCrud(metaclass=ABCMeta):
     def show_item_detail(self, item):
         print(Style.create_title('%s Data' % self.table_name))
         for header in self.repository.get_headers():
-            label = self.make_label(header)
+            label = Style.make_label(header)
             print('%s: %s' % (label, Colour.blue(str(item[header]))))
 
     def show_item_menu(self, id):
@@ -59,24 +60,24 @@ class BaseCrud(metaclass=ABCMeta):
             if field.initial_value is not None:
                 data['own'][key] = field.initial_value
             elif isinstance(field, ForeignKeyField):
-                foreign_key = self.select_foreign_key_relationship(field.relationship)
+                foreign_key = Relationship.select_foreign_key_relationship(field.relationship)
                 if foreign_key:
                     data['own'][key] = foreign_key
                 else:
                     break
             elif isinstance(field, OneToManyField):
-                foreign_key = self.select_foreign_key_relationship_inverse(field.relationship)
+                foreign_key = Relationship.select_foreign_key_relationship_inverse(field.relationship)
                 if foreign_key:
                     data['relation'][key] = foreign_key
                 else:
                     break
             elif field.default_value is not None:
-                user_input = input("%s (%s): " % (self.make_label(key), field.default_value))
+                user_input = input("%s (%s): " % (Style.make_label(key), field.default_value))
                 if user_input is '':
                     user_input = field.default_value
                 data['own'][key] = user_input
             else:
-                data['own'][key] = input("%s: " % self.make_label(key))
+                data['own'][key] = input("%s: " % Style.make_label(key))
         return data
 
     def save_data(self, data):
@@ -106,20 +107,20 @@ class BaseCrud(metaclass=ABCMeta):
                 continue
             if isinstance(field, ForeignKeyField):
                 if Menu.yes_no_question('Change %s?' % field.relationship.name):
-                    foreign_key = self.select_foreign_key_relationship(field.relationship)
+                    foreign_key = Relationship.select_foreign_key_relationship(field.relationship)
                     if foreign_key:
                         data['own'][key] = foreign_key
                 else:
                     data['own'][key] = item[key]
             elif isinstance(field, OneToManyField):
-                foreign_key = self.select_foreign_key_relationship_inverse(field.relationship)
+                foreign_key = Relationship.select_foreign_key_relationship_inverse(field.relationship)
                 if foreign_key:
                     data['relation'][key] = foreign_key
                 else:
                     data['relation'][key] = item[key]
                 # Todo: handle removing relationships
             else:
-                data['own'][key] = self.update_field(item[key], self.make_label(key))
+                data['own'][key] = self.update_field(item[key], Style.make_label(key))
         return data
 
     def validate_model_data(self, data):
@@ -163,28 +164,6 @@ class BaseCrud(metaclass=ABCMeta):
         self.repository.save()
         self.repository.check_rows_updated('%s Deleted' % self.table_name)
 
-    def select_foreign_key_relationship(self, relationship):
-        repository = relationship.repository()
-        print(Style.create_title('Select %s' % relationship.name))
-        paginated_menu = relationship.paginated_menu or Pagination(repository)
-        item = paginated_menu()
-        if item:
-            return item[0]
-        else:
-            return False
-
     def make_paginated_menu(self):
         return self.paginated_menu()
 
-    def make_label(self, header):
-        return " ".join([word.capitalize() for word in header.split('_')])
-
-    def select_foreign_key_relationship_inverse(self, relationship):
-        foreign_keys = []
-        repository = relationship.repository()
-        while Menu.yes_no_question('Add %s' % relationship.name):
-            print(Style.create_title('Select %s' % relationship.name))
-            paginated_menu = relationship.paginated_menu or Pagination(repository)
-            item = paginated_menu()
-            foreign_keys.append(item['id'])
-        return relationship.related_name, foreign_keys

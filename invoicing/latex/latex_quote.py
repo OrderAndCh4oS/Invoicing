@@ -3,7 +3,7 @@ from invoicing.latex.latex_templating import LatexTemplating
 
 class LatexQuote(LatexTemplating):
     def generate(self, reference_code, company_name, company_address, created_at, total_cost, jobs):
-        template = self.latex_jinja_env.get_template('templates/Quote.tex')
+        template = self.latex_jinja_env.get_template('templates/Quote.example.tex')
         if len(jobs) == 0:
             jobs.append({
                 'title': '-',
