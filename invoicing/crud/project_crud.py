@@ -15,15 +15,15 @@ class ProjectCrud(BaseCrud):
 
     def make_paginated_menu(self):
         return self.paginated_menu(
-            find=self.repository.find_paginated_join_clients_and_company,
-            find_by_id=self.repository.find_by_id_join_clients_and_company
+            find=self.repository.find_paginated_join_company,
+            find_by_id=self.repository.find_by_id_join_company
         )
 
     def generate(self):
         print(Style.create_title('Generate Quote'))
         project = self.paginated_menu(
-            find=self.repository.find_paginated_join_clients_and_company,
-            find_by_id=self.repository.find_by_id_join_clients_and_company
+            find=self.repository.find_paginated_join_company,
+            find_by_id=self.repository.find_by_id_join_company
         )
         if project:
             jobs = JobRepository().find_jobs_by_project_id(project['id'])
