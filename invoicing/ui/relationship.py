@@ -24,5 +24,8 @@ class Relationship:
             print(Style.create_title('Select %s' % relationship.name))
             paginated_menu = relationship.paginated_menu or Pagination(repository)
             item = paginated_menu()
-            foreign_keys.append(item['id'])
+            if item:
+                foreign_keys.append(item['id'])
+            else:
+                print('\nNo relationship added\n')
         return relationship.related_name, foreign_keys
