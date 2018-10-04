@@ -34,3 +34,4 @@ Invoicing-old.db
 /invoicing/I-1000 A Company.tex
 /sqlite/invoicing.db
 /sqlite/invoicing-live.db
+/invoicing/.env
