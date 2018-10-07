@@ -4,14 +4,14 @@ This is an alternative entry point for a Flask HTTP API it uses the api modules.
 
 from flask import Flask, request
 
-from invoicing.api.client_api import ClientAPI
-from invoicing.api.company_api import CompanyAPI
-from invoicing.api.index_api import IndexAPI
-from invoicing.api.invoice_api import InvoiceAPI
-from invoicing.api.job_api import JobAPI
-from invoicing.api.project_api import ProjectAPI
-from invoicing.api.staff_api import StaffAPI
-from invoicing.api.status_api import StatusAPI
+from api.client_api import ClientAPI
+from api.company_api import CompanyAPI
+from api.index_api import IndexAPI
+from api.invoice_api import InvoiceAPI
+from api.job_api import JobAPI
+from api.project_api import ProjectAPI
+from api.staff_api import StaffAPI
+from api.status_api import StatusAPI
 
 app = Flask(__name__)
 

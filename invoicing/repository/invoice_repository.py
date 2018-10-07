@@ -1,5 +1,5 @@
-from invoicing.query_builder.query_builder import QueryBuilder
-from invoicing.repository.base_repository import BaseRepository
+from query_builder.query_builder import QueryBuilder
+from repository.base_repository import BaseRepository
 
 
 class InvoiceRepository(BaseRepository):

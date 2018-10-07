@@ -2,7 +2,7 @@
 
 import sys
 
-from invoicing.command_line import Invoicing
+from command_line import Invoicing
 
 
 def main():

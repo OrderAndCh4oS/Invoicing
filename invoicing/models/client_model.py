@@ -1,9 +1,9 @@
-from invoicing.model_validation.field import StringField, ForeignKeyField
-from invoicing.model_validation.validations import IsRequired
-from invoicing.models.base_model import BaseModel
-from invoicing.models.company_model import CompanyModel
-from invoicing.relationships.base_relationship import BaseRelationship
-from invoicing.repository.company_repository import CompanyRepository
+from model_validation.field import StringField, ForeignKeyField
+from model_validation.validations import IsRequired
+from models.base_model import BaseModel
+from models.company_model import CompanyModel
+from relationships.base_relationship import BaseRelationship
+from repository.company_repository import CompanyRepository
 
 
 class ClientModel(BaseModel):

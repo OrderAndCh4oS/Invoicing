@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from invoicing.model_validation.field import ForeignKeyField, Field, StringField
-from invoicing.model_validation.validations import IsString
-from invoicing.models.base_model import BaseModel
-from invoicing.models.company_model import CompanyModel
-from invoicing.relationships.base_relationship import BaseRelationship
-from invoicing.repository.company_repository import CompanyRepository
+from model_validation.field import ForeignKeyField, Field, StringField
+from model_validation.validations import IsString
+from models.base_model import BaseModel
+from models.company_model import CompanyModel
+from relationships.base_relationship import BaseRelationship
+from repository.company_repository import CompanyRepository
 
 
 class ProjectModel(BaseModel):

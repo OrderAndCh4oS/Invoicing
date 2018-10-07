@@ -1,10 +1,10 @@
 import json
 from datetime import datetime
 
-from invoicing.api.base_api import BaseAPI
-from invoicing.models.project_model import ProjectModel
-from invoicing.repository.project_repository import ProjectRepository
-from invoicing.transformer.json import JSONTransformer
+from api.base_api import BaseAPI
+from models.project_model import ProjectModel
+from repository.project_repository import ProjectRepository
+from transformer.json import JSONTransformer
 
 
 class ProjectAPI(BaseAPI):

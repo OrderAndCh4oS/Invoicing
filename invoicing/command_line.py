@@ -1,7 +1,7 @@
-from invoicing.actions.action import Action
-from invoicing.actions.action_collection import ActionCollection
-from invoicing.controller.main_controller import MainController
-from invoicing.ui.menu import Menu
+from actions.action import Action
+from actions.action_collection import ActionCollection
+from controller.main_controller import MainController
+from ui.menu import Menu
 
 
 class Invoicing:

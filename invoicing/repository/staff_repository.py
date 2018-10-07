@@ -1,4 +1,4 @@
-from invoicing.repository.base_repository import BaseRepository
+from repository.base_repository import BaseRepository
 
 
 class StaffRepository(BaseRepository):

@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from invoicing.model_validation.field import Field, ForeignKeyField, OneToManyField
-from invoicing.model_validation.validations import IsString
-from invoicing.models.base_model import BaseModel
-from invoicing.models.client_model import ClientModel
-from invoicing.models.job_model import JobModel
-from invoicing.relationships.base_relationship import BaseRelationship, OneToManyRelationship
-from invoicing.repository.client_repository import ClientRepository
-from invoicing.repository.job_repository import JobRepository
-from invoicing.ui.pagination import Pagination
+from model_validation.field import Field, ForeignKeyField, OneToManyField
+from model_validation.validations import IsString
+from models.base_model import BaseModel
+from models.client_model import ClientModel
+from models.job_model import JobModel
+from relationships.base_relationship import BaseRelationship, OneToManyRelationship
+from repository.client_repository import ClientRepository
+from repository.job_repository import JobRepository
+from ui.pagination import Pagination
 
 
 def job_paginated_menu():

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from invoicing.model_validation.validation import Validation
+from model_validation.validation import Validation
 
 
 class IsRequired(Validation):

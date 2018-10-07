@@ -1,6 +1,6 @@
-from invoicing.models.base_model import BaseModel
-from invoicing.repository.base_repository import BaseRepository
-from invoicing.transformer.json import JSONTransformer
+from models.base_model import BaseModel
+from repository.base_repository import BaseRepository
+from transformer.json import JSONTransformer
 
 
 # Todo: Paginate results

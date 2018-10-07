@@ -1,4 +1,4 @@
-from invoicing.model_validation.validation_link import ValidationLink
+from model_validation.validation_link import ValidationLink
 
 
 class Validator():

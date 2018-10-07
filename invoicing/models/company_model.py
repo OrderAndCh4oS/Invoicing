@@ -1,6 +1,6 @@
-from invoicing.model_validation.field import StringField
-from invoicing.model_validation.validations import IsRequired
-from invoicing.models.base_model import BaseModel
+from model_validation.field import StringField
+from model_validation.validations import IsRequired
+from models.base_model import BaseModel
 
 
 class CompanyModel(BaseModel):

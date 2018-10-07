@@ -1,6 +1,6 @@
-from invoicing.api.base_api import BaseAPI
-from invoicing.models.client_model import ClientModel
-from invoicing.repository.client_repository import ClientRepository
+from api.base_api import BaseAPI
+from models.client_model import ClientModel
+from repository.client_repository import ClientRepository
 
 
 class ClientAPI(BaseAPI):

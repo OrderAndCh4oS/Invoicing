@@ -1,6 +1,6 @@
-from invoicing.model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean, IsDate, IsCallable
-from invoicing.model_validation.validator import Validator
-from invoicing.relationships.base_relationship import BaseRelationship, OneToManyRelationship
+from model_validation.validations import IsInteger, IsFloat, IsString, IsBoolean, IsDate, IsCallable
+from model_validation.validator import Validator
+from relationships.base_relationship import BaseRelationship, OneToManyRelationship
 
 
 class Field(Validator):
