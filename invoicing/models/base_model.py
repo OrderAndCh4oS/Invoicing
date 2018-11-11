@@ -8,10 +8,10 @@ class OrderedClassMembers(type):
     def __prepare__(self, name, bases):
         return collections.OrderedDict()
 
-    def __new__(cls, name, bases, classdict):
-        result = type.__new__(cls, name, bases, dict(classdict))
+    def __new__(cls, name, bases, class_dict):
+        result = type.__new__(cls, name, bases, dict(class_dict))
         exclude = set(dir(type))
-        result.__fields__ = list(f for f in classdict.keys() if f not in exclude)
+        result.__fields__ = list(f for f in class_dict.keys() if f not in exclude)
         return result
 
 
