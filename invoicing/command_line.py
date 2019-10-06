@@ -2,7 +2,7 @@ from invoicing.actions.action import Action
 from invoicing.actions.action_collection import ActionCollection
 from invoicing.controller.main_controller import MainController
 from invoicing.ui.menu import Menu
-
+1
 
 class Invoicing:
     def __init__(self):
