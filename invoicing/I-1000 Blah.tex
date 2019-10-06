@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{letter}
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\setmainfont{Aptifer Sans LT Pro}
+\newfontfamily\semibold{Aptifer Sans LT Pro Semibold}
+\newfontfamily\semiboldit{Aptifer Sans LT Pro Semibold Italic}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{anyfontsize}
+\usepackage{verbatimbox}
+\usepackage{booktabs}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage[left=88pt,right=88pt,top=28pt,bottom=48pt]{geometry}
+\author{Sean Cooper}
+\title{Invoice}
+
+\begin{document}
+    \begin{center}
+        \includegraphics[width=100pt]{logo.png}
+    \end{center}
+    \vspace{18pt}
+    \fontsize{7pt}{9pt}\selectfont
+    \begin{minipage}[t]{0.6415\textwidth}
+    {\semibold Invoice To:}
+        \begin{flushleft}
+            Blah
+            Blah, blah
+        \end{flushleft}
+    \end{minipage}\hspace{12pt}
+    \begin{minipage}[t]{0.1550\textwidth}
+        \setlength{\parskip}{1em}
+        {\semibold Invoice Number:}\\
+        I-1000\par
+        {\semibold Date Issued:}\\
+        06/10/2019 15:58
+    \end{minipage}\hspace{12pt}
+    \begin{minipage}[t]{0.1350\textwidth}
+    {\semibold Client Reference:}
+        \\
+        N\textbackslash A
+    \end{minipage}
+    \addvbuffer[24pt 32pt]{
+    \def\arraystretch{1.5}%
+    \fontsize{7pt}{9pt}\selectfont
+    \begin{tabular}{L{78.5mm}|R{12mm}|R{9mm}|R{12mm}|R{15mm}}
+        \hline
+        {\semibold Description} & {\semibold Type} & {\semibold Qty} & {\semibold Rate} & {\semibold Cost} \\
+        \hline
+                {\semiboldit asdasd} \newline
+        asdasdasd & hours & 8.0 & 100.0 & 800.0 \\
+                \specialrule{1.5pt}{0pt}{1pt}
+        \multicolumn{4}{c}{} {\semibold Total} & 800.0 \\
+        \cline{4-5}
+    \end{tabular}}\\
+    \fontsize{7pt}{9pt}\selectfont
+    {\semibold Payment must be made within 28 days of invoice issue date.}\par
+    \vspace*{\fill}
+    \begin{center}
+    {\fontsize{7pt}{9pt}\selectfont
+    Name trading as:\\
+    {\semiboldit Company Name}\\
+    Address Line One,\\
+    Address Line Two,\\
+    City, Post Code\\}
+    \end{center}
+\end{document}
