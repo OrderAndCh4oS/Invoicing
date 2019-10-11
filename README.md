@@ -14,7 +14,7 @@ Copy .env.example and rename to .env
 
 Copy the example LaTeX invoices
 
-`cp invoicing/templates/Invoice.example.tex invoicing/templates/Invoice.tex`
+`cp invoicing/templates/Invoice.example.tex invoicing/templates/Invoice.tex` . 
 `cp invoicing/templates/Quote.tex invoicing/Quote.tex`
 
 Use `pip` to install dependencies from the `requirements.txt`
