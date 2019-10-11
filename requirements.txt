@@ -30,7 +30,7 @@ text-template==0.1.4
 tqdm==4.28.1
 twine==1.12.1
 unicode==2.6
-urllib3==1.24.1
+urllib3==1.24.2
 uWSGI==2.0.17.1
 webencodings==0.5.1
 Werkzeug==0.14.1
