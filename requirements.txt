@@ -10,7 +10,7 @@ docutils==0.14
 Flask==1.0.2
 idna==2.7
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2>=2.10.1
 MarkupSafe==1.1.0
 more-itertools==4.3.0
 pathlib2==2.3.2
