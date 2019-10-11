@@ -5,7 +5,7 @@ from invoicing.transformer.json import JSONTransformer
 
 # Todo: Paginate results
 # Todo: handle saving relationships
-class BaseAPI():
+class BaseAPI:
 
     def __init__(self, repository: BaseRepository, model: BaseModel):
         self.model = model

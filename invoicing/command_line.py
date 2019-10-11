@@ -8,13 +8,13 @@ class Invoicing:
     def __init__(self):
         controller = MainController()
         Menu.create('Manage', ActionCollection(
-            ('Companies', controller.companyAction),
-            ('Clients', controller.clientAction),
-            ('Staff', controller.staffAction),
-            ('Statuses', controller.statusAction),
-            ('Projects', controller.projectAction),
-            ('Jobs', controller.jobAction),
-            ('Invoices', controller.invoiceAction),
+            ('Companies', controller.company_action),
+            ('Clients', controller.client_action),
+            ('Staff', controller.staff_action),
+            ('Statuses', controller.status_action),
+            ('Projects', controller.project_action),
+            ('Jobs', controller.job_action),
+            ('Invoices', controller.invoice_action),
             exit_action=Action('q', 'Quit', False)
         ))
 

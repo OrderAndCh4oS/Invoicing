@@ -33,7 +33,7 @@ class Menu:
             id = input('\nEnter an id to view or \'b\' to go back: ')
             if id == 'b':
                 return False
-            if not Validation.isNumber(id):
+            if not Validation.is_number(id):
                 print('Not a valid number')
                 continue
             item = find_by_id(id)

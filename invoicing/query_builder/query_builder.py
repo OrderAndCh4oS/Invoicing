@@ -14,17 +14,17 @@ class QueryBuilder:
         return self
 
     def where(self, condition, param=None):
-        self.addParam(param)
+        self.add_param(param)
         self.query += 'where {} '.format(condition)
         return self
 
     def limit(self, limit):
-        self.addParam(limit)
+        self.add_param(limit)
         self.query += 'limit ? '
         return self
 
     def offset(self, offset):
-        self.addParam(offset)
+        self.add_param(offset)
         self.query += 'offset ? '
         return self
 
@@ -32,12 +32,12 @@ class QueryBuilder:
         self.query += 'select count(*) '
         return self
 
-    def whereIDIsLastInserted(self):
+    def where_id_is_last_inserted(self):
         self.query += 'where id = last_insert_rowid() '
         return self
 
-    def andWhere(self, condition, param=None):
-        self.addParam(param)
+    def and_where(self, condition, param=None):
+        self.add_param(param)
         self.query += 'and {} '.format(condition)
         return self
 
@@ -47,7 +47,7 @@ class QueryBuilder:
 
     def insert(self, values):
         for k, v in values.items():
-            self.addParam(v)
+            self.add_param(v)
         self.query += 'insert into {} ({}) values ({}) '.format(
             self.table,
             ', '.join([k for k in values]),
@@ -57,7 +57,7 @@ class QueryBuilder:
 
     def update(self, set):
         for k, v in set.items():
-            self.addParam(v)
+            self.add_param(v)
         self.query = 'update {} set {} '.format(self.table, ', '.join([k + ' = ?' for k in set]))
         return self
 
@@ -66,13 +66,13 @@ class QueryBuilder:
         self.query += 'delete from {} '.format(table)
         return self
 
-    def addParam(self, param):
+    def add_param(self, param):
         if param != None:
             self.params.append(param)
 
     def raw(self, query, params=None):
         for param in params:
-            self.addParam(param)
+            self.add_param(param)
         self.query += query + ' '
         return self
 

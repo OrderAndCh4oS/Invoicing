@@ -9,23 +9,30 @@ from invoicing.crud.status_crud import StatusCrud
 
 class MainController:
 
-    def companyAction(self):
+    @staticmethod
+    def company_action():
         CompanyCrud().menu()
 
-    def clientAction(self):
+    @staticmethod
+    def client_action():
         ClientCrud().menu()
 
-    def projectAction(self):
+    @staticmethod
+    def project_action():
         ProjectCrud().menu()
 
-    def invoiceAction(self):
+    @staticmethod
+    def invoice_action():
         InvoiceCrud().menu()
 
-    def jobAction(self):
+    @staticmethod
+    def job_action():
         JobCrud().menu()
 
-    def staffAction(self):
+    @staticmethod
+    def staff_action():
         StaffCrud().menu()
 
-    def statusAction(self):
+    @staticmethod
+    def status_action():
         StatusCrud().menu()

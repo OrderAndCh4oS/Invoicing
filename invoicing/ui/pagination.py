@@ -36,7 +36,7 @@ class Pagination:
             if self.should_change_page(user_input):
                 self.change_page(user_input)
                 continue
-            if not Validation.isNumber(user_input):
+            if not Validation.is_number(user_input):
                 print('Command not recognised')
                 continue
             result = self.find_by_id(user_input)
