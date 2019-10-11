@@ -1,6 +1,6 @@
 class Validation:
     @staticmethod
-    def isNumber(number):
+    def is_number(number):
         try:
             int(number)
         except ValueError:
@@ -8,7 +8,7 @@ class Validation:
         return True
 
     @staticmethod
-    def isFloat(number):
+    def is_float(number):
         try:
             float(number)
         except ValueError:
@@ -16,7 +16,7 @@ class Validation:
         return True
 
     @staticmethod
-    def isNumberAndInRange(number, start, stop):
-        if Validation.isNumber(number) and number >= start and number <= stop:
+    def is_number_and_in_range(number, start, stop):
+        if Validation.is_number(number) and number >= start and number <= stop:
             return True
         return False

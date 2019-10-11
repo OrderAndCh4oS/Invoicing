@@ -46,7 +46,7 @@ class BaseRepository(Sqlite3Database, metaclass=ABCMeta):
         query = QueryBuilder(self.table) \
             .select(select) \
             .from_() \
-            .whereIDIsLastInserted()
+            .where_id_is_last_inserted()
         self.execute(**query.build())
         return self.get_one()
 

@@ -28,8 +28,8 @@ class LatexTemplating:
         return_code = subprocess.call(
             cmd,
             shell=True,
-            stdout=open('var/logs/stdout.txt', 'wb'),
-            stderr=open('var/logs/stderr.txt', 'wb')
+            stdout=open('stdout.txt', 'wb'),
+            stderr=open('stderr.txt', 'wb')
         )
         try:
             if not return_code == 0:

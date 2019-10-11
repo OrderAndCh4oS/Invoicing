@@ -31,7 +31,7 @@ class JobCrud(BaseCrud):
 
     def log_time(self, job_id):
         logged_time = ''
-        while not Validation.isFloat(logged_time):
+        while not Validation.is_float(logged_time):
             logged_time = input('Log Time: ')
         self.repository.update_actual_time(job_id, logged_time)
         self.repository.save()

@@ -7,7 +7,7 @@ from invoicing.model_validation.field import ForeignKeyField, OneToManyField
 from invoicing.ui.menu import Menu
 from invoicing.ui.pagination import Pagination
 from invoicing.ui.style import Style
-from ui.relationship import Relationship
+from invoicing.ui.relationship import Relationship
 
 
 class BaseCrud(metaclass=ABCMeta):

@@ -41,7 +41,7 @@ class InvoiceCrud(BaseCrud):
             print('Estimated Time: %s' % job['estimated_time'])
             print('Logged Time: %s' % job['actual_time'])
             billable = ''
-            while not Validation.isFloat(billable):
+            while not Validation.is_float(billable):
                 billable = input('Billable Time: ')
             jobRepository.update_billable_time(job['id'], billable)
             jobRepository.save()

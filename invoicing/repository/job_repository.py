@@ -89,7 +89,7 @@ class JobRepository(BaseRepository):
             .join('status', 'status_id = status.id') \
             .join('project', 'project_id = project.id') \
             .where('project.client_id = ?', client_id) \
-            .andWhere('completed = ?', '1')
+            .and_where('completed = ?', '1')
         self.execute(**query.build())
         return self.get_all()
 
@@ -103,7 +103,7 @@ class JobRepository(BaseRepository):
             .join('status', 'status_id = status.id') \
             .join('project', 'project_id = project.id') \
             .where('project.client_id = ?', client_id) \
-            .andWhere('completed = ?', '0') \
+            .and_where('completed = ?', '0') \
             .limit(limit) \
             .offset(limit * page - limit)
         self.execute(**query.build())
