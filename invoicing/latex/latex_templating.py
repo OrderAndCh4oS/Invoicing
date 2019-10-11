@@ -40,7 +40,9 @@ class LatexTemplating:
                 print("\n" + file_name + ".pdf has been generated\n")
         except ValueError as e:
             print("\nError creating pdf: " + str(e))
-            print("This is probably an issue with the LaTeX file. Try to compile the template manually.\n")
+            print("This is probably an issue with the LaTeX file.\n"
+                  "Make sure you have LaTeX installed and try to "
+                  "compile the template manually.\n")
 
     def remove_generation_files(self, file_name):
         # os.unlink(file_name + '.tex')
