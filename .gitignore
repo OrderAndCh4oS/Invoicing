@@ -34,7 +34,9 @@ Invoicing-old.db
 /example.yml
 /sqlite/invoicing.db
 /sqlite/invoicing-live.db
+/invoicing/sqlite/invoicing_live.db
 /invoicing/.env
 /invoicing/*.txt
 /invoicing/*.tex
 
+!/requirements.txt
