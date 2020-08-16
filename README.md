@@ -18,8 +18,8 @@ Copy the example LaTeX invoices
 
 `cp invoicing/templates/Quote.example.tex invoicing/templates/Quote.tex`
 
-Use `pip` to install dependencies from the `requirements.txt`
+Use `poetry` to install dependencies
 
-`pip install -r requirements.txt`
+`poetry install`
 
-Run the project from `invoicing/command_line.py` in your ide, this should find all the imports. At least it does in PyCharm.
+Run `python invoicing/command_line.py` to begin
