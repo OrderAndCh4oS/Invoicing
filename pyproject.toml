@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "invoicing"
-version = "1.0.0"
+version = "1.0.1"
 description = "Generate invoice PDF from LaTeX template"
 authors = ["Sarcoma <sean@orderandchaoscreative.com>"]
 license = "MIT"
