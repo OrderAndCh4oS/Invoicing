@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from invoicing.actions.action import Action
 from invoicing.actions.action_collection import ActionCollection
 from invoicing.controller.main_controller import MainController
