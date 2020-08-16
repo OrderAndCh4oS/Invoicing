@@ -22,4 +22,4 @@ Use `poetry` to install dependencies
 
 `poetry install`
 
-Run `python invoicing/command_line.py` to begin
+cd into `cd ./invoicing` and run `python command_line.py` to begin
